@@ -2,10 +2,10 @@
 Sujet : https://moodle.ip-paris.fr/pluginfile.php/451163/mod_resource/content/0/projet.pdf
 
 ## Convention adopter :
-Pas de '_' -> les '_' représentent les espaces dans la suite
+Pas de '\_' -> les '\_' représentent les espaces dans la suite
 
 - Variable : mot1Mot2Mot3
-- Noeud : Mot1_Mot2_Mot3
+- Noeud : Mot1\_Mot2\_Mot3
 - Type : Mot1Mot2Mot3
 - Script : Mot1Mot2Mot3 
 
