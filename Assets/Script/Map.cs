@@ -8,19 +8,19 @@ public class MapLoader : MonoBehaviour
         cross,
         start,
         end,
-        other
+        constructible
     }
 
 
     [SerializeField]
     private TileType[,] mapArray;
 /*
-(299, 229, 229) Zone non constructible = 0
-(255, 233, 127) Chemin = 1
-(255, 178, 127) intersection = 2
-(0, 255, 33) Entree = 3
-(255, 0, 0) Destination = 4
-other Zone constructible = 5
+(299, 229, 229) Zone non constructible = 0 Tile asset : snow-tile
+(255, 233, 127) Chemin = 1 Tile asset : snow-tile-straight/square
+(255, 178, 127) intersection = 2 Tile asset : snow-tile-split/crossing
+(0, 255, 33) Entree = 3 Tile asset : snow-tile-end
+(255, 0, 0) Destination = 4 Tile asset : snow-tile-end-round
+other Zone constructible = 5 Tile asset : snow-tile-hill
 */
 
     private TileType[,] mapArcs;
@@ -39,7 +39,7 @@ other Zone constructible = 5
                 {TileType.empty, TileType.empty, TileType.end, TileType.empty, TileType.empty},
                 {TileType.empty, TileType.empty, TileType.road, TileType.empty, TileType.empty},
                 {TileType.start, TileType.road, TileType.cross, TileType.end, TileType.empty},
-                {TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty},
+                {TileType.empty, TileType.constructible, TileType.empty, TileType.empty, TileType.empty},
                 {TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty}
         };
 
