@@ -2,9 +2,18 @@ using UnityEngine;
 
 public class MapLoader : MonoBehaviour
 {
+    private enum TileType{
+        empty,
+        road,
+        cross,
+        start,
+        end,
+        other
+    }
+
 
     [SerializeField]
-    private int[,] mapArray;
+    private TileType[,] mapArray;
 /*
 (299, 229, 229) Zone non constructible = 0
 (255, 233, 127) Chemin = 1
@@ -13,15 +22,6 @@ public class MapLoader : MonoBehaviour
 (255, 0, 0) Destination = 4
 other Zone constructible = 5
 */
-
-    enum TileType{
-        empty,
-        road,
-        cross,
-        start,
-        end,
-        other
-    }
 
     private TileType[,] mapArcs;
 
@@ -35,14 +35,16 @@ other Zone constructible = 5
         // Convertir la map en mapArray
         //faire d'autre trucs
 
-        mapArray = [ //map Test
-                [empty, empty, end, empty, empty],
-                [empty, empty, road, empty, empty],
-                [start, road, cross, end, empty],
-                [empty, empty, empty, empty, empty],
-                [empty, empty, empty, empty, empty]
-                    ];
-        }
+        TileType[,] mapArrayTest = { //map Test
+                {TileType.empty, TileType.empty, TileType.end, TileType.empty, TileType.empty},
+                {TileType.empty, TileType.empty, TileType.road, TileType.empty, TileType.empty},
+                {TileType.start, TileType.road, TileType.cross, TileType.end, TileType.empty},
+                {TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty},
+                {TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty}
+        };
+
+        mapArray = mapArrayTest;
+    }
 
     // Update is called once per frame
     void Update()
