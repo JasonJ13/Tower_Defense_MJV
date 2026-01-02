@@ -89,7 +89,7 @@ other Zone constructible = 5 Tile asset : snow-tile
         {
             for (int x = 0; x < mapImage.width; x++)
             {
-                Color32 pixel = pixels[(mapImage.height-1-y) * mapImage.width + (mapImage.width-1-x)]; // L'image se lit de haut en bas (ok) et DE DROITE A GAUCHE ???
+                Color32 pixel = pixels[y * mapImage.width + x]; // L'image se lit déjà de bas en haut et de gauche apparemment ?
 
                 if (pixel.Equals(colorEmpty)){
                    mapArray[y,x] = TileType.empty;
