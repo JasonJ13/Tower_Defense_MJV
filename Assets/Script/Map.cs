@@ -13,12 +13,12 @@ public class MapLoader : MonoBehaviour
     }
 
 /*
-(229, 229, 229) Zone non constructible = 0 Tile asset : snow-tile
+(229, 229, 229) Zone non constructible = 0 Tile asset : snow-tile-hill
 (255, 233, 127) Chemin = 1 Tile asset : snow-tile-straight/square
 (255, 178, 127) intersection = 2 Tile asset : snow-tile-split/crossing
 (0, 255, 33) Entree = 3 Tile asset : snow-tile-end
 (255, 0, 0) Destination = 4 Tile asset : snow-tile-end-round
-other Zone constructible = 5 Tile asset : snow-tile-hill
+other Zone constructible = 5 Tile asset : snow-tile
 */
 
     private Color32 colorEmpty = new Color32(229, 229, 229, 255);
@@ -41,6 +41,8 @@ other Zone constructible = 5 Tile asset : snow-tile-hill
     private GameObject TileStart;
     [SerializeField]
     private GameObject TileEnd;
+    [SerializeField]
+    private GameObject TileConstructible;
 
 
     private TileType[,] mapArray; // 2DArray representation of a map
@@ -59,7 +61,7 @@ other Zone constructible = 5 Tile asset : snow-tile-hill
         //faire d'autre trucs
 
         mapArray = LoadMapArray(mapDiskPath);
-        Debug.Log(mapArray);
+        LoadTiles(mapArray);
 
         TileType[,] mapArrayTest = { //map Test
                 {TileType.empty, TileType.empty, TileType.end, TileType.empty, TileType.empty},
@@ -69,14 +71,11 @@ other Zone constructible = 5 Tile asset : snow-tile-hill
                 {TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty}
                 };
 
-        mapArray = mapArrayTest;
+//        mapArray = mapArrayTest;
     }
 
     // Update is called once per frame
-    void Update()
-    {
-
-    }
+    void Update(){}
 
     private TileType[,] LoadMapArray(string path){ // create the MapArray associated to the png given path.
 
@@ -121,28 +120,33 @@ other Zone constructible = 5 Tile asset : snow-tile-hill
 
     private void LoadTiles(TileType[,] mapArray){ // create the Tiles associated to the MapArray .
 
+        float offset = 0.5f;
+        Vector3 position = new Vector3(0,0,0);
+        Quaternion rotation = new Quaternion(0,0,0,0);
+
         for (int y = 0; y < mapArray.GetLength(0); y++)
         {
             for (int x = 0; x < mapArray.GetLength(1); x++)
             {
+                position.Set(x+offset, 0, y+offset);
+
                 if (mapArray[y,x] == TileType.empty){
-                   Instantiate(TileEmpty);
+                   Instantiate(TileEmpty, position, rotation, this.transform);
                 }
                 else if (mapArray[y,x] == TileType.road){
-                    
-                   
+                   Instantiate(TileRoad1, position, rotation, this.transform);
                 }
                 else if (mapArray[y,x] == TileType.cross){
-                   
+                   Instantiate(TileCross1, position, rotation, this.transform);
                 }
                 else if (mapArray[y,x] == TileType.start){
-                   
+                   Instantiate(TileStart, position, rotation, this.transform);
                 }
                 else if (mapArray[y,x] == TileType.end){
-                   
+                   Instantiate(TileEnd, position, rotation, this.transform);
                 }
                 else{
-                   mapArray[y,x] = TileType.constructible;
+                   Instantiate(TileConstructible, position, rotation, this.transform);
                 }                
             }
         }
