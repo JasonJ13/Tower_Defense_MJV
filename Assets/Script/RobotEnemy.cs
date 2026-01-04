@@ -10,7 +10,7 @@ public class RobotEnemy : MonoBehaviour
     private int currentHP;
 
     private Vector3 rot = Vector3.zero;
-    //private float rotSpeed = 40f;
+    
     private Animator anim;
 
     private Vector2 destination;
@@ -25,11 +25,11 @@ public class RobotEnemy : MonoBehaviour
         currentHP = maxHP;
 
     }
+    
 
     private void Update()
     {
 
-        Die();
 
 
     }
@@ -42,25 +42,10 @@ public class RobotEnemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
-        if (currentHP <= 0)
-        {
-            Die();
-        }
-
+       
     }
 
-    private IEnumerator Die()
-    {
-
-        Debug.Log("Ennemi mort");
-        anim.SetBool("Open_Anim", false);
-
-        Debug.Log("après yieLD");
-        Destroy(gameObject);
-
-
-
-    }
+   
 
     
 }
