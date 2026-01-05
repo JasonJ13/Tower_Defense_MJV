@@ -67,5 +67,5 @@
         "*.sln": "*.csproj",
         "*.slnx": "*.csproj"
     },
-    "dotnet.defaultSolution": "Tower_Defense_MJV.slnx"
+    "dotnet.defaultSolution": "Gambeling-Gambeling.slnx"
 }
