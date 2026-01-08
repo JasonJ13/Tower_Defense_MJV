@@ -15,6 +15,7 @@ public class RobotEnemy : MonoBehaviour
 
     private Animator anim;
 
+    private EnemyGraph graph;
     //valeurs provisoires
     //private float redModifier = 0.5f;
     //private float blueModifier = 1f;
@@ -22,11 +23,14 @@ public class RobotEnemy : MonoBehaviour
     //private float yellowModifier = 1f;
 
 
-    
+    private void Awake()
+    {
+        graph = new EnemyGraph();
+        
+    }
     private void Start()
     {
         anim = gameObject.GetComponent<Animator>();
-
         currentHP = maxHP;
         
     }
