@@ -16,10 +16,10 @@ public class RobotEnemy : MonoBehaviour
     private Animator anim;
 
     //valeurs provisoires
-    private float redModifier = 0.5f;
-    private float blueModifier = 1f;
-    private float greenModifier = 2f;
-    private float yellowModifier = 1f;
+    //private float redModifier = 0.5f;
+    //private float blueModifier = 1f;
+    //private float greenModifier = 2f;
+    //private float yellowModifier = 1f;
 
 
     
@@ -43,12 +43,6 @@ public class RobotEnemy : MonoBehaviour
         this.destination = destination;
     }
 
-
-    private void ReachDestination()
-    {
-        Debug.Log("Fin du parcours");
-        return;
-    }
 
 
     public void TakeDamage(int damage)

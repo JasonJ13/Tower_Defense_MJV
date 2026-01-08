@@ -13,7 +13,7 @@ public class TowerTest : Tower
     protected override void shoot()
     {
         Debug.Log("shoot");
-        Vector3 PositionBullet = new Vector3(GetComponent<transform>().position.x + 3, GetComponent<transform>().position.y, GetComponent<transform>().position.z);
+        Vector3 PositionBullet = new Vector3(GetComponent<Transform>().position.x + 3, GetComponent<Transform>().position.y, GetComponent<Transform>().position.z);
         Instantiate(bullet, PositionBullet, Quaternion.identity);
     }
 
