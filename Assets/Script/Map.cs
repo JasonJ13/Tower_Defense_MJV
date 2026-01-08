@@ -36,10 +36,10 @@ public class Map : MonoBehaviour
    {
       public int column;
       public int row;
-      public coords(int c, int r)
+      public coords(int column, int row)
       {
-         column = c;
-         row = r;
+         this.column = column;
+         this.row = row;
       }
    }
 
@@ -88,7 +88,11 @@ public class Map : MonoBehaviour
 
    private TileType[,] mapArray; // 2DArray representation of a map
 
-   private Dictionary<coords, (coords, int)> mapGraph; // Dictionary representation of the graph of the map, weight being the length of the path towards
+   private int height;
+   private int width;
+
+   private Dictionary<coords, TileType> mapGraph; // Dictionary that contains all nodes and their infos
+   private Dictionary<coords, (coords, int)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two node
 
    private int[,] mapTruc;
 
@@ -142,7 +146,11 @@ public class Map : MonoBehaviour
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
-      mapArray = LoadMapArray(mapDiskPath);
+      this.mapArray = LoadMapArray(mapDiskPath);
+      this.height = mapArray.GetLength(0);
+      this.width = mapArray.GetLength(1);
+      this.mapGraph = CreateMapGraph(mapArray);
+      this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraph);
       CheckMap(mapArray);
       LoadTiles(mapArray);
 
@@ -212,6 +220,50 @@ public class Map : MonoBehaviour
 
       return mapArray;
    }
+
+   private Dictionary<coords, TileType> CreateMapGraph(TileType[,] mapArray)
+   {
+      Dictionary<coords, TileType> mapGraph = new Dictionary<coords, TileType> {}; 
+      return mapGraph;
+   }
+
+
+   /// <summary>
+   /// This function creates the given graph of a mapArray AND send an error if all roads are not strictly horizontal xor vertical (and correctly spaced out)
+   /// </summary>
+   /// <param name="mapArray"></param>
+   /// <returns></returns>
+   private Dictionary<coords, (coords, int)> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraph)
+   { 
+      //On crée mapGraphNodeInfos type dabord, on copie toute les clés, puis on connecte les noeurds qui doivent etre connecté
+
+      Dictionary<coords, (coords, int)> mapGraphAdj = new Dictionary<coords, (coords, int)> {};
+
+      // Horizontal sweep to add start, end, and cross node to graph
+      for (int row = 0; row < mapArray.GetLength(0); row++)
+      {
+         for (int column = 0; column < mapArray.GetLength(1); column++)
+         {
+            coords pos = new coords(row, column);
+            if (mapArray[row, column] == TileType.start)
+            {
+            }
+            else if (mapArray[row, column] == TileType.end)
+            {
+
+            }
+            else if (mapArray[row, column] == TileType.cross)
+            {
+
+            }
+         }
+      }
+
+
+
+      return mapGraphAdj;
+   }
+
 
    /// <summary>
    /// Verifies the validity of a map
