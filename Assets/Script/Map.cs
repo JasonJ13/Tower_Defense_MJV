@@ -1,16 +1,34 @@
 using UnityEngine;
 using System.IO;
+using System;
 
-public class MapLoader : MonoBehaviour
+public class Map : MonoBehaviour
 {
-    private enum TileType{
+   public static Map Instance
+   {
+      get;
+      private set;
+    }
+
+    private void Awake()
+    {
+        if (Map.Instance != null){
+            Debug.LogError("Error : Instance of App already exists");
+        }
+        Map.Instance = this;
+    }
+
+    public enum TileType{
         empty,
         road,
         cross,
         start,
         end,
-        constructible
+        constructible,
+        construct
     }
+        private static float OFFSET = 0.5f;
+
 
 /*
 (229, 229, 229) Zone non constructible = 0 Tile asset : snow-tile-hill
@@ -77,6 +95,16 @@ other Zone constructible = 5 Tile asset : snow-tile
     // Update is called once per frame
     void Update(){}
 
+    public (int column, int row) PositionToMapArray(Vector3 position)
+   {
+      return ((int) Math.Floor(position.z-OFFSET), (int) Math.Floor(position.x-OFFSET));
+   }
+
+   public TileType[,] GetMapArray()
+   {
+      return this.mapArray;
+   }
+
     private TileType[,] LoadMapArray(string path){ // create the MapArray associated to the png given path.
 
         Texture2D mapImage = new Texture2D(2, 2);
@@ -85,29 +113,29 @@ other Zone constructible = 5 Tile asset : snow-tile
         TileType[,] mapArray = new TileType[mapImage.height, mapImage.width];
 
         Color32[] pixels = mapImage.GetPixels32();
-        for (int y = 0; y < mapImage.height; y++)
+        for (int row = 0; row < mapImage.height; row++)
         {
-            for (int x = 0; x < mapImage.width; x++)
+            for (int column = 0; column < mapImage.width; column++)
             {
-                Color32 pixel = pixels[y * mapImage.width + x]; // L'image se lit déjà de bas en haut et de gauche apparemment ?
+                Color32 pixel = pixels[row * mapImage.width + column]; // L'image se lit déjà de bas en haut et de gauche apparemment ?
 
                 if (pixel.Equals(colorEmpty)){
-                   mapArray[y,x] = TileType.empty;
+                   mapArray[row,column] = TileType.empty;
                 }
                 else if (pixel.Equals(colorRoad)){
-                   mapArray[y,x] = TileType.road;
+                   mapArray[row,column] = TileType.road;
                 }
                 else if (pixel.Equals(colorCross)){
-                   mapArray[y,x] = TileType.cross;
+                   mapArray[row,column] = TileType.cross;
                 }
                 else if (pixel.Equals(colorStart)){
-                   mapArray[y,x] = TileType.start;
+                   mapArray[row,column] = TileType.start;
                 }
                 else if (pixel.Equals(colorEnd)){
-                   mapArray[y,x] = TileType.end;
+                   mapArray[row,column] = TileType.end;
                 }
                 else{
-                   mapArray[y,x] = TileType.constructible;
+                   mapArray[row,column] = TileType.constructible;
                 }
 
 
@@ -120,29 +148,28 @@ other Zone constructible = 5 Tile asset : snow-tile
 
     private void LoadTiles(TileType[,] mapArray){ // create the Tiles associated to the MapArray .
 
-        float offset = 0.5f;
         Vector3 position = new Vector3(0,0,0);
         Quaternion rotation = new Quaternion(0,0,0,0);
 
-        for (int y = 0; y < mapArray.GetLength(0); y++)
+        for (int row = 0; row < mapArray.GetLength(0); row++)
         {
-            for (int x = 0; x < mapArray.GetLength(1); x++)
+            for (int column = 0; column < mapArray.GetLength(1); column++)
             {
-                position.Set(x+offset, 0, y+offset);
+                position.Set(column+OFFSET, 0, row+OFFSET);
 
-                if (mapArray[y,x] == TileType.empty){
+                if (mapArray[row,column] == TileType.empty){
                    Instantiate(TileEmpty, position, rotation, this.transform);
                 }
-                else if (mapArray[y,x] == TileType.road){
+                else if (mapArray[row,column] == TileType.road){
                    Instantiate(TileRoad1, position, rotation, this.transform);
                 }
-                else if (mapArray[y,x] == TileType.cross){
+                else if (mapArray[row,column] == TileType.cross){
                    Instantiate(TileCross1, position, rotation, this.transform);
                 }
-                else if (mapArray[y,x] == TileType.start){
+                else if (mapArray[row,column] == TileType.start){
                    Instantiate(TileStart, position, rotation, this.transform);
                 }
-                else if (mapArray[y,x] == TileType.end){
+                else if (mapArray[row,column] == TileType.end){
                    Instantiate(TileEnd, position, rotation, this.transform);
                 }
                 else{
