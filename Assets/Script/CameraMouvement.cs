@@ -18,19 +18,17 @@ public class CameraMouvement : MonoBehaviour
     private float zoom;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Start()
     {
         cameraTransform = GetComponent<Transform>();
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        mouvement = moveAction.ReadValue<Vector2>()*SPEED * Time.deltaTime;
-        zoom = zoomAction.ReadValue<float>()*SPEED * Time.deltaTime/2;
 
+
+    private Vector3 define_translate(Vector2 mouvement, float zoom)
+    {
         if ((cameraTransform.position.x + mouvement.x > cameraBorder.x&& mouvement.x > 0) || (cameraTransform.position.x + mouvement.x < -cameraBorder.x && mouvement.x < 0))
         {
             mouvement.x = 0;
@@ -46,7 +44,18 @@ public class CameraMouvement : MonoBehaviour
             zoom = 0;
         }
 
-        cameraTransform.Translate(mouvement.x,mouvement.y,zoom);
+        return new Vector3(mouvement.x, mouvement.y, zoom);
+    }
+
+
+    // Update is called once per frame
+    private void Update()
+    {
+        mouvement = moveAction.ReadValue<Vector2>()*SPEED * Time.deltaTime;
+        zoom = zoomAction.ReadValue<float>()*SPEED * Time.deltaTime/2;
+        Vector3 translate = define_translate(mouvement, zoom);
+        
+        cameraTransform.Translate(translate);
 
     }
 
