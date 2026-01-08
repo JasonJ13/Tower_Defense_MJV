@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.IO;
 using System;
+using UnityEngine.UIElements;
 
 public class Map : MonoBehaviour
 {
@@ -8,15 +9,15 @@ public class Map : MonoBehaviour
    {
       get;
       private set;
-    }
+   }
 
-    private void Awake()
-    {
+   private void Awake()
+   {
         if (Map.Instance != null){
             Debug.LogError("Error : Instance of App already exists");
         }
         Map.Instance = this;
-    }
+   }
 
     public enum TileType{
         empty,
@@ -81,6 +82,7 @@ other Zone constructible = 5 Tile asset : snow-tile
         //faire d'autre trucs
 
         mapArray = LoadMapArray(mapDiskPath);
+        CheckMap(mapArray);
         LoadTiles(mapArray);
 
         TileType[,] mapArrayTest = { //map Test
@@ -97,8 +99,11 @@ other Zone constructible = 5 Tile asset : snow-tile
     // Update is called once per frame
     void Update(){}
 
-    public (int column, int row) PositionToMapArray(Vector3 position)
+   public (int column, int row) PositionToMapArray(Vector3 position)
    {
+        if (position.x < 0 || position.z < 0){
+            Debug.LogError("Error : position out of Map");
+        }
       return ((int) Math.Floor(position.z-OFFSET), (int) Math.Floor(position.x-OFFSET));
    }
 
@@ -107,7 +112,13 @@ other Zone constructible = 5 Tile asset : snow-tile
       return this.mapArray;
    }
 
-    private TileType[,] LoadMapArray(string path){ // create the MapArray associated to the png given path.
+   public void SetMapArray((int column, int row) pos, TileType type)
+   {
+      this.mapArray[pos.column, pos.row] = type;
+   }
+
+
+   private TileType[,] LoadMapArray(string path){ // create the MapArray associated to the png given path.
 
         Texture2D mapImage = new Texture2D(2, 2);
         mapImage.LoadImage(File.ReadAllBytes(path));
@@ -146,10 +157,31 @@ other Zone constructible = 5 Tile asset : snow-tile
 
 
         return mapArray;
-    }
+   }
 
-    private void LoadTiles(TileType[,] mapArray){ // create the Tiles associated to the MapArray .
+   private void CheckMap(TileType[,] mapArray) //Verify the validity of a map
+   {
+      bool endExist = false;
+      bool startExist = false;
+        for (int row = 0; row < mapArray.GetLength(0); row++)
+        {
+            for (int column = 0; column < mapArray.GetLength(1); column++)
+         {
+            if (mapArray[row,column] == TileType.start){
+               startExist = true;
+            }
+            if (mapArray[row,column] == TileType.end){
+               endExist = true;
+            }
 
+         }
+        }
+
+
+   }
+
+   private void LoadTiles(TileType[,] mapArray) // create the Tiles associated to the MapArray .
+   {
         Vector3 position = new Vector3(0,0,0);
         Quaternion rotation = new Quaternion(0,0,0,0);
 
@@ -181,7 +213,7 @@ other Zone constructible = 5 Tile asset : snow-tile
         }
 
 
-    }
+   }
 
 
 
