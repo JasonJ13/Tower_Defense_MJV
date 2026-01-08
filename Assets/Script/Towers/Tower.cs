@@ -1,14 +1,17 @@
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
-using System.Collections.Generic;
-
 
 public abstract class Tower : MonoBehaviour
 {
+    [SerializeField]
+    protected int range;
 
-    [SerializeField] protected int range;
-    [SerializeField] protected int dmg;
-    [SerializeField] protected GameObject bullet;
+    [SerializeField]
+    protected int dmg;
+
+    [SerializeField]
+    protected GameObject bullet;
     private int supplied = 0;
 
     protected Transform towerTransform;
@@ -17,9 +20,7 @@ public abstract class Tower : MonoBehaviour
     protected int colum;
     private List<Vector2> TileRoad;
 
-
-
-    protected void initTowerParameter (int d, int r, string name)
+    protected void initTowerParameter(int d, int r, string name)
     {
         dmg = d;
         range = r;
@@ -27,38 +28,27 @@ public abstract class Tower : MonoBehaviour
         // tile = Map.gettile(transform.position.x, transform.position.y)
     }
 
-
     private void OnEnable()
     {
         construct_road();
     }
-
 
     public bool is_connected()
     {
         return supplied > 0;
     }
 
-    public void connected() 
+    public void connected()
     {
-        supplied ++ ;
+        supplied++;
     }
 
-    public void disconnected() 
+    public void disconnected()
     {
-        supplied -- ;
+        supplied--;
     }
 
-
-
-
-    public void construct_road ()
-    {
-
-    }
-
-
+    public void construct_road() { }
 
     protected abstract void shoot();
-
 }
