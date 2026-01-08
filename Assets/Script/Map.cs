@@ -122,7 +122,7 @@ public class Map : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
-    public coords PositionToMapArray(Vector3 position)
+    public coords PositionToCoords(Vector3 position)
     {
         if (position.x < 0 || position.z < 0)
         {
