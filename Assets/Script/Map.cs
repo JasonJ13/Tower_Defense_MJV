@@ -29,6 +29,18 @@ public class Map : MonoBehaviour
 
     private static float OFFSET = 0.5f;
 
+   public struct coords
+   {
+      int column;
+      int row;
+      public coords(int c, int r)
+      {
+         column = c;
+         row = r;
+      }
+   }
+
+
     /*
     (229, 229, 229) Zone non constructible = 0 Tile asset : snow-tile-hill
     (255, 233, 127) Chemin = 1 Tile asset : snow-tile-straight/square
@@ -110,13 +122,13 @@ public class Map : MonoBehaviour
     // Update is called once per frame
     void Update() { }
 
-    public (int column, int row) PositionToMapArray(Vector3 position)
+    public coords PositionToMapArray(Vector3 position)
     {
         if (position.x < 0 || position.z < 0)
         {
             Debug.LogError("Error : position out of Map");
         }
-        return ((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
+        return new coords ((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
     }
 
     public TileType[,] GetMapArray()
