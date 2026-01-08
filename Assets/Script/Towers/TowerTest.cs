@@ -2,26 +2,21 @@ using UnityEngine;
 
 public class TowerTest : Tower
 {
-
-    private float timer = 3f;
+    //private float timer = 3f;
 
     private void Start()
     {
-        nameTower = "Tower Test";
+        towerTransform = GetComponent<Transform>();
+        initTowerParameter(3, 3, "Tower Test");
     }
 
-    protected override void shoot()
-    {
-        Debug.Log("shoot");
-        Vector3 PositionBullet = new Vector3(GetComponent<Transform>().position.x + 3, GetComponent<Transform>().position.y, GetComponent<Transform>().position.z);
-        Instantiate(bullet, PositionBullet, Quaternion.identity);
-    }
+    protected override void shoot() { }
 
-    private void Update()
+    /*private void Update()
     {
         if (timer > 0f)
         {
-          timer -= Time.deltaTime;  
+          timer -= Time.deltaTime;
         } else
         {
             shoot();
@@ -30,6 +25,5 @@ public class TowerTest : Tower
         
 
 
-    }
-    
+    }*/
 }
