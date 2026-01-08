@@ -16,34 +16,37 @@ public abstract class Tower : MonoBehaviour
     private int[] TileRoad;
 
 
-        public bool is_connected()
+
+    public bool is_connected()
     {
         return supplied > 0;
     }
+
     public void connected() 
     {
         supplied ++ ;
     }
+
     public void disconnected() 
     {
         supplied -- ;
     }
 
-    public void initTower (int d, int r)
+
+
+    protected void initTowerParameter (int d, int r)
     {
         dmg = d;
         range = r;
-    } 
+    }
+
+    public void construct_road ()
+    {
+
+    }
+
+
 
     protected abstract void shoot();
-
-
-
-    protected Transform get_tower_transform()
-    {
-        return GetComponent<Transform>();
-    }
-    
-
 
 }
