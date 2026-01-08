@@ -13,13 +13,13 @@ public abstract class Tower : MonoBehaviour
     protected Transform towerTransform;
     protected string nameTower;
 
-    private List TileRoad;
+    private int[] TileRoad;
 
 
 
     public bool is_connected()
     {
-        return supplied > 0
+        return supplied > 0;
     }
 
     public void connected() 
