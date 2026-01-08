@@ -46,6 +46,8 @@ other Zone constructible = 5 Tile asset : snow-tile
     private Color32 colorEnd = new Color32(255, 0, 0, 255);
 
     [SerializeField]
+    private GameObject TileCollider;
+    [SerializeField]
     private GameObject TileEmpty; // visual of the tile 
     [SerializeField]
     private GameObject TileRoad1;
