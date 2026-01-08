@@ -34,13 +34,6 @@ public class RobotEnemy : MonoBehaviour
         currentHP = maxHP;
         
     }
-    
-
-    private void Update()
-    {
-        
-
-    }
 
     private void SetDestination(Vector2 destination)
     {
