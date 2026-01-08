@@ -1,5 +1,6 @@
 using System.Runtime.CompilerServices;
 using UnityEngine;
+using System.Collections.Generic;
 
 
 public abstract class Tower : MonoBehaviour
@@ -12,9 +13,25 @@ public abstract class Tower : MonoBehaviour
 
     protected Transform towerTransform;
     protected string nameTower;
+    protected int row;
+    protected int colum;
+    private List<Vector2> TileRoad;
 
-    private int[] TileRoad;
 
+
+    protected void initTowerParameter (int d, int r, string name)
+    {
+        dmg = d;
+        range = r;
+        nameTower = name;
+        // tile = Map.gettile(transform.position.x, transform.position.y)
+    }
+
+
+    private void OnEnable()
+    {
+        construct_road();
+    }
 
 
     public bool is_connected()
@@ -34,11 +51,6 @@ public abstract class Tower : MonoBehaviour
 
 
 
-    protected void initTowerParameter (int d, int r)
-    {
-        dmg = d;
-        range = r;
-    }
 
     public void construct_road ()
     {
