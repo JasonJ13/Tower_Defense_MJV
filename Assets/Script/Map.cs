@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
@@ -28,7 +29,10 @@ public class Map : MonoBehaviour
 
    private static float OFFSET = 0.5f; // Needed since tiles position is on their center
 
-   public struct coords
+   /// <summary>
+   /// used to access the 2DArray MapArray
+   /// </summary>
+   public struct coords 
    {
       public int column;
       public int row;
@@ -84,10 +88,15 @@ public class Map : MonoBehaviour
 
    private TileType[,] mapArray; // 2DArray representation of a map
 
-   private TileType[,] mapArcs;
+   private Dictionary<coords, (coords, int)> mapGraph; // Dictionary representation of the graph of the map, weight being the length of the path towards
 
    private int[,] mapTruc;
 
+   /// <summary>
+   /// Given a coords, return weither it is inside the mapArray or not
+   /// </summary>
+   /// <param name="pos"></param>
+   /// <returns></returns>
    public bool IsInMap(coords pos)
    {
       if (pos.column < 0 || pos.row < 0 || this.mapArray.GetLength(0) <= pos.row || this.mapArray.GetLength(1) <= pos.column)
@@ -97,12 +106,21 @@ public class Map : MonoBehaviour
       return true;
    }
 
-   public coords PositionToCoords(Vector3 position) // convert 3d position in coords for the mapArray 
+   /// <summary>
+   /// convert a 3d position vector in coords for the mapArray (ignore the y axis)
+   /// </summary>
+   /// <param name="position"></param>
+   /// <returns></returns>
+   public coords PositionToCoords(Vector3 position) 
    {
       return new coords ((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
    }
 
-   public TileType[,] GetMapArray() // MapArray is the 2DArray representation of a map
+   /// <summary>
+   /// mapArray is the 2DArray representation of a map
+   /// </summary>
+   /// <returns></returns>
+   public TileType[,] GetMapArray()
    {
       return this.mapArray;
    }
@@ -122,7 +140,6 @@ public class Map : MonoBehaviour
    {
       string mapDiskPath = Application.dataPath + "/Maps/map_01.png";
       //A faire : Agresser l'utilisateur à choisir une map
-      // Convertir la map en mapArray
       //faire d'autre trucs
 
       mapArray = LoadMapArray(mapDiskPath);
@@ -144,10 +161,15 @@ public class Map : MonoBehaviour
          { TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty },
       };
 
-      //        mapArray = mapArrayTest;
+//        mapArray = mapArrayTest;
    }
 
-   private TileType[,] LoadMapArray(string path) // create the MapArray associated to the png given path.
+   /// <summary>
+   /// create the mapArray associated to the png given path.
+   /// </summary>
+   /// <param name="path"></param>
+   /// <returns></returns>
+   private TileType[,] LoadMapArray(string path)
    { 
       Texture2D mapImage = new Texture2D(2, 2);
       mapImage.LoadImage(File.ReadAllBytes(path));
@@ -191,8 +213,11 @@ public class Map : MonoBehaviour
       return mapArray;
    }
 
-
-   private void CheckMap(TileType[,] mapArray) //Verify the validity of a map
+   /// <summary>
+   /// Verifies the validity of a map
+   /// </summary>
+   /// <param name="mapArray"></param>
+   private void CheckMap(TileType[,] mapArray)
    {
       bool endExist = false;
       bool startExist = false;
@@ -212,7 +237,11 @@ public class Map : MonoBehaviour
       }
    }
 
-   private void LoadTiles(TileType[,] mapArray) // create the Tiles associated to the MapArray .
+   /// <summary>
+   /// create the associated Tiles in mapArray in Unity.
+   /// </summary>
+   /// <param name="mapArray"></param>
+   private void LoadTiles(TileType[,] mapArray)
    {
       Vector3 position = new Vector3(0, 0, 0);
       Quaternion rotation = new Quaternion(0, 0, 0, 0);
