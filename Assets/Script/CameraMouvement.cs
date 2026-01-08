@@ -85,6 +85,12 @@ public class CameraMouvement : MonoBehaviour
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = cameraComponent.ScreenPointToRay(mousePosition);
+
+            var interactible = hitInfo.collider.GetComponent<InteractibleObject>();
+            if (interactible != null)
+            {
+                Debug.Log(interactible.name);
+            }
         }
     }
 }
