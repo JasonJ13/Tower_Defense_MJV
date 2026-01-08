@@ -25,13 +25,17 @@ public abstract class Tower : MonoBehaviour
         dmg = d;
         range = r;
         nameTower = name;
-        // tile = Map.gettile(transform.position.x, transform.position.y)
+        /*tile = Map.gettile()*/
     }
 
     private void OnEnable()
     {
         construct_road();
     }
+
+    public void construct_road() { }
+
+    protected abstract void shoot();
 
     public bool is_connected()
     {
@@ -47,8 +51,4 @@ public abstract class Tower : MonoBehaviour
     {
         supplied--;
     }
-
-    public void construct_road() { }
-
-    protected abstract void shoot();
 }
