@@ -90,15 +90,15 @@ public class Map : MonoBehaviour
 
    public bool IsInMap(coords pos)
    {
-      return false;
+      if (pos.column < 0 || pos.row < 0 || this.mapArray.GetLength(0) <= pos.row || this.mapArray.GetLength(1) <= pos.column)
+      {
+         return false;
+      }
+      return true;
    }
 
    public coords PositionToCoords(Vector3 position) // convert 3d position in coords for the mapArray 
    {
-      if (position.x < 0 || position.z < 0)
-      {
-         Debug.LogError("Error : position out of Map");
-      }
       return new coords ((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
    }
 
