@@ -6,7 +6,6 @@ public class TowerTest : Tower
 
     private void Start()
     {
-        towerTransform = GetComponent<Transform>();
         initTowerParameter(3, 3, "Tower Test");
     }
 
