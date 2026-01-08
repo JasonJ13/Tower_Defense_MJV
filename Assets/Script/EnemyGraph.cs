@@ -11,7 +11,16 @@ public class EnemyGraph : MonoBehaviour
 
     private Dictionary<Map.coords, (Map.coords, int)> adjDict;
     private Dictionary<Map.coords, Map.TileType> typeDict;
-    
+
+
+
+    private void UpdateMap()
+    {
+
+        this.mapArray = Map.Instance.GetMapArray();
+
+    }
+
     public void CreateGraph()
     {
         UpdateMap();
@@ -132,7 +141,7 @@ public class EnemyGraph : MonoBehaviour
                         //si on sort d'un noeud ou début/fin ou si on est déjà dans un chemin
                         if (previous_tile_is_node || inPath)
                         {
-                            inPath = true; //on entre dans un chemin
+                            inPath = true; 
                             weightPath++;
 
                             //parcours des cases à côté voir si il y a une tour construite
@@ -172,14 +181,15 @@ public class EnemyGraph : MonoBehaviour
 
         }
 
-    }
+       
 
-    private void UpdateMap()
-    {
 
-        this.mapArray = Map.Instance.GetMapArray();
 
     }
+
+    
+
+
 
 
     
