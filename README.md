@@ -41,6 +41,7 @@ Pas de '\_' -> les '\_' représentent les espaces dans la suite
   - tire
   - placement par le joeur
   - Générateur
+- La camera -> Jason
 
 - Gestion de Monstres -> Célia
   - PV
