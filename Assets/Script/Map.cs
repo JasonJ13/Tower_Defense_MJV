@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using NUnit.Framework;
 using UnityEngine;
 
 public class Map : MonoBehaviour
@@ -150,6 +151,7 @@ public class Map : MonoBehaviour
 /// <summary>
 /// Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
 /// </summary>
+/// <remarks>A node with no edges do not appear in this dictionnary</remarks>
 /// <returns></returns>
    public Dictionary<coords, (coords, int)> GetMapGraphAdj()
    {
@@ -242,12 +244,32 @@ public class Map : MonoBehaviour
    private Dictionary<coords, TileType> CreateMapGraphNodes(TileType[,] mapArray)
    {
       Dictionary<coords, TileType> mapGraphNodes = new Dictionary<coords, TileType> {}; 
+      for (int row = 0; row < mapArray.GetLength(0); row++)
+      {
+         for (int column = 0; column < mapArray.GetLength(1); column++)
+         {
+            coords pos = new coords(row, column);
+            if (mapArray[row, column] == TileType.start)
+            {
+               mapGraphNodes[pos] = TileType.start;
+            }
+            else if (mapArray[row, column] == TileType.end)
+            {
+               mapGraphNodes[pos] = TileType.end;
+            }
+            else if (mapArray[row, column] == TileType.cross)
+            {
+               mapGraphNodes[pos] = TileType.cross;
+            }
+         }
+      }
+
       return mapGraphNodes;
    }
 
 
    /// <summary>
-   /// This function creates the given graph of a mapArray AND send an error if all roads are not strictly horizontal xor vertical (and correctly spaced out)
+   /// This function creates the given graph of a mapArray
    /// </summary>
    /// <param name="mapArray"></param>
    /// <returns></returns>
@@ -256,27 +278,75 @@ public class Map : MonoBehaviour
       //On crée mapGraphNodes type dabord, on copie toute les clés, puis on connecte les noeurds qui doivent etre connecté
 
       Dictionary<coords, (coords, int)> mapGraphAdj = new Dictionary<coords, (coords, int)> {};
+      bool IsFirstRoadEncountered = true;
+      coords firstRoadPosition = new coords(-1,-1);
+      int weight = 0;
 
-      // Horizontal sweep to add start, end, and cross node to graph
+      // Horizontal sweep
       for (int row = 0; row < mapArray.GetLength(0); row++)
       {
          for (int column = 0; column < mapArray.GetLength(1); column++)
          {
             coords pos = new coords(row, column);
-            if (mapArray[row, column] == TileType.start)
+            if (mapArray[row, column] == TileType.road)
             {
+               if (IsFirstRoadEncountered)
+               {
+                  firstRoadPosition = pos;
+                  IsFirstRoadEncountered = false;
+               }
+               else
+               {
+                  weight++;
+               }
             }
-            else if (mapArray[row, column] == TileType.end)
-            {
 
-            }
-            else if (mapArray[row, column] == TileType.cross)
+            else if (!IsFirstRoadEncountered)
             {
+               if (weight > 0)
+               {
+                  firstRoadPosition.column--;
+                  mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
+               }
 
+               weight = 0;
+               IsFirstRoadEncountered = true;
             }
          }
       }
 
+      // Vertical sweep
+      for (int column = 0; column < mapArray.GetLength(1); column++)
+      {
+         for (int row = 0; row < mapArray.GetLength(0); row++)
+         {
+            coords pos = new coords(row, column);
+            if (mapArray[row, column] == TileType.road)
+            {
+               if (IsFirstRoadEncountered)
+               {
+                  firstRoadPosition = pos;
+                  IsFirstRoadEncountered = false;
+               }
+               else
+               {
+                  weight++;
+               }
+            }
+
+            else if (!IsFirstRoadEncountered)
+            {
+               if (weight > 0)
+               {
+                  firstRoadPosition.row--;
+                  mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
+               }
+
+               weight = 0;
+               IsFirstRoadEncountered = true;
+            }
+         }
+      }
 
 
       return mapGraphAdj;
