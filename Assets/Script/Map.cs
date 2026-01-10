@@ -27,19 +27,19 @@ public class Map : MonoBehaviour
       construct,
    }
 
-   private static float OFFSET = 0.5f; // Needed since tiles position is on their center
+   private static float OFFSET = 0.5f; // Needed since tile position is located on their center
 
    /// <summary>
-   /// used to access the 2DArray MapArray
+   /// used to access the 2DArray mapArray
    /// </summary>
    public struct coords 
    {
-      public int column;
       public int row;
-      public coords(int column, int row)
+      public int column;
+      public coords(int row, int column)
       {
-         this.column = column;
          this.row = row;
+         this.column = column;
       }
    }
 
@@ -91,8 +91,8 @@ public class Map : MonoBehaviour
    private int height;
    private int width;
 
-   private Dictionary<coords, TileType> mapGraph; // Dictionary that contains all nodes and their infos
-   private Dictionary<coords, (coords, int)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two node
+   private Dictionary<coords, TileType> mapGraphNodes; // Dictionary that contains all nodes and their infos
+   private Dictionary<coords, (coords, int)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
 
    private int[,] mapTruc;
 
@@ -117,7 +117,7 @@ public class Map : MonoBehaviour
    /// <returns></returns>
    public coords PositionToCoords(Vector3 position) 
    {
-      return new coords ((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
+      return new coords((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
    }
 
    /// <summary>
@@ -139,6 +139,24 @@ public class Map : MonoBehaviour
       this.mapArray[pos.column, pos.row] = type;
    }
 
+/// <summary>
+/// Dictionary that contains all nodes and their infos
+/// </summary>
+/// <returns></returns>
+   public Dictionary<coords, TileType> GetMapGraphNodes()
+   {
+      return this.mapGraphNodes;
+   }
+/// <summary>
+/// Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
+/// </summary>
+/// <returns></returns>
+   public Dictionary<coords, (coords, int)> GetMapGraphAdj()
+   {
+      return this.mapGraphAdj;
+   }
+
+
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
@@ -149,8 +167,8 @@ public class Map : MonoBehaviour
       this.mapArray = LoadMapArray(mapDiskPath);
       this.height = mapArray.GetLength(0);
       this.width = mapArray.GetLength(1);
-      this.mapGraph = CreateMapGraph(mapArray);
-      this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraph);
+      this.mapGraphNodes = CreateMapGraphNodes(mapArray);
+      this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraphNodes);
       CheckMap(mapArray);
       LoadTiles(mapArray);
 
@@ -221,10 +239,10 @@ public class Map : MonoBehaviour
       return mapArray;
    }
 
-   private Dictionary<coords, TileType> CreateMapGraph(TileType[,] mapArray)
+   private Dictionary<coords, TileType> CreateMapGraphNodes(TileType[,] mapArray)
    {
-      Dictionary<coords, TileType> mapGraph = new Dictionary<coords, TileType> {}; 
-      return mapGraph;
+      Dictionary<coords, TileType> mapGraphNodes = new Dictionary<coords, TileType> {}; 
+      return mapGraphNodes;
    }
 
 
@@ -233,9 +251,9 @@ public class Map : MonoBehaviour
    /// </summary>
    /// <param name="mapArray"></param>
    /// <returns></returns>
-   private Dictionary<coords, (coords, int)> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraph)
+   private Dictionary<coords, (coords, int)> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraphNodes)
    { 
-      //On crée mapGraphNodeInfos type dabord, on copie toute les clés, puis on connecte les noeurds qui doivent etre connecté
+      //On crée mapGraphNodes type dabord, on copie toute les clés, puis on connecte les noeurds qui doivent etre connecté
 
       Dictionary<coords, (coords, int)> mapGraphAdj = new Dictionary<coords, (coords, int)> {};
 
