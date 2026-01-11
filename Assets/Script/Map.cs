@@ -93,7 +93,7 @@ public class Map : MonoBehaviour
    private int width;
 
    private Dictionary<coords, TileType> mapGraphNodes; // Dictionary that contains all nodes and their infos
-   private Dictionary<coords, (coords, int)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
+   private Dictionary<coords, (coords pos, int weight)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
 
    private int[,] mapTruc;
 
@@ -173,6 +173,11 @@ public class Map : MonoBehaviour
       this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraphNodes);
       CheckMap(mapArray);
       LoadTiles(mapArray);
+      foreach (coords key in mapGraphAdj.Keys)
+      {
+         Debug.Log(key + " -> " + mapGraphAdj[key].pos);
+      }
+
 
       TileType[,] mapArrayTest =
       { //map Test
@@ -307,6 +312,7 @@ public class Map : MonoBehaviour
                {
                   firstRoadPosition.column--;
                   mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
+                  mapGraphAdj[pos] = (firstRoadPosition, weight+1);
                }
 
                weight = 0;
@@ -340,6 +346,7 @@ public class Map : MonoBehaviour
                {
                   firstRoadPosition.row--;
                   mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
+                  mapGraphAdj[pos] = (firstRoadPosition, weight+1);
                }
 
                weight = 0;
