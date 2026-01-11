@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using NUnit.Framework;
 using UnityEngine;
 
 public class Map : MonoBehaviour
@@ -42,6 +41,28 @@ public class Map : MonoBehaviour
          this.row = row;
          this.column = column;
       }
+
+      override public string ToString()
+      {
+         return "(" + this.row.ToString() + "," + this.column.ToString() + ")";
+      }
+   }
+
+   /// <summary>
+   /// used for listing edges in mapArrayGraphAdj
+   /// </summary>
+   public struct edge 
+   {
+      public coords node1;
+      public coords node2;
+
+      public int weight;
+      public edge(coords node1, coords node2, int weight)
+      {
+         this.node1 = node1;
+         this.node2 = node2;
+         this.weight = weight;
+      }
    }
 
 
@@ -67,16 +88,15 @@ public class Map : MonoBehaviour
    private GameObject TileEmpty; // visual of the tile
 
    [SerializeField]
-   private GameObject TileRoad1;
-
-   [SerializeField]
-   private GameObject TileRoad2;
+   private GameObject TileRoad;
 
    [SerializeField]
    private GameObject TileCross1;
 
    [SerializeField]
    private GameObject TileCross2;
+   [SerializeField]
+   private GameObject TileCross3;
 
    [SerializeField]
    private GameObject TileStart;
@@ -93,9 +113,9 @@ public class Map : MonoBehaviour
    private int width;
 
    private Dictionary<coords, TileType> mapGraphNodes; // Dictionary that contains all nodes and their infos
-   private Dictionary<coords, (coords pos, int weight)> mapGraphAdj; // Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
+   private List<edge> mapGraphAdj; // List of weighted edges, weight being the length of the road between two nodes
 
-   private int[,] mapTruc;
+
 
    /// <summary>
    /// Given a coords, return weither it is inside the mapArray or not
@@ -149,11 +169,11 @@ public class Map : MonoBehaviour
       return this.mapGraphNodes;
    }
 /// <summary>
-/// Dictionary representation of the weighted adjacence graph of the map, weight being the length of the road between two nodes
+/// List of weighted edges, weight being the length of the road between two nodes
 /// </summary>
 /// <remarks>A node with no edges do not appear in this dictionnary</remarks>
 /// <returns></returns>
-   public Dictionary<coords, (coords, int)> GetMapGraphAdj()
+   public List<edge> GetMapGraphAdj()
    {
       return this.mapGraphAdj;
    }
@@ -173,11 +193,11 @@ public class Map : MonoBehaviour
       this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraphNodes);
       CheckMap(mapArray);
       LoadTiles(mapArray);
-      foreach (coords key in mapGraphAdj.Keys)
-      {
-         Debug.Log(key + " -> " + mapGraphAdj[key].pos);
-      }
 
+      foreach (edge edgy in mapGraphAdj)
+      {
+         Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);
+      }
 
       TileType[,] mapArrayTest =
       { //map Test
@@ -278,11 +298,10 @@ public class Map : MonoBehaviour
    /// </summary>
    /// <param name="mapArray"></param>
    /// <returns></returns>
-   private Dictionary<coords, (coords, int)> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraphNodes)
+   private List<edge> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraphNodes)
    { 
-      //On crée mapGraphNodes type dabord, on copie toute les clés, puis on connecte les noeurds qui doivent etre connecté
 
-      Dictionary<coords, (coords, int)> mapGraphAdj = new Dictionary<coords, (coords, int)> {};
+      List<edge> mapGraphAdj = new List<edge>();
       bool IsFirstRoadEncountered = true;
       coords firstRoadPosition = new coords(-1,-1);
       int weight = 0;
@@ -311,8 +330,8 @@ public class Map : MonoBehaviour
                if (weight > 0)
                {
                   firstRoadPosition.column--;
-                  mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
-                  mapGraphAdj[pos] = (firstRoadPosition, weight+1);
+                  mapGraphAdj.Add(new edge(firstRoadPosition, pos, weight+1));                  
+                  mapGraphAdj.Add(new edge(pos, firstRoadPosition, weight+1));
                }
 
                weight = 0;
@@ -345,8 +364,8 @@ public class Map : MonoBehaviour
                if (weight > 0)
                {
                   firstRoadPosition.row--;
-                  mapGraphAdj[firstRoadPosition] = (pos, weight+1);                  
-                  mapGraphAdj[pos] = (firstRoadPosition, weight+1);
+                  mapGraphAdj.Add(new edge(pos, firstRoadPosition, weight+1));                  
+                  mapGraphAdj.Add(new edge(firstRoadPosition, pos, weight+1));                  
                }
 
                weight = 0;
@@ -405,7 +424,7 @@ public class Map : MonoBehaviour
                }
                else if (mapArray[row, column] == TileType.road)
                {
-                  Instantiate(TileRoad1, position, rotation, this.transform);
+                  Instantiate(TileRoad, position, rotation, this.transform);
                }
                else if (mapArray[row, column] == TileType.cross)
                {

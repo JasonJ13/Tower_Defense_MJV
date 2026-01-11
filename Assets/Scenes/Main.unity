@@ -9343,10 +9343,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapLoader
   TileCollider: {fileID: 0}
   TileEmpty: {fileID: 5989981416866362132, guid: 7aaa42cda75c5ca4784fbe338c82b9d7, type: 3}
-  TileRoad1: {fileID: 5989981416866362132, guid: b122ff25aef157d489541ca866aa6920, type: 3}
-  TileRoad2: {fileID: 5989981416866362132, guid: 3f067be4e73c9134a906d7ddfc7fe964, type: 3}
-  TileCross1: {fileID: 5989981416866362132, guid: b828a0c096e81bd47b184cdf9cc5514e, type: 3}
-  TileCross2: {fileID: 5989981416866362132, guid: 06f91c1096cfd5f47b50f9f9d0c26244, type: 3}
+  TileRoad: {fileID: 5989981416866362132, guid: b122ff25aef157d489541ca866aa6920, type: 3}
+  TileCross1: {fileID: 5989981416866362132, guid: 3f067be4e73c9134a906d7ddfc7fe964, type: 3}
+  TileCross2: {fileID: 5989981416866362132, guid: b828a0c096e81bd47b184cdf9cc5514e, type: 3}
+  TileCross3: {fileID: 5989981416866362132, guid: 06f91c1096cfd5f47b50f9f9d0c26244, type: 3}
   TileStart: {fileID: 5989981416866362132, guid: ee97d4c8b86320d4d9e9892c3de6a7d4, type: 3}
   TileEnd: {fileID: 5989981416866362132, guid: 83136450cba29474ca897b2b88530ec2, type: 3}
   TileConstructible: {fileID: 5989981416866362132, guid: 720144a2d59f28a40b843100b1d15264, type: 3}
@@ -12861,10 +12861,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::MapLoader
   TileCollider: {fileID: 0}
   TileEmpty: {fileID: 919132149155446097, guid: 3f212a8857bc1344fb3baae0ca8e3551, type: 3}
-  TileRoad1: {fileID: 919132149155446097, guid: ef2999b6d7d8500498ffba3041d8afa8, type: 3}
-  TileRoad2: {fileID: 919132149155446097, guid: 2f9610181740b5c48b0f26e0d39cee1b, type: 3}
+  TileRoad: {fileID: 0}
   TileCross1: {fileID: 919132149155446097, guid: 78411ad828a849141a0f029dd908fd5d, type: 3}
   TileCross2: {fileID: 919132149155446097, guid: 4a93fc81f1af1e04ab8a374bcce76730, type: 3}
+  TileCross3: {fileID: 0}
   TileStart: {fileID: 919132149155446097, guid: 0115bc475b9b02142a37183849742fc3, type: 3}
   TileEnd: {fileID: 919132149155446097, guid: 7fa0e73a3b1975f428b7cda972dcf463, type: 3}
   TileConstructible: {fileID: 919132149155446097, guid: a761891bd1e7b174fb86b788fb63771c, type: 3}

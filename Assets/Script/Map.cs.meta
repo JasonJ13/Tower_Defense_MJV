@@ -1,2 +1,20 @@
 fileFormatVersion: 2
 guid: 913224a31b9e4dd4f8b1eb9aa3abc732
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - TileCollider: {instanceID: 0}
+  - TileEmpty: {fileID: 5989981416866362132, guid: 7aaa42cda75c5ca4784fbe338c82b9d7, type: 3}
+  - TileRoad: {fileID: 5989981416866362132, guid: b122ff25aef157d489541ca866aa6920, type: 3}
+  - TileCross1: {fileID: 5989981416866362132, guid: 3f067be4e73c9134a906d7ddfc7fe964, type: 3}
+  - TileCross2: {fileID: 5989981416866362132, guid: b828a0c096e81bd47b184cdf9cc5514e, type: 3}
+  - TileCross3: {fileID: 5989981416866362132, guid: 06f91c1096cfd5f47b50f9f9d0c26244, type: 3}
+  - TileStart: {fileID: 5989981416866362132, guid: 83136450cba29474ca897b2b88530ec2, type: 3}
+  - TileEnd: {fileID: 5989981416866362132, guid: ee97d4c8b86320d4d9e9892c3de6a7d4, type: 3}
+  - TileConstructible: {fileID: 5989981416866362132, guid: 720144a2d59f28a40b843100b1d15264, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
