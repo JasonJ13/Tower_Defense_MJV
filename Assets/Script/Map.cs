@@ -65,6 +65,39 @@ public class Map : MonoBehaviour
       }
    }
 
+    private void Awake()
+    {
+        if (Map.Instance != null)
+        {
+            Debug.LogError("Error : Instance of App already exists");
+        }
+        Map.Instance = this;
+    }
+
+    public enum TileType
+    {
+        empty,
+        road,
+        cross,
+        start,
+        end,
+        constructible,
+        construct,
+    }
+
+    private static float OFFSET = 0.5f; // Needed since tiles position is on their center
+
+    public struct coords
+    {
+        public int column;
+        public int row;
+
+        public coords(int c, int r)
+        {
+            column = c;
+            row = r;
+        }
+    }
 
     /*
     (229, 229, 229) Zone non constructible = 0 Tile asset : snow-tile-hill
