@@ -300,8 +300,8 @@ public class Map : MonoBehaviour
    { 
 
       List<edge> mapGraphAdj = new List<edge>();
-      bool IsFirstRoadEncountered = true;
-      coords firstRoadPosition = new coords(-1,-1);
+      bool OnAPath = false;
+      coords lastCrossPosition = new coords(-1,-1);
       int weight = 0;
 
       // Horizontal sweep
@@ -310,68 +310,60 @@ public class Map : MonoBehaviour
          for (int column = 0; column < mapArray.GetLength(1); column++)
          {
             coords pos = new coords(row, column);
-            if (mapArray[row, column] == TileType.road)
+            if (OnAPath && mapArray[row, column] == TileType.road)
             {
-               if (IsFirstRoadEncountered)
-               {
-                  firstRoadPosition = pos;
-                  IsFirstRoadEncountered = false;
-               }
-               else
-               {
-                  weight++;
-               }
+               weight++;
+            }
+            else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
+            {
+               mapGraphAdj.Add(new edge(lastCrossPosition, pos, weight));                  
+               mapGraphAdj.Add(new edge(pos, lastCrossPosition, weight));
+               weight = 0;
+            }
+            else{
+               OnAPath = false;
             }
 
-            else if (!IsFirstRoadEncountered)
+            if (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)
             {
-               if (weight > 0)
-               {
-                  firstRoadPosition.column--;
-                  mapGraphAdj.Add(new edge(firstRoadPosition, pos, weight+1));                  
-                  mapGraphAdj.Add(new edge(pos, firstRoadPosition, weight+1));
-               }
-
-               weight = 0;
-               IsFirstRoadEncountered = true;
+               OnAPath = true;
+               lastCrossPosition = pos;
             }
          }
+         OnAPath = false;
       }
 
+      weight = 0;
+      OnAPath = false;
       // Vertical sweep
       for (int column = 0; column < mapArray.GetLength(1); column++)
       {
          for (int row = 0; row < mapArray.GetLength(0); row++)
          {
             coords pos = new coords(row, column);
-            if (mapArray[row, column] == TileType.road)
+            if (OnAPath && mapArray[row, column] == TileType.road)
             {
-               if (IsFirstRoadEncountered)
-               {
-                  firstRoadPosition = pos;
-                  IsFirstRoadEncountered = false;
-               }
-               else
-               {
-                  weight++;
-               }
+               weight++;
             }
-
-            else if (!IsFirstRoadEncountered)
+            else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
             {
-               if (weight > 0)
-               {
-                  firstRoadPosition.row--;
-                  mapGraphAdj.Add(new edge(pos, firstRoadPosition, weight+1));                  
-                  mapGraphAdj.Add(new edge(firstRoadPosition, pos, weight+1));                  
-               }
-
+               mapGraphAdj.Add(new edge(lastCrossPosition, pos, weight));                  
+               mapGraphAdj.Add(new edge(pos, lastCrossPosition, weight));
                weight = 0;
-               IsFirstRoadEncountered = true;
             }
-         }
-      }
+            else{
+               OnAPath = false;
+            }
 
+            if (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)
+            {
+               OnAPath = true;
+               lastCrossPosition = pos;
+            }
+         }  
+         OnAPath = false;
+      }
+   
 
       return mapGraphAdj;
    }
