@@ -393,6 +393,13 @@ public class Map : MonoBehaviour
       }
    }
 
+
+   private Quaternion CorrectRotation(TileType[,] mapArray, coords pos)
+   {
+      Quaternion rotation = new Quaternion(0, 0, 0, 0);
+      return rotation;
+   }
+
    /// <summary>
    /// create the associated Tiles in mapArray in Unity.
    /// </summary>
@@ -400,37 +407,35 @@ public class Map : MonoBehaviour
    private void LoadTiles(TileType[,] mapArray)
    {
       Vector3 position = new Vector3(0, 0, 0);
-      Quaternion rotation = new Quaternion(0, 0, 0, 0);
 
       for (int row = 0; row < mapArray.GetLength(0); row++)
       {
          for (int column = 0; column < mapArray.GetLength(1); column++)
          {
                position.Set(column + OFFSET, 0, row + OFFSET);
-
                if (mapArray[row, column] == TileType.empty)
                {
-                  Instantiate(TileEmpty, position, rotation, this.transform);
+                  Instantiate(TileEmpty, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.road)
                {
-                  Instantiate(TileRoad, position, rotation, this.transform);
+                  Instantiate(TileRoad, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.cross)
                {
-                  Instantiate(TileCross1, position, rotation, this.transform);
+                  Instantiate(TileCross1, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.start)
                {
-                  Instantiate(TileStart, position, rotation, this.transform);
+                  Instantiate(TileStart, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.end)
                {
-                  Instantiate(TileEnd, position, rotation, this.transform);
+                  Instantiate(TileEnd, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
                else
                {
-                  Instantiate(TileConstructible, position, rotation, this.transform);
+                  Instantiate(TileConstructible, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
                }
             }
         }
