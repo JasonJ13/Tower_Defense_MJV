@@ -1,9 +1,12 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public abstract class Tower : MonoBehaviour
+public class Tower : MonoBehaviour
 {
+    protected Map map;
+
     [SerializeField]
     protected int range;
 
@@ -17,7 +20,7 @@ public abstract class Tower : MonoBehaviour
     protected string nameTower;
     protected int row;
     protected int colum;
-    protected Map.coords tile;
+    protected Map.coords selfTile;
     private List<Map.coords> TileRoad;
 
     protected void initTowerParameter(int d, int r, string name)
@@ -25,29 +28,32 @@ public abstract class Tower : MonoBehaviour
         dmg = d;
         range = r;
         nameTower = name;
-        tile = Map.Instance.PositionToCoords(GetComponent<Transform>().position);
+        selfTile = Map.Instance.PositionToCoords(GetComponent<Transform>().position);
     }
 
     private void OnEnable()
     {
+        map = GameObject.Find("Map").GetComponent<Map>();
         construct_road();
     }
 
-    private void check_type(Map.TileType type)
+    private void check_type(Map.coords tile)
     {
+        Map.TileType type = map.GetMapArrayCoords(tile);
+
         switch (type)
         {
             case Map.TileType.road:
             case Map.TileType.cross:
-                //ajouter à la liste
+                TileRoad.Add(tile);
                 break;
 
             case Map.TileType.start:
-                //ajouter à la fin de la liste
+                TileRoad.Insert(0, tile);
                 break;
 
             case Map.TileType.end:
-                //ajouter au début
+                TileRoad.Add(tile);
                 break;
 
             case Map.TileType.construct:
@@ -64,12 +70,17 @@ public abstract class Tower : MonoBehaviour
         {
             for (int j = 0; j < this.range - i; j++)
             {
-                // Vérification des cases
+                Map.coords tile = new Map.coords(i, j);
+
+                bool inMap = map.IsInMap(tile);
+
+                if (inMap)
+                {
+                    check_type(tile);
+                }
             }
         }
     }
-
-    protected abstract void shoot();
 
     public bool is_connected()
     {

@@ -7368,6 +7368,7 @@ MonoBehaviour:
   SPEED: 20
   cameraBorder: {x: 12, y: 12}
   zoomLimit: {x: 2, y: 24}
+  towerTest: {fileID: 0}
 --- !u!1 &336062711
 GameObject:
   m_ObjectHideFlags: 0

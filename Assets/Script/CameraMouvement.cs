@@ -15,16 +15,22 @@ public class CameraMouvement : MonoBehaviour
     [SerializeField]
     Vector2 zoomLimit = new Vector2(2, 24);
 
+    [SerializeField]
+    GameObject towerPrefab;
+
     private Camera cameraComponent;
     private Transform cameraTransform;
 
     private InputAction moveAction;
     private InputAction zoomAction;
+    private InputAction addTowerAction;
+    private InputAction placeTowerAction;
 
     private Vector2 mouvement;
     private float zoom;
 
     private bool towerInHand;
+    private Transform tower;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -33,11 +39,13 @@ public class CameraMouvement : MonoBehaviour
         cameraComponent = GetComponent<Camera>();
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
+        addTowerAction = InputSystem.actions.FindAction("Player/AddTower");
+        placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
     private void Awake()
     {
-        towerInHand = true;
+        towerInHand = false;
     }
 
     private Vector3 define_translate(Vector2 mouvement, float zoom)
@@ -72,11 +80,32 @@ public class CameraMouvement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //Mouvement de la caméra
         mouvement = moveAction.ReadValue<Vector2>() * SPEED * Time.deltaTime;
         zoom = zoomAction.ReadValue<float>() * SPEED * Time.deltaTime / 2;
         Vector3 translate = define_translate(mouvement, zoom);
-
         cameraTransform.Translate(translate);
+
+        //Gestion d'une nouvelle tour
+        if (addTowerAction.WasPerformedThisFrame())
+        {
+            if (!towerInHand)
+            {
+                towerInHand = true;
+                Instantiate(towerPrefab, cameraTransform, false);
+                newTowerOnCamera();
+            }
+            else
+            {
+                towerInHand = false;
+            }
+        }
+    }
+
+    private void newTowerOnCamera()
+    {
+        tower = cameraTransform.GetChild(0);
+        //tower.position.y -= cameraTransform.position.y;
     }
 
     private void FixedUpdate()
