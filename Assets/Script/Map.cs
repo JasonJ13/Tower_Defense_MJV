@@ -136,7 +136,7 @@ public class Map : MonoBehaviour
    /// <returns></returns>
    public coords PositionToCoords(Vector3 position) 
    {
-      return new coords((int)Math.Floor(position.z - OFFSET), (int)Math.Floor(position.x - OFFSET));
+      return new coords((int)Math.Floor(position.z), (int)Math.Floor(position.x));
    }
 
    /// <summary>
@@ -202,13 +202,7 @@ public class Map : MonoBehaviour
          { TileType.empty, TileType.empty, TileType.end, TileType.empty, TileType.empty },
          { TileType.empty, TileType.empty, TileType.road, TileType.empty, TileType.empty },
          { TileType.start, TileType.road, TileType.cross, TileType.end, TileType.empty },
-         {
-               TileType.empty,
-               TileType.constructible,
-               TileType.empty,
-               TileType.empty,
-               TileType.empty,
-         },
+         { TileType.empty, TileType.constructible, TileType.empty, TileType.empty, TileType.empty },
          { TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty },
       };
 
@@ -299,7 +293,7 @@ public class Map : MonoBehaviour
    private List<edge> CreateMapGraphAdj(Dictionary<coords, TileType> mapGraphNodes)
    { 
 
-      List<edge> mapGraphAdj = new List<edge>();
+      List<edge> mapGraphAdj = new();
       bool OnAPath = false;
       coords lastCrossPosition = new coords(-1,-1);
       int weight = 0;
