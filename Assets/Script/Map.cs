@@ -11,7 +11,7 @@ public class Map : MonoBehaviour
    {
       if (Map.Instance != null)
       {
-         Debug.LogError("Error : Instance of App already exists");
+         Debug.LogError("Error : Instance of Map already exists");
       }
       Map.Instance = this;
    }
@@ -41,7 +41,7 @@ public class Map : MonoBehaviour
          this.column = column;
       }
 
-      override public string ToString()
+      public override string ToString()
       {
          return "(" + this.row.ToString() + "," + this.column.ToString() + ")";
       }
@@ -187,10 +187,10 @@ public class Map : MonoBehaviour
       this.mapArray = LoadMapArray(mapDiskPath);
       this.height = mapArray.GetLength(0);
       this.width = mapArray.GetLength(1);
-      this.mapGraphNodes = CreateMapGraphNodes(mapArray);
-      this.mapGraphAdj = CreateMapGraphAdj(mapArray, mapGraphNodes);
-      CheckMap(mapArray);
-      LoadTiles(mapArray);
+      this.mapGraphNodes = CreateMapGraphNodes();
+      this.mapGraphAdj = CreateMapGraphAdj(mapGraphNodes);
+      CheckMap();
+      LoadTiles();
 
       foreach (edge edgy in mapGraphAdj)
       {
@@ -264,7 +264,7 @@ public class Map : MonoBehaviour
       return mapArray;
    }
 
-   private Dictionary<coords, TileType> CreateMapGraphNodes(TileType[,] mapArray)
+   private Dictionary<coords, TileType> CreateMapGraphNodes()
    {
       Dictionary<coords, TileType> mapGraphNodes = new Dictionary<coords, TileType> {}; 
       for (int row = 0; row < mapArray.GetLength(0); row++)
@@ -296,7 +296,7 @@ public class Map : MonoBehaviour
    /// </summary>
    /// <param name="mapArray"></param>
    /// <returns></returns>
-   private List<edge> CreateMapGraphAdj(TileType[,] mapArray, Dictionary<coords, TileType> mapGraphNodes)
+   private List<edge> CreateMapGraphAdj(Dictionary<coords, TileType> mapGraphNodes)
    { 
 
       List<edge> mapGraphAdj = new List<edge>();
@@ -373,7 +373,7 @@ public class Map : MonoBehaviour
    /// Verifies the validity of a map
    /// </summary>
    /// <param name="mapArray"></param>
-   private void CheckMap(TileType[,] mapArray)
+   private void CheckMap()
    {
       bool endExist = false;
       bool startExist = false;
@@ -394,9 +394,24 @@ public class Map : MonoBehaviour
    }
 
 
-   private Quaternion CorrectRotation(TileType[,] mapArray, coords pos)
+   private Quaternion CorrectRotation(coords pos)
    {
+      TileType tile = mapArray[pos.row, pos.column];
+      pos.row--;
+      bool leftNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      pos.row++;
+      pos.row++;
+      bool rightNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      pos.row--;
+      pos.column--;
+      bool downNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      pos.column++;
+      pos.column++;
+      bool upNeighboor = IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross);
+      pos.column--;
+
       Quaternion rotation = new Quaternion(0, 0, 0, 0);
+
       return rotation;
    }
 
@@ -404,7 +419,7 @@ public class Map : MonoBehaviour
    /// create the associated Tiles in mapArray in Unity.
    /// </summary>
    /// <param name="mapArray"></param>
-   private void LoadTiles(TileType[,] mapArray)
+   private void LoadTiles()
    {
       Vector3 position = new Vector3(0, 0, 0);
 
@@ -415,27 +430,27 @@ public class Map : MonoBehaviour
                position.Set(column + OFFSET, 0, row + OFFSET);
                if (mapArray[row, column] == TileType.empty)
                {
-                  Instantiate(TileEmpty, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileEmpty, position, CorrectRotation(new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.road)
                {
-                  Instantiate(TileRoad, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileRoad, position, CorrectRotation(new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.cross)
                {
-                  Instantiate(TileCross1, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileCross1, position, CorrectRotation(new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.start)
                {
-                  Instantiate(TileStart, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileStart, position, CorrectRotation(new coords(row, column)), this.transform);
                }
                else if (mapArray[row, column] == TileType.end)
                {
-                  Instantiate(TileEnd, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileEnd, position, CorrectRotation(new coords(row, column)), this.transform);
                }
                else
                {
-                  Instantiate(TileConstructible, position, CorrectRotation(mapArray, new coords(row, column)), this.transform);
+                  Instantiate(TileConstructible, position, CorrectRotation(new coords(row, column)), this.transform);
                }
             }
         }
