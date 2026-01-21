@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class CameraMouvement : MonoBehaviour
 {
+    protected Map map;
+
     [SerializeField]
     float SPEED = 20f;
 
@@ -19,7 +21,10 @@ public class CameraMouvement : MonoBehaviour
     GameObject towerPrefab;
 
     [SerializeField]
-    Transform PlayerView;
+    private GameObject towerConstructiblePrefab;
+
+    [SerializeField]
+    private GameObject towerNotConstructiblePrefab;
 
     private Camera cameraComponent;
     private Transform cameraTransform;
@@ -33,6 +38,7 @@ public class CameraMouvement : MonoBehaviour
     private float zoom;
 
     private bool towerInHand;
+    private bool constructible;
     private GameObject tower;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,7 +84,7 @@ public class CameraMouvement : MonoBehaviour
             zoom = 0;
         }
 
-        return new Vector3(mouvement.x, zoom, mouvement.y);
+        return new Vector3(mouvement.x, mouvement.y, zoom);
     }
 
     // Update is called once per frame
@@ -88,7 +94,7 @@ public class CameraMouvement : MonoBehaviour
         mouvement = moveAction.ReadValue<Vector2>() * SPEED * Time.deltaTime;
         zoom = zoomAction.ReadValue<float>() * SPEED * Time.deltaTime / 2;
         Vector3 translate = define_translate(mouvement, zoom);
-        PlayerView.Translate(translate);
+        cameraTransform.Translate(translate);
 
         //Gestion d'une nouvelle tour
         if (addTowerAction.WasPerformedThisFrame())
@@ -96,7 +102,8 @@ public class CameraMouvement : MonoBehaviour
             if (!towerInHand)
             {
                 towerInHand = true;
-                tower = Instantiate(towerPrefab, PlayerView, false);
+                tower = Instantiate(towerNotConstructiblePrefab);
+                constructible = false;
             }
             else
             {
@@ -114,7 +121,30 @@ public class CameraMouvement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                string name = hitInfo.collider.name;
+                tower.transform.position = hitInfo.transform.position;
+
+                if (
+                    !constructible
+                    && Map.Instance.GetMapArrayCoords(
+                        Map.Instance.PositionToCoords(hitInfo.transform.position)
+                    ) == Map.TileType.constructible
+                )
+                {
+                    constructible = true;
+                    Destroy(tower);
+                    tower = Instantiate(towerConstructiblePrefab);
+                }
+                else if (
+                    constructible
+                    && !(Map.Instance.GetMapArrayCoords(
+                        Map.Instance.PositionToCoords(hitInfo.transform.position)
+                    ) == Map.TileType.constructible)
+                )
+                {
+                    constructible = false;
+                    Destroy(tower);
+                    tower = Instantiate(towerNotConstructiblePrefab);
+                }
             }
         }
     }

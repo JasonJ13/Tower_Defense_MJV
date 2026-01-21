@@ -28,18 +28,16 @@ public class Tower : MonoBehaviour
         dmg = d;
         range = r;
         nameTower = name;
-        selfTile = Map.Instance.PositionToCoords(GetComponent<Transform>().position);
     }
 
     private void OnEnable()
     {
-        map = GameObject.Find("Map").GetComponent<Map>();
         construct_road();
     }
 
     private void check_type(Map.coords tile)
     {
-        Map.TileType type = map.GetMapArrayCoords(tile);
+        Map.TileType type = Map.Instance.GetMapArrayCoords(tile);
 
         switch (type)
         {
@@ -72,7 +70,7 @@ public class Tower : MonoBehaviour
             {
                 Map.coords tile = new Map.coords(i, j);
 
-                bool inMap = map.IsInMap(tile);
+                bool inMap = Map.Instance.IsInMap(tile);
 
                 if (inMap)
                 {
