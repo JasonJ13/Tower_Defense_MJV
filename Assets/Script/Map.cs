@@ -150,12 +150,12 @@ public class Map : MonoBehaviour
 
    public TileType GetMapArrayCoords(coords pos)
    {
-      return this.mapArray[pos.column, pos.row];
+      return this.mapArray[pos.row, pos.column];
    }
 
    public void SetMapArray((int column, int row) pos, TileType type)
    {
-      this.mapArray[pos.column, pos.row] = type;
+      this.mapArray[pos.row, pos.column] = type;
    }
 
 /// <summary>
