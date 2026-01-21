@@ -204,7 +204,7 @@ public class Map : MonoBehaviour
 
         foreach (edge edgy in mapGraphAdj)
         {
-            Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);
+            //Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);
         }
 
         TileType[,] mapArrayTest =
