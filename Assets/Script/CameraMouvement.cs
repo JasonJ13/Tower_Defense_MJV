@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 public class CameraMouvement : MonoBehaviour
 {
+    protected Map map;
+
     [SerializeField]
     float SPEED = 20f;
 
@@ -15,29 +17,45 @@ public class CameraMouvement : MonoBehaviour
     [SerializeField]
     Vector2 zoomLimit = new Vector2(2, 24);
 
+    [SerializeField]
+    GameObject towerPrefab;
+
+    [SerializeField]
+    private GameObject towerConstructiblePrefab;
+
+    [SerializeField]
+    private GameObject towerNotConstructiblePrefab;
+
     private Camera cameraComponent;
     private Transform cameraTransform;
 
     private InputAction moveAction;
     private InputAction zoomAction;
+    private InputAction addTowerAction;
+    private InputAction placeTowerAction;
 
     private Vector2 mouvement;
     private float zoom;
 
     private bool towerInHand;
+    private bool constructible;
+    private GameObject tower;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
         cameraTransform = GetComponent<Transform>();
         cameraComponent = GetComponent<Camera>();
+
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
+        addTowerAction = InputSystem.actions.FindAction("Player/AddTower");
+        placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
     private void Awake()
     {
-        towerInHand = true;
+        towerInHand = false;
     }
 
     private Vector3 define_translate(Vector2 mouvement, float zoom)
@@ -72,11 +90,26 @@ public class CameraMouvement : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
+        //Mouvement de la caméra
         mouvement = moveAction.ReadValue<Vector2>() * SPEED * Time.deltaTime;
         zoom = zoomAction.ReadValue<float>() * SPEED * Time.deltaTime / 2;
         Vector3 translate = define_translate(mouvement, zoom);
-
         cameraTransform.Translate(translate);
+
+        //Gestion d'une nouvelle tour
+        if (addTowerAction.WasPerformedThisFrame())
+        {
+            if (!towerInHand)
+            {
+                towerInHand = true;
+                tower = Instantiate(towerNotConstructiblePrefab);
+                constructible = false;
+            }
+            else
+            {
+                towerInHand = false;
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -88,7 +121,30 @@ public class CameraMouvement : MonoBehaviour
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                string name = hitInfo.collider.name;
+                tower.transform.position = hitInfo.transform.position;
+
+                if (
+                    !constructible
+                    && Map.Instance.GetMapArrayCoords(
+                        Map.Instance.PositionToCoords(hitInfo.transform.position)
+                    ) == Map.TileType.constructible
+                )
+                {
+                    constructible = true;
+                    Destroy(tower);
+                    tower = Instantiate(towerConstructiblePrefab);
+                }
+                else if (
+                    constructible
+                    && !(Map.Instance.GetMapArrayCoords(
+                        Map.Instance.PositionToCoords(hitInfo.transform.position)
+                    ) == Map.TileType.constructible)
+                )
+                {
+                    constructible = false;
+                    Destroy(tower);
+                    tower = Instantiate(towerNotConstructiblePrefab);
+                }
             }
         }
     }
