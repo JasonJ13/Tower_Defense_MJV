@@ -180,7 +180,7 @@ public class Map : MonoBehaviour
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
-      string mapDiskPath = Application.dataPath + "/Maps/map_01.png";
+      string mapDiskPath = Application.dataPath + "/Maps/map_02.png";
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
@@ -192,10 +192,7 @@ public class Map : MonoBehaviour
       CheckMap();
       LoadTiles();
 
-      foreach (edge edgy in mapGraphAdj)
-      {
-         Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);
-      }
+//      foreach (edge edgy in mapGraphAdj){Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);}
 
       TileType[,] mapArrayTest =
       { //map Test
@@ -391,22 +388,143 @@ public class Map : MonoBehaviour
    private Quaternion CorrectRotation(coords pos)
    {
       TileType tile = mapArray[pos.row, pos.column];
+      if (!(tile == TileType.road || tile == TileType.cross))
+      {
+         return new Quaternion(0, 0, 0, 0);        
+      }
+      if (tile == TileType.road)
+      {
+         pos.row--;
+         if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column] == TileType.cross))
+         {
+            return new Quaternion(0, 0, 0, 0);
+         }
+         else
+         {
+            return Quaternion.AngleAxis(90, Vector3.up);
+         }
+      }
+
+      // If we are here, it means tile = Tiletype.cross
+      bool rightNeighboor = false;
+      bool leftNeighboor = false;
+      bool upNeighboor = false;
+      bool downNeighboor = false;
+      int count = 0;
       pos.row--;
-      bool leftNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column] == TileType.cross))
+      {
+         downNeighboor = true;
+         count++;         
+      }
       pos.row++;
       pos.row++;
-      bool rightNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         upNeighboor = true;
+         count++;
+      }
       pos.row--;
       pos.column--;
-      bool downNeighboor = IsInMap(pos) && mapArray[pos.row, pos.column]!=TileType.empty;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         leftNeighboor = true;
+         count++;
+      }
       pos.column++;
       pos.column++;
-      bool upNeighboor = IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross);
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         rightNeighboor = true;
+         count++;
+      }
       pos.column--;
+      if (count == 4)
+      {
+         return new Quaternion(0, 0, 0, 0);
+      }
+      if (count == 3)
+      {
+         Debug.Log("testest : " + pos);
+         Debug.Log(downNeighboor);
+         if (downNeighboor == false)
+         {
+         return Quaternion.AngleAxis(0, Vector3.up);            
+         }
+         if (leftNeighboor == false)
+         {
+         return Quaternion.AngleAxis(90, Vector3.up);            
+         }
+         if (upNeighboor == false)
+         {
+         return Quaternion.AngleAxis(180, Vector3.up);            
+         }
+         if (rightNeighboor == false)
+         {
+         return Quaternion.AngleAxis(-90, Vector3.up);            
+         }
+      }
+      if (count == 2)
+      {
+         if (leftNeighboor == true && upNeighboor == true)
+         {
+         return Quaternion.AngleAxis(0, Vector3.up);            
+         }
+         if (upNeighboor == true && rightNeighboor == true)
+         {
+         return Quaternion.AngleAxis(90, Vector3.up);            
+         }
+         if (rightNeighboor == true && downNeighboor == true)
+         {
+         return Quaternion.AngleAxis(180, Vector3.up);            
+         }
+         if (downNeighboor == true && leftNeighboor == true)
+         {
+         return Quaternion.AngleAxis(-90, Vector3.up);            
+         }
+      }
 
-      Quaternion rotation = new Quaternion(0, 0, 0, 0);
 
-      return rotation;
+      Debug.LogError("Cross have not correct neighboors placement");   
+      return new Quaternion(0, 0, 0, 0);
+   }
+
+   private GameObject CorrectCrossTile(coords pos)
+   {
+      int count = 0;
+      pos.row--;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column] == TileType.cross))
+      {
+         count++;
+      }
+      pos.row++;  
+      pos.row++;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         count++;
+      }
+      pos.row--;
+      pos.column--;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         count++;
+      }
+      pos.column++;
+      pos.column++;
+      if (IsInMap(pos) && (mapArray[pos.row, pos.column]==TileType.start || mapArray[pos.row, pos.column]==TileType.end || mapArray[pos.row, pos.column]==TileType.road || mapArray[pos.row, pos.column]==TileType.cross)){
+         count++;
+      }
+      pos.column--;
+      
+      if (count == 2)
+      {
+         return TileCross1;
+      }
+      if (count == 3)
+      {
+         return TileCross2;
+      }
+      if (count == 4)
+      {
+         return TileCross3;         
+      }
+      Debug.LogError("Cross have less than 2 correct neighboors");
+      return TileEmpty;    
    }
 
    /// <summary>
@@ -415,38 +533,40 @@ public class Map : MonoBehaviour
    /// <param name="mapArray"></param>
    private void LoadTiles()
    {
-      Vector3 position = new Vector3(0, 0, 0);
-
+      Vector3 position = new(0, 0, 0);
+      coords pos = new(0, 0);
       for (int row = 0; row < mapArray.GetLength(0); row++)
       {
+         pos.row = row;
          for (int column = 0; column < mapArray.GetLength(1); column++)
          {
-               position.Set(column + OFFSET, 0, row + OFFSET);
-               if (mapArray[row, column] == TileType.empty)
-               {
-                  Instantiate(TileEmpty, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
-               else if (mapArray[row, column] == TileType.road)
-               {
-                  Instantiate(TileRoad, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
-               else if (mapArray[row, column] == TileType.cross)
-               {
-                  Instantiate(TileCross1, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
-               else if (mapArray[row, column] == TileType.start)
-               {
-                  Instantiate(TileStart, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
-               else if (mapArray[row, column] == TileType.end)
-               {
-                  Instantiate(TileEnd, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
-               else
-               {
-                  Instantiate(TileConstructible, position, CorrectRotation(new coords(row, column)), this.transform);
-               }
+            pos.column = column;
+            position.Set(column + OFFSET, 0, row + OFFSET);
+            if (mapArray[row, column] == TileType.empty)
+            {
+               Instantiate(TileEmpty, position, CorrectRotation(pos), this.transform);
             }
-        }
-    }
+            else if (mapArray[row, column] == TileType.road)
+            {
+               Instantiate(TileRoad, position, CorrectRotation(pos), this.transform);
+            }
+            else if (mapArray[row, column] == TileType.cross)
+            {
+               Instantiate(CorrectCrossTile(pos), position, CorrectRotation(pos), this.transform);
+            }
+            else if (mapArray[row, column] == TileType.start)
+            {
+               Instantiate(TileStart, position, CorrectRotation(pos), this.transform);
+            }
+            else if (mapArray[row, column] == TileType.end)
+            {
+               Instantiate(TileEnd, position, CorrectRotation(pos), this.transform);
+            }
+            else
+            {
+               Instantiate(TileConstructible, position, CorrectRotation(pos), this.transform);
+            }
+         }
+      }
+   }
 }
