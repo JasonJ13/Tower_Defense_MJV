@@ -150,11 +150,13 @@ public class Map : MonoBehaviour
 
    public TileType GetMapArrayCoords(coords pos)
    {
+      Debug.Assert(IsInMap(pos));
       return this.mapArray[pos.row, pos.column];
    }
 
-   public void SetMapArray((int column, int row) pos, TileType type)
+   public void SetMapArray(coords pos, TileType type)
    {
+      Debug.Assert(IsInMap(pos));
       this.mapArray[pos.row, pos.column] = type;
    }
 
@@ -180,7 +182,7 @@ public class Map : MonoBehaviour
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
-      string mapDiskPath = Application.dataPath + "/Maps/map_02.png";
+      string mapDiskPath = Application.dataPath + "/Maps/map_03.png";
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
