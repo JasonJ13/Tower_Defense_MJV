@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Assertions;
 
 public class Map : MonoBehaviour
 {
@@ -39,6 +41,12 @@ public class Map : MonoBehaviour
       {
          this.row = row;
          this.column = column;
+      }
+
+
+      public bool Equals(coords pos2)
+      {
+         return this.row == pos2.row && this.column == pos2.column;
       }
 
       public override string ToString()
@@ -136,7 +144,7 @@ public class Map : MonoBehaviour
       this.width = mapArray.GetLength(1);
       this.graph = new();
       this.graph.CreateNodes(mapArray);
-      this.graph.CreateMapGraphAdj(mapArray);
+      this.graph.CreateEdges(mapArray);
       CheckMap();
       LoadTiles();
 
@@ -413,33 +421,25 @@ public class Map : MonoBehaviour
 
    public class Graph
    {
-      private Dictionary<coords, TileType> mapGraphNodes; // Dictionary that contains all nodes and their infos
-      private List<edge> mapGraphAdj; // List of weighted edges, weight being the length of the road between two nodes
-      private List<node> nodes; // List that contains all nodes
+      private Dictionary<coords, nodeInfos> dictNodes; // Dictionnary that contains all infos for a given node (ie coords)
+      private List<edge> edges; // List of weighted edges, weight being the length of the road between two nodes
 
-      public struct node 
+      public struct nodeInfos 
       {
          public coords pos;
          public TileType type;
          public int distanceFromStart;
-         public coords nextNodeToStart;
          public int distanceFromEnd;
-         public coords nextNodeToEnd;
-         public node(coords pos, TileType type, int distanceFromStart, coords nextNodeToStart, int distanceFromEnd, coords nextNodeToEnd)
+         public nodeInfos(coords pos, TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
          {
             this.pos = pos;
             this.type = type;
             this.distanceFromStart = distanceFromStart;
-            this.nextNodeToStart = nextNodeToStart;
             this.distanceFromEnd = distanceFromEnd;
-            this.nextNodeToEnd = nextNodeToEnd;
          }
       }
 
 
-      /// <summary>
-      /// used for listing edges in mapArrayGraphAdj
-      /// </summary>
       public struct edge 
       {
          public coords node1;
@@ -455,27 +455,37 @@ public class Map : MonoBehaviour
       }
 
    /// <summary>
-   /// Dictionary that contains all nodes and their infos
+   /// Dictionary that contains all nodes (coords) and their infos (nodeInfos)
    /// </summary>
    /// <returns></returns>
-      public Dictionary<coords, TileType> GetMapGraphNodes()
+      public Dictionary<coords, nodeInfos> GetDictNodes()
       {
-         return this.mapGraphNodes;
+         return this.dictNodes;
       }
+
+      public List<coords> GetNodes()
+      {
+         return this.dictNodes.Keys.ToList();
+      }
+
+      public nodeInfos GetNodeInfos(coords pos)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
+         return this.dictNodes[pos];
+      }
+
    /// <summary>
    /// List of weighted edges, weight being the length of the road between two nodes
    /// </summary>
-   /// <remarks>A node with no edges do not appear in this dictionnary</remarks>
    /// <returns></returns>
-      public List<edge> GetMapGraphAdj()
+      public List<edge> GetEdges()
       {
-         return this.mapGraphAdj;
+         return this.edges;
       }
+      
 
-
-      public Dictionary<coords, TileType> CreateNodes(TileType[,] mapArray)
+      public void CreateNodes(TileType[,] mapArray)
       {
-         Dictionary<coords, TileType> mapGraphNodes = new Dictionary<coords, TileType> {}; 
          for (int row = 0; row < mapArray.GetLength(0); row++)
          {
             for (int column = 0; column < mapArray.GetLength(1); column++)
@@ -483,20 +493,20 @@ public class Map : MonoBehaviour
                coords pos = new coords(row, column);
                if (mapArray[row, column] == TileType.start)
                {
-                  mapGraphNodes[pos] = TileType.start;
+                  this.dictNodes[pos] = new nodeInfos(pos, TileType.start);
                }
                else if (mapArray[row, column] == TileType.end)
                {
-                  mapGraphNodes[pos] = TileType.end;
+                  this.dictNodes[pos] = new nodeInfos(pos, TileType.end);
                }
                else if (mapArray[row, column] == TileType.cross)
                {
-                  mapGraphNodes[pos] = TileType.cross;
+                  this.dictNodes[pos] = new nodeInfos(pos, TileType.cross);
                }
             }
          }
 
-         return mapGraphNodes;
+         return;
       }
 
 
@@ -505,10 +515,9 @@ public class Map : MonoBehaviour
       /// </summary>
       /// <param name="mapArray"></param>
       /// <returns></returns>
-      public List<edge> CreateMapGraphAdj(TileType[,] mapArray)
+      public void CreateEdges(TileType[,] mapArray)
       { 
-         Debug.Assert(this.mapGraphNodes != null);
-         List<edge> mapGraphAdj = new();
+         Debug.Assert(this.dictNodes != null);
          bool OnAPath = false;
          coords lastCrossPosition = new coords(-1,-1);
          int weight = 0;
@@ -525,8 +534,8 @@ public class Map : MonoBehaviour
                }
                else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
                {
-                  mapGraphAdj.Add(new edge(lastCrossPosition, pos, weight));                  
-                  mapGraphAdj.Add(new edge(pos, lastCrossPosition, weight));
+                  this.edges.Add(new edge(lastCrossPosition, pos, weight));                  
+                  this.edges.Add(new edge(pos, lastCrossPosition, weight));
                   weight = 0;
                }
                else{
@@ -556,8 +565,8 @@ public class Map : MonoBehaviour
                }
                else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
                {
-                  mapGraphAdj.Add(new edge(lastCrossPosition, pos, weight));                  
-                  mapGraphAdj.Add(new edge(pos, lastCrossPosition, weight));
+                  edges.Add(new edge(lastCrossPosition, pos, weight));                  
+                  edges.Add(new edge(pos, lastCrossPosition, weight));
                   weight = 0;
                }
                else{
@@ -574,7 +583,7 @@ public class Map : MonoBehaviour
          }
       
 
-         return mapGraphAdj;
+         return;
       }
 
    }
