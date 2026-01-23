@@ -135,7 +135,7 @@ GameObject:
   - component: {fileID: 3348301165846499720}
   - component: {fileID: 8767573790190227223}
   m_Layer: 0
-  m_Name: Robot Enemy
+  m_Name: Robot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -203,7 +203,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d07558bd5c1e8845bb8bc2483276874, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotEnemy
-  maxHP: 100
+  maxHP: 50
   speed: 100
 --- !u!1 &272349382468337885
 GameObject:

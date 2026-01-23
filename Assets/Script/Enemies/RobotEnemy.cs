@@ -7,8 +7,8 @@ public class RobotEnemy : MonoBehaviour
 {
     [SerializeField] private int maxHP;
     [SerializeField] private float speed;
-
-    //[SerializeField] private Vector2[] destinations;
+    [SerializeField] private int damage;
+    [SerializeField] private float randomPath;
 
     private Vector2 destination;
     private int currentHP;
@@ -16,24 +16,16 @@ public class RobotEnemy : MonoBehaviour
     private Animator anim;
 
     private EnemyGraph graph;
-    //valeurs provisoires
-    //private float redModifier = 0.5f;
-    //private float blueModifier = 1f;
-    //private float greenModifier = 2f;
-    //private float yellowModifier = 1f;
 
 
-    private void Awake()
-    {
-        graph = new EnemyGraph();
-        
-    }
     private void Start()
     {
         anim = gameObject.GetComponent<Animator>();
         currentHP = maxHP;
-        
+
     }
+
+    
 
     private void SetDestination(Vector2 destination)
     {
@@ -44,7 +36,6 @@ public class RobotEnemy : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        //il faut multiplier les dégats par le modifier selon le type de la tour, à voir
         currentHP -= damage;
         if (currentHP <= 0)
         {
@@ -58,8 +49,9 @@ public class RobotEnemy : MonoBehaviour
         anim.SetBool("Open_Anim", false);
 
     }
-    public void DeathAnimFinished()
+    protected void DeathAnimFinished()
     {
+        
         Debug.Log("mort");
         Destroy(gameObject,0.5f);
     }
