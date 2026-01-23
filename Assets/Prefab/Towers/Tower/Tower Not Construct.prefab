@@ -14,11 +14,11 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 2a452af218fb184429b9e77a8de4ec20, type: 2}
     - target: {fileID: 2723801371631890344, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
       propertyPath: m_Name
-      value: Tower Variant
+      value: Tower Not Construct
       objectReference: {fileID: 0}
     - target: {fileID: 4550773813143690578, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.73752
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4550773813143690578, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
       propertyPath: m_LocalPosition.y
@@ -26,7 +26,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4550773813143690578, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3.43575
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4550773813143690578, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
       propertyPath: m_LocalRotation.w
