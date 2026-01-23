@@ -10,7 +10,7 @@ MonoImporter:
   - TileCross1: {fileID: 5989981416866362132, guid: 3f067be4e73c9134a906d7ddfc7fe964, type: 3}
   - TileCross2: {fileID: 5989981416866362132, guid: b828a0c096e81bd47b184cdf9cc5514e, type: 3}
   - TileCross3: {fileID: 5989981416866362132, guid: 06f91c1096cfd5f47b50f9f9d0c26244, type: 3}
-  - TileStart: {fileID: 5989981416866362132, guid: 83136450cba29474ca897b2b88530ec2, type: 3}
+  - TileStart: {fileID: 8538551921834504145, guid: 71d2931676d338b4892fe9fdc041787a, type: 3}
   - TileEnd: {fileID: 5989981416866362132, guid: ee97d4c8b86320d4d9e9892c3de6a7d4, type: 3}
   - TileConstructible: {fileID: 5989981416866362132, guid: 720144a2d59f28a40b843100b1d15264, type: 3}
   executionOrder: 0

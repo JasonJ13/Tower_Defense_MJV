@@ -7368,7 +7368,9 @@ MonoBehaviour:
   SPEED: 20
   cameraBorder: {x: 12, y: 12}
   zoomLimit: {x: 2, y: 24}
-  towerTest: {fileID: 0}
+  towerPrefab: {fileID: 0}
+  towerConstructiblePrefab: {fileID: 0}
+  towerNotConstructiblePrefab: {fileID: 0}
 --- !u!1 &336062711
 GameObject:
   m_ObjectHideFlags: 0
@@ -9351,8 +9353,8 @@ MonoBehaviour:
   TileCross1: {fileID: 5989981416866362132, guid: 3f067be4e73c9134a906d7ddfc7fe964, type: 3}
   TileCross2: {fileID: 5989981416866362132, guid: b828a0c096e81bd47b184cdf9cc5514e, type: 3}
   TileCross3: {fileID: 5989981416866362132, guid: 06f91c1096cfd5f47b50f9f9d0c26244, type: 3}
-  TileStart: {fileID: 5989981416866362132, guid: ee97d4c8b86320d4d9e9892c3de6a7d4, type: 3}
-  TileEnd: {fileID: 5989981416866362132, guid: 83136450cba29474ca897b2b88530ec2, type: 3}
+  TileStart: {fileID: 8538551921834504145, guid: 71d2931676d338b4892fe9fdc041787a, type: 3}
+  TileEnd: {fileID: 2502074910117677563, guid: 71cd3dd99ece1824a9e4d01edb6cd31b, type: 3}
   TileConstructible: {fileID: 5989981416866362132, guid: 720144a2d59f28a40b843100b1d15264, type: 3}
 --- !u!1 &447267713
 GameObject:
