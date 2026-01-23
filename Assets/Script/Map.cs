@@ -143,8 +143,7 @@ public class Map : MonoBehaviour
       this.height = mapArray.GetLength(0);
       this.width = mapArray.GetLength(1);
       this.graph = new();
-      this.graph.CreateNodes(mapArray);
-      this.graph.CreateEdges(mapArray);
+      this.graph.CreateGraph(mapArray);
       CheckMap();
       LoadTiles();
 
@@ -426,7 +425,7 @@ public class Map : MonoBehaviour
 
       public struct nodeInfos 
       {
-         public coords pos;
+         public coords pos; // technically redundant but I like it
          public TileType type;
          public int distanceFromStart;
          public int distanceFromEnd;
@@ -463,11 +462,20 @@ public class Map : MonoBehaviour
          return this.dictNodes;
       }
 
+   /// <summary>
+   /// List of nodes (represented by coords)
+   /// </summary>
+   /// <returns></returns>
       public List<coords> GetNodes()
       {
          return this.dictNodes.Keys.ToList();
       }
 
+   /// <summary>
+   /// nodeInfos is a STRUCT that contains ??? (TBA)
+   /// </summary>
+   /// <param name="pos"></param>
+   /// <returns></returns>
       public nodeInfos GetNodeInfos(coords pos)
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(pos));
@@ -484,7 +492,18 @@ public class Map : MonoBehaviour
       }
       
 
-      public void CreateNodes(TileType[,] mapArray)
+   /// <summary>
+   /// This function creates the given graph of a mapArray 
+   /// </summary>
+   /// <param name="mapArray"></param>
+      public void CreateGraph(TileType[,] mapArray)
+      {
+         this.CreateDictNodes(mapArray);
+         this.CreateEdges(mapArray);
+         return;
+      }
+
+      private void CreateDictNodes(TileType[,] mapArray)
       {
          for (int row = 0; row < mapArray.GetLength(0); row++)
          {
@@ -510,12 +529,7 @@ public class Map : MonoBehaviour
       }
 
 
-      /// <summary>
-      /// This function creates the given graph of a mapArray
-      /// </summary>
-      /// <param name="mapArray"></param>
-      /// <returns></returns>
-      public void CreateEdges(TileType[,] mapArray)
+      private void CreateEdges(TileType[,] mapArray)
       { 
          Debug.Assert(this.dictNodes != null);
          bool OnAPath = false;
