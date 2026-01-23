@@ -21,17 +21,21 @@ public class CameraMouvement : MonoBehaviour
     GameObject towerPrefab;
 
     [SerializeField]
-    private GameObject towerConstructiblePrefab;
+    GameObject generatorPrefab;
 
     [SerializeField]
-    private GameObject towerNotConstructiblePrefab;
+    GameObject towerConstructablePrefab;
+
+    [SerializeField]
+    GameObject generatorConstructablePrefab;
 
     private Camera cameraComponent;
     private Transform cameraTransform;
 
     private InputAction moveAction;
     private InputAction zoomAction;
-    private InputAction addTowerAction;
+    private InputAction addTowerAction1;
+    private InputAction addTowerAction2;
     private InputAction placeTowerAction;
 
     private Vector2 mouvement;
@@ -40,6 +44,7 @@ public class CameraMouvement : MonoBehaviour
     private bool towerInHand;
     private bool constructible;
     private GameObject tower;
+    private MeshRenderer tower_MeshRenderer;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -49,7 +54,8 @@ public class CameraMouvement : MonoBehaviour
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
-        addTowerAction = InputSystem.actions.FindAction("Player/AddTower");
+        addTowerAction1 = InputSystem.actions.FindAction("Player/AddTower1");
+        addTowerAction2 = InputSystem.actions.FindAction("Player/AddTower2");
         placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
@@ -97,18 +103,41 @@ public class CameraMouvement : MonoBehaviour
         cameraTransform.Translate(translate);
 
         //Gestion d'une nouvelle tour
-        if (addTowerAction.WasPerformedThisFrame())
+        if (addTowerAction1.WasPerformedThisFrame() || addTowerAction2.WasPerformedThisFrame())
         {
             if (!towerInHand)
             {
                 towerInHand = true;
-                tower = Instantiate(towerNotConstructiblePrefab);
+
+                if (addTowerAction1.WasPerformedThisFrame())
+                {
+                    tower = Instantiate(towerConstructablePrefab);
+                }
+                else
+                {
+                    tower = Instantiate(generatorConstructablePrefab);
+                }
+
                 constructible = false;
+                tower_MeshRenderer = tower
+                    .GetComponent<Transform>()
+                    .GetChild(0)
+                    .GetComponent<MeshRenderer>();
             }
             else
             {
                 towerInHand = false;
+                Destroy(tower);
             }
+        }
+
+        if (constructible && placeTowerAction.WasPerformedThisFrame())
+        {
+            constructible = false;
+            towerInHand = false;
+
+            Instantiate(towerPrefab, tower.transform.position, tower.transform.rotation);
+            Destroy(tower);
         }
     }
 
@@ -131,19 +160,19 @@ public class CameraMouvement : MonoBehaviour
                 )
                 {
                     constructible = true;
-                    Destroy(tower);
-                    tower = Instantiate(towerConstructiblePrefab);
+                    tower_MeshRenderer.materials[0].color = Color.green;
                 }
                 else if (
                     constructible
-                    && !(Map.Instance.GetMapArrayCoords(
-                        Map.Instance.PositionToCoords(hitInfo.transform.position)
-                    ) == Map.TileType.constructible)
+                    && !(
+                        Map.Instance.GetMapArrayCoords(
+                            Map.Instance.PositionToCoords(hitInfo.transform.position)
+                        ) == Map.TileType.constructible
+                    )
                 )
                 {
                     constructible = false;
-                    Destroy(tower);
-                    tower = Instantiate(towerNotConstructiblePrefab);
+                    tower_MeshRenderer.materials[0].color = Color.red;
                 }
             }
         }
