@@ -146,6 +146,15 @@ public class Map : MonoBehaviour
       this.graph.CreateGraph(mapArray);
       CheckMap();
       LoadTiles();
+      foreach (coords node1 in this.graph.GetNodes())
+      {
+         foreach (coords node2 in this.graph.GetNodes())
+         {
+//            Debug.Log(this.graph.GetPathWeight(node1, node2));
+//            Debug.Log(this.graph.GetPath(node1, node2).Count);
+         }
+      }
+      
 
 //      foreach (edge edgy in mapGraphAdj){Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);}
 
@@ -422,19 +431,36 @@ public class Map : MonoBehaviour
    {
       private Dictionary<coords, nodeInfos> dictNodes; // Dictionnary that contains all infos for a given node (ie coords)
       private List<edge> edges; // List of weighted edges, weight being the length of the road between two nodes
+      private int[,] matAdj; //
+      private int[,] prev; // 
+
+      private int MAXLENGTHPATH;
+
 
       public struct nodeInfos 
       {
-         public coords pos; // technically redundant but I like it
-         public TileType type;
+         private static int idSetter=0;
+         private int id;
+         private TileType type;
          public int distanceFromStart;
          public int distanceFromEnd;
-         public nodeInfos(coords pos, TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
+         public nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
          {
-            this.pos = pos;
+            this.id = idSetter;
+            idSetter++;
             this.type = type;
             this.distanceFromStart = distanceFromStart;
             this.distanceFromEnd = distanceFromEnd;
+         }
+
+         public TileType GetTileType()
+         {
+            return this.type;
+         }
+
+         public int GetId()
+         {
+            return this.id;
          }
       }
 
@@ -490,7 +516,48 @@ public class Map : MonoBehaviour
       {
          return this.edges;
       }
-      
+
+      public int GetPathWeight(coords pos1, coords pos2)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos1));
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos2));
+         return this.matAdj[this.dictNodes[pos1].GetId(), this.dictNodes[pos2].GetId()];
+      }
+
+/*
+procedure Path(u, v) is
+    if prev[u][v] = null then
+        return []
+    path = [v]
+    while u ≠ v do
+        v = prev[u][v]
+        path.prepend(v)
+    return path
+*/
+
+      public List<coords> GetPath(coords pos1, coords pos2)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos1));
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos2));
+
+         Dictionary<int, coords> dictIdToNode = new();
+         foreach (coords node in this.dictNodes.Keys)
+         {
+            dictIdToNode[this.dictNodes[node].GetId()] = node;
+         }
+         int u = this.dictNodes[pos1].GetId();
+         int v = this.dictNodes[pos2].GetId();
+         List<coords> path = new();
+         if (this.prev[u,v] == -1){return path;}
+         path.Add(dictIdToNode[v]);
+         while (u != v)
+         {
+            v = this.prev[u,v];
+            path.Add(dictIdToNode[v]);
+         }
+         return path;
+      }
+
 
    /// <summary>
    /// This function creates the given graph of a mapArray 
@@ -498,8 +565,10 @@ public class Map : MonoBehaviour
    /// <param name="mapArray"></param>
       public void CreateGraph(TileType[,] mapArray)
       {
+         this.MAXLENGTHPATH = mapArray.GetLength(0)*mapArray.GetLength(1);
          this.CreateDictNodes(mapArray);
          this.CreateEdges(mapArray);
+         this.CreateMatAdj();
          return;
       }
 
@@ -513,15 +582,15 @@ public class Map : MonoBehaviour
                coords pos = new coords(row, column);
                if (mapArray[row, column] == TileType.start)
                {
-                  this.dictNodes[pos] = new nodeInfos(pos, TileType.start);
+                  this.dictNodes[pos] = new nodeInfos(TileType.start);
                }
                else if (mapArray[row, column] == TileType.end)
                {
-                  this.dictNodes[pos] = new nodeInfos(pos, TileType.end);
+                  this.dictNodes[pos] = new nodeInfos(TileType.end);
                }
                else if (mapArray[row, column] == TileType.cross)
                {
-                  this.dictNodes[pos] = new nodeInfos(pos, TileType.cross);
+                  this.dictNodes[pos] = new nodeInfos(TileType.cross);
                }
             }
          }
@@ -581,7 +650,7 @@ public class Map : MonoBehaviour
                }
                else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
                {
-                  edges.Add(new edge(lastCrossPosition, pos, weight));                  
+                  edges.Add(new edge(lastCrossPosition, pos, weight));
                   edges.Add(new edge(pos, lastCrossPosition, weight));
                   weight = 0;
                }
@@ -600,6 +669,65 @@ public class Map : MonoBehaviour
       
 
          return;
+      }
+
+
+/*  
+procedure FloydWarshallWithPathReconstruction() is
+    for each edge (u, v) do
+        dist[u][v] = w(u, v)  // The weight of the edge (u, v)
+        prev[u][v] = u
+    for each vertex v do
+        dist[v][v] = 0
+        prev[v][v] = v
+    for k from 1 to |V| do // standard Floyd-Warshall implementation
+        for i from 1 to |V|
+            for j from 1 to |V|
+                if dist[i][j] > dist[i][k] + dist[k][j] then
+                    dist[i][j] = dist[i][k] + dist[k][j]
+                    prev[i][j] = prev[k][j]
+*/
+      private void CreateMatAdj()
+      {
+         int length = this.GetNodes().Count;
+         this.matAdj = new int[length, length]; 
+         this.prev = new int[length, length];        
+         for (int row = 0; row < length; row++)
+         {
+            for (int column = 0; column < length; column++)
+            {
+               this.matAdj[row, column] = this.MAXLENGTHPATH + 1;
+               this.prev[row, column] = -1;
+               if (row==column)
+               {
+                  this.matAdj[row,column] = 0;
+                  this.prev[row, column] = row;
+               }
+            }
+         }
+         foreach (edge edgy in this.edges)
+         {
+            
+            this.matAdj[this.dictNodes[edgy.node1].GetId(), this.dictNodes[edgy.node2].GetId()] = edgy.weight;
+            this.prev[this.dictNodes[edgy.node1].GetId(), this.dictNodes[edgy.node2].GetId()] = this.dictNodes[edgy.node1].GetId();
+         }
+
+         for (int k=0; k < length; k++)
+         {
+            for (int i=0; i < length; i++)
+            {
+               for (int j=0; j < length; j++)
+               {
+                if (this.matAdj[i,j] > this.matAdj[i,k] + this.matAdj[k, j])
+                  {
+                     this.matAdj[i,j] = this.matAdj[i,k] + this.matAdj[k,j];
+                     this.prev[i,j] = this.prev[k,j];                     
+                  }
+               }
+            }   
+         }
+
+
       }
 
    }
