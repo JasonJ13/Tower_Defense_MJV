@@ -33698,8 +33698,9 @@ MonoBehaviour:
   cameraBorder: {x: 10, y: 10}
   zoomLimit: {x: 2, y: 24}
   towerPrefab: {fileID: 2723801371631890344, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
-  towerConstructiblePrefab: {fileID: 8339988317540890832, guid: 83dcbe53abca7b4488d2717df52879fc, type: 3}
-  towerNotConstructiblePrefab: {fileID: 5707283993927370067, guid: b2d510ca0dafc684e826745d3089c66f, type: 3}
+  generatorPrefab: {fileID: 6801466210788762790, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+  towerConstructablePrefab: {fileID: 5707283993927370067, guid: b2d510ca0dafc684e826745d3089c66f, type: 3}
+  generatorConstructablePrefab: {fileID: 6405362064283743044, guid: 71e6b3c5a4aee9e49abb29e3c5ec631d, type: 3}
 --- !u!1 &1808858324
 GameObject:
   m_ObjectHideFlags: 0
