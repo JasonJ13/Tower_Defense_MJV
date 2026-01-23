@@ -135,7 +135,7 @@ public class Map : MonoBehaviour
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
-      string mapDiskPath = Application.dataPath + "/Maps/map_03.png";
+      string mapDiskPath = Application.dataPath + "/Maps/map_01.png";
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
@@ -505,6 +505,7 @@ public class Map : MonoBehaviour
 
       private void CreateDictNodes(TileType[,] mapArray)
       {
+         this.dictNodes = new();
          for (int row = 0; row < mapArray.GetLength(0); row++)
          {
             for (int column = 0; column < mapArray.GetLength(1); column++)
@@ -531,6 +532,7 @@ public class Map : MonoBehaviour
 
       private void CreateEdges(TileType[,] mapArray)
       { 
+         this.edges = new();
          Debug.Assert(this.dictNodes != null);
          bool OnAPath = false;
          coords lastCrossPosition = new coords(-1,-1);
