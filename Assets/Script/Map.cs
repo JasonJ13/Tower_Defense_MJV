@@ -64,8 +64,8 @@ public class Map : MonoBehaviour
    private Color32 colorEmpty = new Color32(229, 229, 229, 255);
    private Color32 colorRoad = new Color32(255, 233, 127, 255);
    private Color32 colorCross = new Color32(255, 178, 127, 255);
-   private Color32 colorStart = new Color32(0, 255, 33, 255);
-   private Color32 colorEnd = new Color32(255, 0, 0, 255);
+   private Color32 colorStart = new Color32(255, 0, 0, 255);
+   private Color32 colorEnd = new Color32(0, 255, 33, 255);
 
    [SerializeField]
    private GameObject TileCollider;
