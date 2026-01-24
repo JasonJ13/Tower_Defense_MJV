@@ -11,17 +11,31 @@ public class OffensifTower : Tower
     [SerializeField]
     protected float shootRate = 60f;
 
-    private List<Map.coords> TileRoad;
+    private Map.Graph graph;
+
+    private List<Map.Graph.nodeInfos> path = new List<Map.Graph.nodeInfos>();
     private float timer;
 
     private int supplied = 0;
 
-    private void OnEnable()
+    protected override void OnEnable()
     {
-        //construct_road();
+        base.OnEnable();
+        constructPath();
     }
 
-    private void check_type(Map.coords tile)
+    private void constructPath()
+    {
+        graph = Map.Instance.GetGraph();
+        getNeighbours().ForEach(addPath);
+
+        foreach (Map.Graph.nodeInfos node in path)
+        {
+            Debug.Log(node.distanceFromStart);
+        }
+    }
+
+    private void addPath(Map.coords tile)
     {
         Map.TileType type = Map.Instance.GetMapArrayCoords(tile);
 
@@ -29,21 +43,16 @@ public class OffensifTower : Tower
         {
             case Map.TileType.road:
             case Map.TileType.cross:
-                TileRoad.Add(tile);
-                break;
-
             case Map.TileType.start:
-                TileRoad.Insert(0, tile);
-                break;
-
             case Map.TileType.end:
-                TileRoad.Add(tile);
+                path.Add(graph.GetNodeInfos(tile));
                 break;
 
-            case Map.TileType.construct:
-                //check si la construction est un générateur
+            case Map.TileType.generator:
+                connected();
                 break;
         }
+        path.Sort();
     }
 
     public bool is_connected()

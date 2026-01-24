@@ -1,9 +1,15 @@
 using UnityEngine;
 
-public class Generator : MonoBehaviour
+public class Generator : Tower
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() { }
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        foreach (Map.coords tile in this.getNeighbours())
+        {
+            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct) { }
+        }
+    }
 
     // Update is called once per frame
     void Update() { }
