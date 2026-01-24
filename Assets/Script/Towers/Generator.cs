@@ -2,8 +2,15 @@ using UnityEngine;
 
 public class Generator : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start() { }
+    void OnEnable() { 
+        foreach(tile in this.getNeighbours())
+        {
+            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct)
+            {
+                
+            }
+        }
+    }
 
     // Update is called once per frame
     void Update() { }
