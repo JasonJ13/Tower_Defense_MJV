@@ -439,12 +439,12 @@ public class Map : MonoBehaviour
 
       public struct nodeInfos 
       {
-         private static int idSetter=0;
-         private int id;
-         private TileType type;
+         internal static int idSetter=0;
+         internal int id;
+         public TileType type;
          public int distanceFromStart;
          public int distanceFromEnd;
-         public nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
+         internal nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
          {
             this.id = idSetter;
             idSetter++;
@@ -453,15 +453,6 @@ public class Map : MonoBehaviour
             this.distanceFromEnd = distanceFromEnd;
          }
 
-         public TileType GetTileType()
-         {
-            return this.type;
-         }
-
-         public int GetId()
-         {
-            return this.id;
-         }
       }
 
 
@@ -521,7 +512,7 @@ public class Map : MonoBehaviour
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(pos1));
          Assert.IsTrue(this.dictNodes.ContainsKey(pos2));
-         return this.matAdj[this.dictNodes[pos1].GetId(), this.dictNodes[pos2].GetId()];
+         return this.matAdj[this.dictNodes[pos1].id, this.dictNodes[pos2].id];
       }
 
 /*
@@ -543,10 +534,10 @@ procedure Path(u, v) is
          Dictionary<int, coords> dictIdToNode = new();
          foreach (coords node in this.dictNodes.Keys)
          {
-            dictIdToNode[this.dictNodes[node].GetId()] = node;
+            dictIdToNode[this.dictNodes[node].id] = node;
          }
-         int u = this.dictNodes[pos1].GetId();
-         int v = this.dictNodes[pos2].GetId();
+         int u = this.dictNodes[pos1].id;
+         int v = this.dictNodes[pos2].id;
          List<coords> path = new();
          if (this.prev[u,v] == -1){return path;}
          path.Add(dictIdToNode[v]);
@@ -555,6 +546,7 @@ procedure Path(u, v) is
             v = this.prev[u,v];
             path.Add(dictIdToNode[v]);
          }
+         path.Reverse();
          return path;
       }
 
@@ -575,6 +567,7 @@ procedure Path(u, v) is
       private void CreateDictNodes(TileType[,] mapArray)
       {
          this.dictNodes = new();
+         Graph.nodeInfos.idSetter = 0;
          for (int row = 0; row < mapArray.GetLength(0); row++)
          {
             for (int column = 0; column < mapArray.GetLength(1); column++)
@@ -708,8 +701,8 @@ procedure FloydWarshallWithPathReconstruction() is
          foreach (edge edgy in this.edges)
          {
             
-            this.matAdj[this.dictNodes[edgy.node1].GetId(), this.dictNodes[edgy.node2].GetId()] = edgy.weight;
-            this.prev[this.dictNodes[edgy.node1].GetId(), this.dictNodes[edgy.node2].GetId()] = this.dictNodes[edgy.node1].GetId();
+            this.matAdj[this.dictNodes[edgy.node1].id, this.dictNodes[edgy.node2].id] = edgy.weight;
+            this.prev[this.dictNodes[edgy.node1].id, this.dictNodes[edgy.node2].id] = this.dictNodes[edgy.node1].id;
          }
 
          for (int k=0; k < length; k++)
