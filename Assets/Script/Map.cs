@@ -26,6 +26,11 @@ public class Map : MonoBehaviour
       end,
       constructible,
       construct,
+      generator,
+      tower_red,
+      tower_green,
+      tower_yellow,
+      tower_blue
    }
 
    private static float OFFSET = 0.5f; // Needed since tile position is located on their center
