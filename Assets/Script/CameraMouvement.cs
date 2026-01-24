@@ -2,12 +2,11 @@ using System.Collections;
 using System.Diagnostics;
 using UnityEditor.UIElements;
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 public class CameraMouvement : MonoBehaviour
 {
-    protected Map map;
-
     [SerializeField]
     float SPEED = 20f;
 
@@ -24,10 +23,10 @@ public class CameraMouvement : MonoBehaviour
     GameObject generatorPrefab;
 
     [SerializeField]
-    GameObject towerConstructablePrefab;
+    GameObject towerNotBuiltlePrefab;
 
     [SerializeField]
-    GameObject generatorConstructablePrefab;
+    GameObject generatorNotBuiltPrefab;
 
     private Camera cameraComponent;
     private Transform cameraTransform;
@@ -41,10 +40,17 @@ public class CameraMouvement : MonoBehaviour
     private Vector2 mouvement;
     private float zoom;
 
-    private bool towerInHand;
+    private enum TowerType
+    {
+        empty,
+        Offensif,
+        Generator,
+    }
+
     private bool constructible;
-    private GameObject tower;
-    private MeshRenderer tower_MeshRenderer;
+    private TowerType towerInHand = TowerType.empty;
+    private GameObject towerNB = null;
+    private MeshRenderer tower_MeshRenderer = null;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
@@ -59,16 +65,11 @@ public class CameraMouvement : MonoBehaviour
         placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
-    private void Awake()
-    {
-        towerInHand = false;
-    }
-
     private Vector3 define_translate(Vector2 mouvement, float zoom)
     {
         if (
             (cameraTransform.position.x + mouvement.x > cameraBorder.x && mouvement.x > 0)
-            || (cameraTransform.position.x + mouvement.x < -cameraBorder.x && mouvement.x < 0)
+            || (cameraTransform.position.x + mouvement.x < 0 && mouvement.x < 0)
         )
         {
             mouvement.x = 0;
@@ -76,7 +77,7 @@ public class CameraMouvement : MonoBehaviour
 
         if (
             (cameraTransform.position.z + mouvement.y > cameraBorder.y && mouvement.y > 0)
-            || (cameraTransform.position.z + mouvement.y < -cameraBorder.y && mouvement.y < 0)
+            || (cameraTransform.position.z + mouvement.y < 0 && mouvement.y < 0)
         )
         {
             mouvement.y = 0;
@@ -105,52 +106,77 @@ public class CameraMouvement : MonoBehaviour
         //Gestion d'une nouvelle tour
         if (addTowerAction1.WasPerformedThisFrame() || addTowerAction2.WasPerformedThisFrame())
         {
-            if (!towerInHand)
+            if (towerInHand == TowerType.empty)
             {
-                towerInHand = true;
-
                 if (addTowerAction1.WasPerformedThisFrame())
                 {
-                    tower = Instantiate(towerConstructablePrefab);
+                    towerNB = Instantiate(towerNotBuiltlePrefab);
+                    towerInHand = TowerType.Offensif;
                 }
                 else
                 {
-                    tower = Instantiate(generatorConstructablePrefab);
+                    towerNB = Instantiate(generatorNotBuiltPrefab);
+                    towerInHand = TowerType.Generator;
                 }
 
                 constructible = false;
-                tower_MeshRenderer = tower
+                tower_MeshRenderer = towerNB
                     .GetComponent<Transform>()
                     .GetChild(0)
                     .GetComponent<MeshRenderer>();
             }
             else
             {
-                towerInHand = false;
-                Destroy(tower);
+                towerInHand = TowerType.empty;
+                Destroy(towerNB);
             }
         }
 
         if (constructible && placeTowerAction.WasPerformedThisFrame())
         {
-            constructible = false;
-            towerInHand = false;
+            Assert.IsTrue(towerInHand != TowerType.empty);
+            switch (towerInHand)
+            {
+                case TowerType.Offensif:
+                    Instantiate(
+                        towerPrefab,
+                        towerNB.transform.position,
+                        towerNB.transform.rotation
+                    );
+                    Map.Instance.SetMapArray(
+                        Map.Instance.PositionToCoords(towerNB.transform.position),
+                        Map.TileType.construct
+                    );
+                    break;
 
-            Instantiate(towerPrefab, tower.transform.position, tower.transform.rotation);
-            Destroy(tower);
+                case TowerType.Generator:
+                    Instantiate(
+                        generatorPrefab,
+                        towerNB.transform.position,
+                        towerNB.transform.rotation
+                    );
+                    Map.Instance.SetMapArray(
+                        Map.Instance.PositionToCoords(towerNB.transform.position),
+                        Map.TileType.generator
+                    );
+                    break;
+            }
+            Destroy(towerNB);
+            constructible = false;
+            towerInHand = TowerType.empty;
         }
     }
 
     private void FixedUpdate()
     {
-        if (towerInHand)
+        if (towerInHand != TowerType.empty)
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = cameraComponent.ScreenPointToRay(mousePosition);
 
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
-                tower.transform.position = hitInfo.transform.position;
+                towerNB.transform.position = hitInfo.transform.position;
 
                 if (
                     !constructible
