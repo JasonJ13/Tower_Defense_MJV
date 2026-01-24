@@ -158,6 +158,7 @@ public class Map : MonoBehaviour
 //            Debug.Log(this.graph.GetPathWeight(node1, node2));
 //            Debug.Log(this.graph.GetPath(node1, node2).Count);
          }
+//         Debug.Log(this.graph.GetNodeInfos(node1).distanceFromEnd);
       }
       
 
@@ -457,7 +458,6 @@ public class Map : MonoBehaviour
             this.distanceFromStart = distanceFromStart;
             this.distanceFromEnd = distanceFromEnd;
          }
-
       }
 
 
@@ -555,6 +555,21 @@ procedure Path(u, v) is
          return path;
       }
 
+      public static int CompareDistanceFromStart(nodeInfos n1, nodeInfos n2)
+      {
+            if (n1.distanceFromStart < n2.distanceFromStart)
+            {
+               return -1;
+            }
+            else if (n1.distanceFromStart == n2.distanceFromStart)
+            {
+               return 0;
+            }
+            else
+            {
+               return 1;
+            }
+      }
 
    /// <summary>
    /// This function creates the given graph of a mapArray 
@@ -566,6 +581,8 @@ procedure Path(u, v) is
          this.CreateDictNodes(mapArray);
          this.CreateEdges(mapArray);
          this.CreateMatAdj();
+         this.CreateDistanceFromStart();
+         this.CreateDistanceFromEnd();
          return;
       }
 
@@ -724,9 +741,60 @@ procedure FloydWarshallWithPathReconstruction() is
                }
             }   
          }
-
-
       }
+
+      private void CreateDistanceFromStart()
+      {
+         List<coords> startNodes = new();
+         var keys = GetNodes();
+         foreach (coords node in keys)
+         {
+            nodeInfos value = dictNodes[node];
+            value.distanceFromEnd = this.MAXLENGTHPATH;
+            dictNodes[node] = value;
+            if (dictNodes[node].type == TileType.start)
+            {
+               startNodes.Add(node);
+            }
+         }
+         foreach (coords node in keys)
+         {
+            foreach (coords nodeStart in startNodes)
+            {
+               nodeInfos value = dictNodes[node];
+               value.distanceFromEnd = Math.Min(dictNodes[node].distanceFromEnd, GetPathWeight(node, nodeStart));
+               dictNodes[node] = value;
+            }
+         }
+         return;
+      }
+
+      private void CreateDistanceFromEnd()
+      {
+         List<coords> endNodes = new();
+         var keys = GetNodes();
+         foreach (coords node in keys)
+         {
+            nodeInfos value = dictNodes[node];
+            value.distanceFromEnd = this.MAXLENGTHPATH;
+            dictNodes[node] = value;
+            if (dictNodes[node].type == TileType.end)
+            {
+               endNodes.Add(node);
+            }
+         }
+         foreach (coords node in keys)
+         {
+            foreach (coords nodeEnd in endNodes)
+            {
+               nodeInfos value = dictNodes[node];
+               value.distanceFromEnd = Math.Min(dictNodes[node].distanceFromEnd, GetPathWeight(node, nodeEnd));
+               dictNodes[node] = value;
+            }
+         }
+         return;
+      }
+
 
    }
 }
