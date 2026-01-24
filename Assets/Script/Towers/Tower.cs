@@ -10,30 +10,28 @@ public class Tower : MonoBehaviour
     [SerializeField]
     protected int range;
 
-    [SerializeField]
-    protected string nameTower;
-
-    protected Map.coords selfTile;
+    protected Map.coords coord;
 
     protected Transform transform;
 
-    protected virtual void initTowerParameter(string name)
+    protected virtual void OnEnable()
     {
         transform = GetComponent<Transform>();
 
-        selfTile = Map.Instance.PositionToCoords(transform.position);
+        coord = Map.Instance.PositionToCoords(transform.position);
     }
 
-    private List<Map.coords> getNeighbours()
+    protected List<Map.coords> getNeighbours()
     {
         List<Map.coords> neighbours = new List<Map.coords>();
 
-        for (int i = 0; i < 1 + range; i++)
+        for (int i = -range; i < 1 + range; i++)
         {
-            for (int j = 0; j < range - i; j++)
+            for (int j = -range + Mathf.Abs(i); j < range - Mathf.Abs(i) + 1; j++)
             {
-                Map.coords tile = new Map.coords(i, j);
-                if ((j != 0 && i != 0) && Map.Instance.IsInMap(tile))
+                Map.coords tile = new Map.coords(coord.row + i, coord.column + j);
+
+                if ((j != 0 || i != 0) && Map.Instance.IsInMap(tile))
                 {
                     neighbours.Add(tile);
                 }

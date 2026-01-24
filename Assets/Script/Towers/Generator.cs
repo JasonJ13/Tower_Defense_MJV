@@ -1,14 +1,13 @@
 using UnityEngine;
 
-public class Generator : MonoBehaviour
+public class Generator : Tower
 {
-    void OnEnable() { 
-        foreach(tile in this.getNeighbours())
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        foreach (Map.coords tile in this.getNeighbours())
         {
-            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct)
-            {
-                
-            }
+            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct) { }
         }
     }
 

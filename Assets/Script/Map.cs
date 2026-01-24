@@ -27,6 +27,7 @@ public class Map : MonoBehaviour
         end,
         constructible,
         construct,
+        generator,
     }
 
     private static float OFFSET = 0.5f; // Needed since tile position is located on their center
@@ -556,6 +557,22 @@ public class Map : MonoBehaviour
             {
                 return this.id;
             }
+
+            public static int CompareDistanceFromStart(nodeInfos n1, nodeInfos n2)
+            {
+                if (n1.distanceFromStart < n2.distanceFromStart)
+                {
+                    return -1;
+                }
+                else if (n1.distanceFromStart == n2.distanceFromStart)
+                {
+                    return 0;
+                }
+                else
+                {
+                    return 1;
+                }
+            }
         }
 
         public struct edge
@@ -598,6 +615,7 @@ public class Map : MonoBehaviour
         /// <returns></returns>
         public nodeInfos GetNodeInfos(coords pos)
         {
+            Debug.Log(pos);
             Assert.IsTrue(this.dictNodes.ContainsKey(pos));
             return this.dictNodes[pos];
         }
