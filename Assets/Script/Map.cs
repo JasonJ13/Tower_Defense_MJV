@@ -2,8 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using UnityEditor;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
+
 
 public class Map : MonoBehaviour
 {
@@ -205,6 +208,14 @@ public class Map : MonoBehaviour
    private void Start()
    {
       string mapDiskPath = Application.dataPath + "/Maps/map_01.png";
+      try 
+      {
+         mapDiskPath = EditorUtility.OpenFilePanel("Map Loader", Application.dataPath + "/Maps/", "png");
+      }
+      catch
+      {
+         mapDiskPath = Application.dataPath + "/Maps/map_01.png";
+      }
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
