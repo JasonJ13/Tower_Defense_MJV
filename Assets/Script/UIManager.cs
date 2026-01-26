@@ -7,12 +7,12 @@ public class UIManager : MonoBehaviour
     private Button GeneratorButton;
     private Button DropOutButton;
 
-    private CameraMouvement cameraScript;
+    private Player playerScript;
 
     void OnEnable()
     {
         var uiDocument = this.GetComponent<UIDocument>();
-        cameraScript = GameObject.Find("Main Camera").GetComponent<CameraMouvement>();
+        playerScript = GameObject.Find("Player").GetComponent<Player>();
 
         offensifTowerButton = uiDocument.rootVisualElement.Q("Offensif") as Button;
         GeneratorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
@@ -25,16 +25,16 @@ public class UIManager : MonoBehaviour
 
     void OffensifSelected(ClickEvent evt)
     {
-        cameraScript.add_in_hand(CameraMouvement.TowerType.Offensif);
+        playerScript.add_in_hand(Player.TowerType.Offensif);
     }
 
     void GeneratorSelected(ClickEvent evt)
     {
-        cameraScript.add_in_hand(CameraMouvement.TowerType.Generator);
+        playerScript.add_in_hand(Player.TowerType.Generator);
     }
 
     void DropOutSelected(ClickEvent evt)
     {
-        cameraScript.add_in_hand(CameraMouvement.TowerType.empty);
+        playerScript.add_in_hand(Player.TowerType.empty);
     }
 }
