@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 
@@ -28,7 +28,8 @@ public class RobotFactory : MonoBehaviour
 
     private Map.Graph graph;
     private List<Map.coords> starts;
-    private List<RobotEnemy> robots;
+    private List<RobotEnemy> robots = new List<RobotEnemy>();
+
 
     private void Start()
     {
@@ -38,7 +39,7 @@ public class RobotFactory : MonoBehaviour
 
     public RobotEnemy FindRobotOnTile(Map.coords coord)
     {
-        foreach (RobotEnemy robot in robots) 
+        foreach (RobotEnemy robot in robots)
         {
             Map.coords robotCoord = Map.Instance.PositionToCoords(robot.transform.position);
             if (robotCoord.Equals(coord))
