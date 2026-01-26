@@ -1,54 +1,43 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public abstract class Tower : MonoBehaviour
+public class Tower : MonoBehaviour
 {
+    protected Map map;
+
     [SerializeField]
     protected int range;
 
-    [SerializeField]
-    protected int dmg;
+    protected Map.coords coord;
 
-    [SerializeField]
-    protected GameObject bullet;
-    private int supplied = 0;
+    protected Transform transform;
 
-    protected Transform towerTransform;
-    protected string nameTower;
-    protected int row;
-    protected int colum;
-    private List<Vector2> TileRoad;
-
-    protected void initTowerParameter(int d, int r, string name)
+    protected virtual void OnEnable()
     {
-        dmg = d;
-        range = r;
-        nameTower = name;
-        // tile = Map.gettile(transform.position.x, transform.position.y)
+        transform = GetComponent<Transform>();
+
+        coord = Map.Instance.PositionToCoords(transform.position);
     }
 
-    private void OnEnable()
+    protected List<Map.coords> getNeighbours()
     {
-        construct_road();
+        List<Map.coords> neighbours = new List<Map.coords>();
+
+        for (int i = -range; i < 1 + range; i++)
+        {
+            for (int j = -range + Mathf.Abs(i); j < range - Mathf.Abs(i) + 1; j++)
+            {
+                Map.coords tile = new Map.coords(coord.row + i, coord.column + j);
+
+                if ((j != 0 || i != 0) && Map.Instance.IsInMap(tile))
+                {
+                    neighbours.Add(tile);
+                }
+            }
+        }
+
+        return neighbours;
     }
-
-    public bool is_connected()
-    {
-        return supplied > 0;
-    }
-
-    public void connected()
-    {
-        supplied++;
-    }
-
-    public void disconnected()
-    {
-        supplied--;
-    }
-
-    public void construct_road() { }
-
-    protected abstract void shoot();
 }
