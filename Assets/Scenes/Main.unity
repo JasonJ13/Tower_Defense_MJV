@@ -3920,6 +3920,56 @@ Transform:
   - {fileID: 1259411273}
   m_Father: {fileID: 658454059}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &178492261
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 178492263}
+  - component: {fileID: 178492262}
+  m_Layer: 0
+  m_Name: RobotFactory
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &178492262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178492261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436533bfe1811e34b80a74bf4b570ec8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotFactory
+  standartRobot: {fileID: 0}
+  quickRobot: {fileID: 0}
+  bigRobot: {fileID: 0}
+  jesterRobot: {fileID: 0}
+  level: 0
+  waveIndex: 0
+--- !u!4 &178492263
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178492261}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &179859163
 GameObject:
   m_ObjectHideFlags: 0
@@ -7306,10 +7356,6 @@ MonoBehaviour:
   SPEED: 20
   cameraBorder: {x: 12, y: 12}
   zoomLimit: {x: 2, y: 24}
-  towerPrefab: {fileID: 0}
-  generatorPrefab: {fileID: 0}
-  towerNotBuiltlePrefab: {fileID: 0}
-  generatorNotBuiltPrefab: {fileID: 0}
 --- !u!1 &336062711
 GameObject:
   m_ObjectHideFlags: 0
@@ -38930,3 +38976,4 @@ SceneRoots:
   - {fileID: 410087041}
   - {fileID: 832575519}
   - {fileID: 440849323}
+  - {fileID: 178492263}
