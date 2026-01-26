@@ -16,6 +16,7 @@ public class RobotEnemy : MonoBehaviour
 
     private Vector3 destination;
     private int currentHP;
+    private Map.coords coord;
 
     private Animator anim;
 
@@ -24,7 +25,7 @@ public class RobotEnemy : MonoBehaviour
     private CharacterController characterController;
 
     private Vector3 direction;
-    private float rotation;
+    private float angle;
 
     private bool marching = false;
 
@@ -35,12 +36,18 @@ public class RobotEnemy : MonoBehaviour
         currentHP = maxHP;
         characterController = gameObject.GetComponent<CharacterController>();
 
-        this.destinations = new List<Map.coords>() { new Map.coords(1, 5), new Map.coords(4,5) };
-        Debug.Log(destinations.Count);
+        this.destinations = new List<Map.coords>() { new Map.coords(1, 5), new Map.coords(4,5) }; //valeurs temporaires
+        this.coord = new Map.coords(1, 1);
+        transform.position = Map.Instance.CoordsToPosition(this.coord); //valeur temporaire
+
+        
+
         if (destinations.Count > 0 )
             ChangeDestination();
 
-        transform.position = Map.Instance.CoordsToPosition(new Map.coords(1, 1));
+
+        
+
     }
 
     private void Update()
@@ -48,19 +55,22 @@ public class RobotEnemy : MonoBehaviour
         if (destination !=null && marching)
         {
 
-            var pos = transform.position;
-            
+            Vector3 rot = new Vector3(0, angle, 0);
+            transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, rot, Time.deltaTime);
+
+
             direction = destination - transform.position;
+
             direction.y = 0;
             var distance = direction.magnitude;
             direction = direction / distance;
-            Debug.Log(direction);
-            Debug.Log(distance);
 
-           
+
+
             if (distance<0.05)
             {
-                transform.position = destination;
+                transform.position = destination; //petit tp pour éviter que le robot parte dans tous les sens
+
                 if (destinations.Count > 0)
                 {
                     Debug.Log("change destination");
@@ -75,7 +85,7 @@ public class RobotEnemy : MonoBehaviour
             }
             else
             {
-                characterController.Move(direction * speed * Time.deltaTime);
+                //characterController.Move(direction * speed * Time.deltaTime);
             }
         }
         
@@ -89,10 +99,13 @@ public class RobotEnemy : MonoBehaviour
     {
         var new_coords = destinations.FirstOrDefault();
         destinations.Remove(new_coords);
+
+
         this.destination = Map.Instance.CoordsToPosition(new_coords);
-        Debug.Log(destination);
-        this.rotation = Vector2.Angle(new Vector2(transform.position.x, transform.position.z), new Vector2(destination.x, destination.z));
-        //Debug.Log(rotation);
+        
+    
+        angle = 90;
+        Debug.Log(angle);
         
 
 
