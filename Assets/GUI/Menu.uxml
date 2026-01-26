@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/style.uss?fileID=7433441132597879392&amp;guid=4bf4cd61d2f85064fa2f9bd7e322602a&amp;type=3#style" />
+    <ui:VisualElement style="flex-grow: 1;">
+        <ui:VisualElement style="min-width: 8%; justify-content: center; align-self: center; flex-grow: 1;">
+            <ui:VisualElement style="position: absolute; background-color: rgb(211, 211, 211);">
+                <ui:Foldout text="Foldout" name="Map" class="TitleScroll" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

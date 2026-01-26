@@ -1,0 +1,26 @@
+:root {
+}
+
+.ButtonTower {
+    font-size: 32px;
+    left: 8%;
+    width: 80%;
+    bottom: 0;
+    top: 16px;
+    -unity-font-style: normal;
+}
+
+.TitleScroll {
+    font-size: 32px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+}
+
+.Control {
+}
+
+.ButtonMAP {
+    font-size: 32px;
+    width: 80%;
+    -unity-font-style: normal;
+}

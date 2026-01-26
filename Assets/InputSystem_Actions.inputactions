@@ -43,6 +43,33 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "AddTower3",
+                    "type": "Button",
+                    "id": "dc2b24e7-0959-42df-9e03-af8413901fa0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AddTower4",
+                    "type": "Button",
+                    "id": "863e138e-2626-4bcc-affc-f402d20b5cd8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "AddTower5",
+                    "type": "Button",
+                    "id": "6847179a-1ffe-4135-8d1e-907bc8a0e57c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "PlaceTower",
                     "type": "Button",
                     "id": "8c8c6be9-9d50-4f4b-96c3-cec924aaf88b",
@@ -237,6 +264,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "AddTower2",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d0f9f38-2138-4b09-aed2-d0b34beb86fb",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AddTower3",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "11b08f18-446a-49b2-a57f-e2ed1803aa91",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AddTower4",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f2d9fb0c-b799-43b1-af55-74193672e4b4",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "AddTower5",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

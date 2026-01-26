@@ -1,0 +1,12 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <Style src="project://database/Assets/GUI/style.uss?fileID=7433441132597879392&amp;guid=4bf4cd61d2f85064fa2f9bd7e322602a&amp;type=3#style" />
+    <ui:VisualElement style="flex-grow: 1; width: 20%; background-color: rgb(191, 191, 191);">
+        <ui:Label text="Tower" class="TitleScroll" />
+        <ui:Button text="Archer" name="Archer" class="ButtonTower" />
+        <ui:Button text="Turret" name="Turret" class="ButtonTower" />
+        <ui:Button text="Mage" name="Mage" class="ButtonTower" />
+        <ui:Button text="Cannon" name="Cannon" class="ButtonTower" />
+        <ui:Button text="Generator" name="Generator" class="ButtonTower" />
+        <ui:Button text="Drop Tower" name="DropOut" class="ButtonTower" />
+    </ui:VisualElement>
+</ui:UXML>
