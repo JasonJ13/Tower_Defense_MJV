@@ -7,6 +7,7 @@
     width: 80%;
     bottom: 0;
     top: 16px;
+    -unity-font-style: normal;
 }
 
 .TitleScroll {
@@ -16,4 +17,10 @@
 }
 
 .Control {
+}
+
+.ButtonMAP {
+    font-size: 32px;
+    width: 80%;
+    -unity-font-style: normal;
 }
