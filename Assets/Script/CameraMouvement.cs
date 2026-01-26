@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using UnityEditor.UIElements;
 using UnityEngine;
@@ -40,11 +41,19 @@ public class CameraMouvement : MonoBehaviour
     private Vector2 mouvement;
     private float zoom;
 
-    private enum TowerType
+    public enum TowerType
     {
         empty,
         Offensif,
         Generator,
+    }
+
+    private Dictionary<TowerType, GameObject> typeToTower = new Dictionary<TowerType, GameObject>();
+
+    void defineTypeToTower()
+    {
+        typeToTower.Add(TowerType.Offensif, towerNotBuiltlePrefab);
+        typeToTower.Add(TowerType.Generator, generatorPrefab);
     }
 
     private bool constructible;
@@ -55,6 +64,8 @@ public class CameraMouvement : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
+        defineTypeToTower();
+
         cameraTransform = GetComponent<Transform>();
         cameraComponent = GetComponent<Camera>();
 
@@ -94,6 +105,29 @@ public class CameraMouvement : MonoBehaviour
         return new Vector3(mouvement.x, mouvement.y, zoom);
     }
 
+    public void add_in_hand(TowerType newTower)
+    {
+        if (towerNB != null)
+        {
+            Destroy(towerNB);
+        }
+
+        if (newTower != towerInHand && newTower != TowerType.empty)
+        {
+            towerNB = Instantiate(typeToTower[newTower]);
+            towerInHand = newTower;
+            constructible = false;
+            tower_MeshRenderer = towerNB
+                .GetComponent<Transform>()
+                .GetChild(0)
+                .GetComponent<MeshRenderer>();
+        }
+        else
+        {
+            towerInHand = TowerType.empty;
+        }
+    }
+
     // Update is called once per frame
     private void Update()
     {
@@ -104,32 +138,13 @@ public class CameraMouvement : MonoBehaviour
         cameraTransform.Translate(translate);
 
         //Gestion d'une nouvelle tour
-        if (addTowerAction1.WasPerformedThisFrame() || addTowerAction2.WasPerformedThisFrame())
+        if (addTowerAction1.WasPerformedThisFrame())
         {
-            if (towerInHand == TowerType.empty)
-            {
-                if (addTowerAction1.WasPerformedThisFrame())
-                {
-                    towerNB = Instantiate(towerNotBuiltlePrefab);
-                    towerInHand = TowerType.Offensif;
-                }
-                else
-                {
-                    towerNB = Instantiate(generatorNotBuiltPrefab);
-                    towerInHand = TowerType.Generator;
-                }
-
-                constructible = false;
-                tower_MeshRenderer = towerNB
-                    .GetComponent<Transform>()
-                    .GetChild(0)
-                    .GetComponent<MeshRenderer>();
-            }
-            else
-            {
-                towerInHand = TowerType.empty;
-                Destroy(towerNB);
-            }
+            add_in_hand(TowerType.Offensif);
+        }
+        else if (addTowerAction2.WasPerformedThisFrame())
+        {
+            add_in_hand(TowerType.Generator);
         }
 
         if (constructible && placeTowerAction.WasPerformedThisFrame())
@@ -200,6 +215,11 @@ public class CameraMouvement : MonoBehaviour
                     constructible = false;
                     tower_MeshRenderer.materials[0].color = Color.red;
                 }
+            }
+            else
+            {
+                constructible = false;
+                tower_MeshRenderer.materials[0].color = Color.red;
             }
         }
     }
