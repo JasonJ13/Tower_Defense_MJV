@@ -111,6 +111,11 @@ public class Map : MonoBehaviour
       return new coords((int)Math.Floor(position.z), (int)Math.Floor(position.x));
    }
 
+   public Vector3 CoordsToPosition(coords pos) 
+   {
+      return new Vector3(pos.column + OFFSET, 0, pos.row + OFFSET);
+   }
+
    public TileType[,] GetMapArray()
    {
       return this.mapArray;
@@ -438,7 +443,7 @@ public class Map : MonoBehaviour
    {
       private Dictionary<coords, nodeInfos> dictNodes; // Dictionnary that contains all infos for a given node (ie coords)
       private List<edge> edges; // List of weighted edges, weight being the length of the road between two nodes
-      private int[,] matAdj; //
+      private int[,] matAdj; // 
       private int[,] prev; // 
 
       private int MAXLENGTHPATH;
@@ -449,15 +454,15 @@ public class Map : MonoBehaviour
          internal static int idSetter=0;
          internal int id;
          public TileType type;
-         public int distanceFromStart;
-         public int distanceFromEnd;
+         internal int distanceFromEnd;
+         internal coords nearestEnd;
          internal nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
          {
             this.id = idSetter;
             idSetter++;
             this.type = type;
-            this.distanceFromStart = distanceFromStart;
             this.distanceFromEnd = distanceFromEnd;
+            this.nearestEnd = new coords(0,0);
          }
       }
 
@@ -556,26 +561,26 @@ procedure Path(u, v) is
          return path;
       }
 
-      public int GetDistanceFromStart(coords pos)
-      {
-         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
-         return this.dictNodes[pos].distanceFromStart;
-      }
-
       public int GetDistanceFromEnd(coords pos)
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(pos));
          return this.dictNodes[pos].distanceFromEnd;
       }
 
-
-      public static int CompareDistanceFromStart(nodeInfos n1, nodeInfos n2)
+      public coords GetNearestEnd(coords pos)
       {
-            if (n1.distanceFromStart < n2.distanceFromStart)
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
+         return this.dictNodes[pos].nearestEnd;
+      }
+
+
+      public static int CompareDistanceFromEnd(nodeInfos n1, nodeInfos n2)
+      {
+            if (n1.distanceFromEnd < n2.distanceFromEnd)
             {
                return -1;
             }
-            else if (n1.distanceFromStart == n2.distanceFromStart)
+            else if (n1.distanceFromEnd == n2.distanceFromEnd)
             {
                return 0;
             }
@@ -595,7 +600,6 @@ procedure Path(u, v) is
          this.CreateDictNodes(mapArray);
          this.CreateEdges(mapArray);
          this.CreateMatAdj();
-         this.CreateDistanceFromStart();
          this.CreateDistanceFromEnd();
          return;
       }
@@ -757,32 +761,6 @@ procedure FloydWarshallWithPathReconstruction() is
          }
       }
 
-      private void CreateDistanceFromStart()
-      {
-         List<coords> startNodes = new();
-         var keys = GetNodes();
-         foreach (coords node in keys)
-         {
-            nodeInfos value = dictNodes[node];
-            value.distanceFromEnd = this.MAXLENGTHPATH;
-            dictNodes[node] = value;
-            if (dictNodes[node].type == TileType.start)
-            {
-               startNodes.Add(node);
-            }
-         }
-         foreach (coords node in keys)
-         {
-            foreach (coords nodeStart in startNodes)
-            {
-               nodeInfos value = dictNodes[node];
-               value.distanceFromEnd = Math.Min(dictNodes[node].distanceFromEnd, GetPathWeight(node, nodeStart));
-               dictNodes[node] = value;
-            }
-         }
-         return;
-      }
-
       private void CreateDistanceFromEnd()
       {
          List<coords> endNodes = new();
@@ -802,8 +780,13 @@ procedure FloydWarshallWithPathReconstruction() is
             foreach (coords nodeEnd in endNodes)
             {
                nodeInfos value = dictNodes[node];
-               value.distanceFromEnd = Math.Min(dictNodes[node].distanceFromEnd, GetPathWeight(node, nodeEnd));
-               dictNodes[node] = value;
+               int w = GetPathWeight(node, nodeEnd);
+               if (w < dictNodes[node].distanceFromEnd)
+               {
+                  value.distanceFromEnd = w;
+                  value.nearestEnd = nodeEnd;
+                  dictNodes[node] = value;                  
+               }
             }
          }
          return;

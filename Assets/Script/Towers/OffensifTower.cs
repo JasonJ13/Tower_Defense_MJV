@@ -31,7 +31,7 @@ public class OffensifTower : Tower
 
         foreach (Map.Graph.nodeInfos node in path)
         {
-            Debug.Log(node.distanceFromStart);
+            Debug.Log(node.distanceFromEnd);
         }
     }
 
