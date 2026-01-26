@@ -142,6 +142,64 @@ public class Map : MonoBehaviour
       return this.graph;
    }
 
+/// <summary>
+/// Must be a start, end, cross or road tile
+/// </summary>
+/// <param name="pos"></param>
+/// <returns></returns>
+   public int GetDistanceFromEnd(coords pos)
+   {
+      if (this.graph.GetNodes().Contains(pos))
+      {
+         return this.graph.GetDistanceFromEnd(pos);
+      }
+
+      Debug.Assert(GetMapArrayCoords(pos)==TileType.road);
+      coords nearestEnd = new(-1,-1);
+      coords posTest = pos;
+      posTest.row--;
+      int lengthToEnd1=0;
+      int lengthToEnd2=0;
+      if (IsInMap(posTest) && GetMapArrayCoords(posTest)==TileType.road || GetMapArrayCoords(posTest)==TileType.cross || GetMapArrayCoords(posTest)==TileType.start || GetMapArrayCoords(posTest)==TileType.end)
+      //if horizontal road
+      {
+         posTest=pos;
+         while (!(GetMapArrayCoords(posTest)==TileType.cross || GetMapArrayCoords(posTest)==TileType.start || GetMapArrayCoords(posTest) == TileType.end))
+         {
+            lengthToEnd1++;
+            posTest.row--;
+         }
+         lengthToEnd1= lengthToEnd1 + this.graph.GetDistanceFromEnd(posTest);
+         posTest = pos;
+         while (!(GetMapArrayCoords(posTest)==TileType.cross || GetMapArrayCoords(posTest)==TileType.start || GetMapArrayCoords(posTest) == TileType.end))
+         {
+            lengthToEnd2++;
+            posTest.row++;
+         }
+         lengthToEnd2= lengthToEnd2 + this.graph.GetDistanceFromEnd(posTest);
+      }
+      else
+      //if vertical road
+      {
+         posTest=pos;         
+         while (!(GetMapArrayCoords(posTest)==TileType.cross || GetMapArrayCoords(posTest)==TileType.start || GetMapArrayCoords(posTest) == TileType.end))
+         {
+            lengthToEnd1++;
+            posTest.column--;
+         }
+         lengthToEnd1= lengthToEnd1 + this.graph.GetDistanceFromEnd(posTest);
+         posTest = pos;
+         while (!(GetMapArrayCoords(posTest)==TileType.cross || GetMapArrayCoords(posTest)==TileType.start || GetMapArrayCoords(posTest) == TileType.end))
+         {
+            lengthToEnd2++;
+            posTest.column++;
+         }
+         lengthToEnd2= lengthToEnd2 + this.graph.GetDistanceFromEnd(posTest);
+      }
+      return Math.Min(lengthToEnd1, lengthToEnd2);
+   }
+
+
 
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
@@ -454,7 +512,7 @@ public class Map : MonoBehaviour
             idSetter++;
             this.type = type;
             this.distanceFromEnd = distanceFromEnd;
-            this.nearestEnd = new coords(0,0);
+            this.nearestEnd = new coords(-1,-1);
          }
       }
 
