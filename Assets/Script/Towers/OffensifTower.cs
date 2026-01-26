@@ -28,11 +28,6 @@ public class OffensifTower : Tower
     {
         graph = Map.Instance.GetGraph();
         getNeighbours().ForEach(addPath);
-
-        foreach (Map.coords tile in path)
-        {
-            Debug.Log(tile);
-        }
     }
 
     private void addPath(Map.coords tile)
