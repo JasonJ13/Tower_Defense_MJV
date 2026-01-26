@@ -41,7 +41,7 @@ public class CameraMouvement : MonoBehaviour
     private Vector2 mouvement;
     private float zoom;
 
-    private enum TowerType
+    public enum TowerType
     {
         empty,
         Offensif,
@@ -105,7 +105,7 @@ public class CameraMouvement : MonoBehaviour
         return new Vector3(mouvement.x, mouvement.y, zoom);
     }
 
-    private void add_in_hand(TowerType newTower)
+    public void add_in_hand(TowerType newTower)
     {
         if (towerNB != null)
         {
