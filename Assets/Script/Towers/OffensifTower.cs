@@ -65,15 +65,26 @@ public class OffensifTower : Tower
     {
         if (timer > shootRate)
         {
-            /*foreach (Map.coords chemin in TileRoad)
-            {
-                //Check si un ennemi est présent
-                break;
-            }*/
+            Shoot();
         }
         else
         {
             timer += 1f;
+        }
+    }
+
+    protected virtual void Shoot()
+    {
+        foreach (Map.coords tile in path)
+        {
+            RobotEnemy robotTarget = RobotFactory.Instance.FindRobotOnTile(tile);
+            if (robotTarget != null)
+            {
+                Debug.Log("shoot");
+                robotTarget.TakeDamage(this.dmg);
+                timer = 0;
+                return;
+            }
         }
     }
 }

@@ -1,5 +1,5 @@
-using NUnit.Framework;
 using System.Collections.Generic;
+using NUnit.Framework;
 using UnityEngine;
 
 public class RobotFactory : MonoBehaviour
@@ -19,11 +19,11 @@ public class RobotFactory : MonoBehaviour
 
     public int waveIndex;
 
-    private List<RobotEnemy> robots;
+    private List<RobotEnemy> robots = new List<RobotEnemy>();
 
     public RobotEnemy FindRobotOnTile(Map.coords coord)
     {
-        foreach (RobotEnemy robot in robots) 
+        foreach (RobotEnemy robot in robots)
         {
             Map.coords robotCoord = Map.Instance.PositionToCoords(robot.transform.position);
             if (robotCoord.Equals(coord))
