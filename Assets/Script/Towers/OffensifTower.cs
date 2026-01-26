@@ -13,7 +13,7 @@ public class OffensifTower : Tower
 
     private Map.Graph graph;
 
-    private List<Map.Graph.nodeInfos> path = new List<Map.Graph.nodeInfos>();
+    private List<Map.coords> path = new List<Map.coords>();
     private float timer;
 
     private int supplied = 0;
@@ -29,9 +29,9 @@ public class OffensifTower : Tower
         graph = Map.Instance.GetGraph();
         getNeighbours().ForEach(addPath);
 
-        foreach (Map.Graph.nodeInfos node in path)
+        foreach (Map.coords tile in path)
         {
-            Debug.Log(node.distanceFromEnd);
+            Debug.Log(tile);
         }
     }
 
@@ -44,15 +44,14 @@ public class OffensifTower : Tower
             case Map.TileType.road:
             case Map.TileType.cross:
             case Map.TileType.start:
-            case Map.TileType.end:
-                path.Add(graph.GetNodeInfos(tile));
+                path.Add(tile);
                 break;
 
             case Map.TileType.generator:
                 connected();
                 break;
         }
-        path.Sort();
+        path.Sort(Map.Compare);
     }
 
     public bool is_connected()
