@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEditor;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 
 public class Map : MonoBehaviour
 {
-
    public static Map Instance { get; private set; }
    private void Awake()
    {
@@ -690,6 +688,19 @@ procedure Path(u, v) is
          return neighboors; 
       }
 
+      public bool IsEdge(coords node1, coords node2)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(node1));
+         Assert.IsTrue(this.dictNodes.ContainsKey(node2));
+         foreach (edge edgy in this.edges)
+         {
+            if ((edgy.node1.Equals(node1) && edgy.node2.Equals(node2)) || (edgy.node2.Equals(node1) && edgy.node1.Equals(node2)))
+            {
+               return true;
+            }
+         }
+         return false;
+      }
 
       public int CompareDistanceFromEnd(nodeInfos n1, nodeInfos n2)
       {
