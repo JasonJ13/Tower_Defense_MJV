@@ -229,6 +229,9 @@ public class Map : MonoBehaviour
       {
          mapDiskPath = Application.dataPath + "/Maps/map_01.png";
       }
+      List<string> filesPNG = new();
+      filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png*", SearchOption.AllDirectories).ToList();
+      Debug.Log("ta mere" + filesPNG[0]);
       //A faire : Agresser l'utilisateur à choisir une map
       //faire d'autre trucs
 
@@ -526,16 +529,18 @@ public class Map : MonoBehaviour
       public struct nodeInfos 
       {
          public static int idSetter=0;
+         public List<coords> neighboors;
          public int id;
          public TileType type;
          public int distanceFromEnd;
          public coords nearestEnd;
-         public nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
+         public nodeInfos(TileType type)
          {
             this.id = idSetter;
             idSetter++;
             this.type = type;
-            this.distanceFromEnd = distanceFromEnd;
+            this.neighboors = new();
+            this.distanceFromEnd = int.MaxValue;
             this.nearestEnd = new coords(-1,-1);
          }
       }
@@ -670,22 +675,30 @@ procedure Path(u, v) is
          return starts; 
       }
 
-      public List<coords> GetNeighboors(coords node)
+      public void CreateNeighboors()
       {
-         Assert.IsTrue(this.dictNodes.ContainsKey(node));
-         List<coords> neighboors = new();
-         foreach (edge edgy in this.edges)
+         foreach (coords node in this.GetNodes())
          {
-            if (edgy.node1.Equals(node))
+            nodeInfos value = this.dictNodes[node];            
+            value.neighboors = new();
+            foreach (edge edgy in this.edges)
             {
-               neighboors.Add(edgy.node2);
-            }
-            if (edgy.node2.Equals(node))
-            {
-               neighboors.Add(edgy.node1);
+               if (edgy.node1.Equals(node))
+               {
+                  value.neighboors.Add(edgy.node2);
+               }
+               if (edgy.node2.Equals(node))
+               {
+                  value.neighboors.Add(edgy.node1);
+               }
             }
          }
-         return neighboors; 
+         return;
+      }
+
+      public List<coords> GetNeighboors(coords node)
+      {
+         return this.dictNodes[node].neighboors; 
       }
 
       public bool IsEdge(coords node1, coords node2)
