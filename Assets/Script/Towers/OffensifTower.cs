@@ -9,9 +9,7 @@ public class OffensifTower : Tower
     protected int dmg;
 
     [SerializeField]
-    protected float shootRate = 60f;
-
-    private Map.Graph graph;
+    protected float shootRate;
 
     private List<Map.coords> path = new List<Map.coords>();
     private float timer;
@@ -26,7 +24,6 @@ public class OffensifTower : Tower
 
     private void constructPath()
     {
-        graph = Map.Instance.GetGraph();
         getNeighbours().ForEach(addPath);
     }
 

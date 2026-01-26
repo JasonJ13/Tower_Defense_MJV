@@ -27,7 +27,7 @@ public class Tower : MonoBehaviour
 
         for (int i = -range; i < 1 + range; i++)
         {
-            for (int j = -range + Mathf.Abs(i); j < range - Mathf.Abs(i) + 1; j++)
+            for (int j = -range; j < range + 1; j++)
             {
                 Map.coords tile = new Map.coords(coord.row + i, coord.column + j);
 
