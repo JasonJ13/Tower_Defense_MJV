@@ -17,7 +17,7 @@ public class RobotFactory : MonoBehaviour
         RobotFactory.Instance = this;
     }
 
-    [SerializeField] private GameObject standartRobot;
+    [SerializeField] private GameObject standardRobot;
     [SerializeField] private GameObject quickRobot;
     [SerializeField] private GameObject bigRobot;
     [SerializeField] private GameObject jesterRobot;

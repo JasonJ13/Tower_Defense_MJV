@@ -3949,10 +3949,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 436533bfe1811e34b80a74bf4b570ec8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RobotFactory
-  standartRobot: {fileID: 0}
-  quickRobot: {fileID: 0}
-  bigRobot: {fileID: 0}
-  jesterRobot: {fileID: 0}
+  standardRobot: {fileID: 230910005746097172, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
+  quickRobot: {fileID: 8366493169363178492, guid: b29c07d1c65893942b12620d1f590725, type: 3}
+  bigRobot: {fileID: 1440602166178317342, guid: cd5b882039ce0b04184e6be04fde50d6, type: 3}
+  jesterRobot: {fileID: 1324678228782901740, guid: 10f950b38d04d4242b9c1e8438091c58, type: 3}
   level: 0
   waveIndex: 0
 --- !u!4 &178492263
@@ -38975,5 +38975,5 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 440849323}
   - {fileID: 178492263}
+  - {fileID: 440849323}
