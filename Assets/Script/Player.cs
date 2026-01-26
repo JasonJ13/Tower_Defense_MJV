@@ -38,47 +38,90 @@ public class Player : MonoBehaviour
     Camera cameraComponent;
 
     [SerializeField]
-    GameObject towerPrefab;
+    GameObject archerPrefab;
+
+    [SerializeField]
+    GameObject turretPrefab;
+
+    [SerializeField]
+    GameObject magePrefab;
+
+    [SerializeField]
+    GameObject cannonPrefab;
 
     [SerializeField]
     GameObject generatorPrefab;
 
     [SerializeField]
-    GameObject towerNotBuiltlePrefab;
+    GameObject archerNotBuiltPrefab;
+
+    [SerializeField]
+    GameObject turretNotBuiltPrefab;
+
+    [SerializeField]
+    GameObject mageNotBuiltPrefab;
+
+    [SerializeField]
+    GameObject cannonNotBuiltPrefab;
 
     [SerializeField]
     GameObject generatorNotBuiltPrefab;
 
-    private InputAction addTowerAction1;
-    private InputAction addTowerAction2;
+    private InputAction addArcherAction;
+    private InputAction addTouretAction;
+    private InputAction addMageAction;
+    private InputAction addCannonAction;
+    private InputAction addGeneratorAction;
     private InputAction placeTowerAction;
 
     public enum TowerType
     {
-        empty,
-        Offensif,
+        Empty,
+        Archer,
+        Turret,
+        Mage,
+        Cannon,
         Generator,
+    }
+
+    private Dictionary<TowerType, GameObject> typeToTowerNB =
+        new Dictionary<TowerType, GameObject>();
+
+    void defineTypeToTowerNB()
+    {
+        typeToTowerNB.Add(TowerType.Archer, archerNotBuiltPrefab);
+        typeToTowerNB.Add(TowerType.Turret, turretNotBuiltPrefab);
+        typeToTowerNB.Add(TowerType.Mage, mageNotBuiltPrefab);
+        typeToTowerNB.Add(TowerType.Cannon, cannonNotBuiltPrefab);
+        typeToTowerNB.Add(TowerType.Generator, generatorNotBuiltPrefab);
     }
 
     private Dictionary<TowerType, GameObject> typeToTower = new Dictionary<TowerType, GameObject>();
 
     void defineTypeToTower()
     {
-        typeToTower.Add(TowerType.Offensif, towerNotBuiltlePrefab);
+        typeToTower.Add(TowerType.Archer, archerPrefab);
+        typeToTower.Add(TowerType.Turret, turretPrefab);
+        typeToTower.Add(TowerType.Mage, magePrefab);
+        typeToTower.Add(TowerType.Cannon, cannonPrefab);
         typeToTower.Add(TowerType.Generator, generatorPrefab);
     }
 
     private bool constructible;
-    private TowerType towerInHand = TowerType.empty;
+    private TowerType towerInHand = TowerType.Empty;
     private GameObject towerNB = null;
     private MeshRenderer tower_MeshRenderer = null;
 
     private void OnEnable()
     {
+        defineTypeToTowerNB();
         defineTypeToTower();
 
-        addTowerAction1 = InputSystem.actions.FindAction("Player/AddTower1");
-        addTowerAction2 = InputSystem.actions.FindAction("Player/AddTower2");
+        addArcherAction = InputSystem.actions.FindAction("Player/AddTower1");
+        addTouretAction = InputSystem.actions.FindAction("Player/AddTower2");
+        addMageAction = InputSystem.actions.FindAction("Player/AddTower3");
+        addCannonAction = InputSystem.actions.FindAction("Player/AddTower4");
+        addGeneratorAction = InputSystem.actions.FindAction("Player/AddTower5");
         placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
@@ -89,9 +132,14 @@ public class Player : MonoBehaviour
             Destroy(towerNB);
         }
 
-        if (newTower != towerInHand && newTower != TowerType.empty)
+        if (newTower == TowerType.Empty)
         {
-            towerNB = Instantiate(typeToTower[newTower]);
+            return;
+        }
+
+        if (newTower != towerInHand)
+        {
+            towerNB = Instantiate(typeToTowerNB[newTower]);
             towerInHand = newTower;
             constructible = false;
             tower_MeshRenderer = towerNB
@@ -101,59 +149,67 @@ public class Player : MonoBehaviour
         }
         else
         {
-            towerInHand = TowerType.empty;
+            towerInHand = TowerType.Empty;
+        }
+    }
+
+    private void add_to_map(TowerType newTower)
+    {
+        Assert.IsTrue(newTower != TowerType.Empty);
+
+        Instantiate(typeToTower[newTower], towerNB.transform.position, towerNB.transform.rotation);
+
+        if (newTower == TowerType.Generator)
+        {
+            Map.Instance.SetMapArray(
+                Map.Instance.PositionToCoords(towerNB.transform.position),
+                Map.TileType.generator
+            );
+        }
+        else
+        {
+            Map.Instance.SetMapArray(
+                Map.Instance.PositionToCoords(towerNB.transform.position),
+                Map.TileType.construct
+            );
         }
     }
 
     private void Update()
     {
-        if (addTowerAction1.WasPerformedThisFrame())
+        if (addArcherAction.WasPerformedThisFrame())
         {
-            add_in_hand(TowerType.Offensif);
+            add_in_hand(TowerType.Archer);
         }
-        else if (addTowerAction2.WasPerformedThisFrame())
+        else if (addTouretAction.WasPerformedThisFrame())
+        {
+            add_in_hand(TowerType.Turret);
+        }
+        else if (addMageAction.WasPerformedThisFrame())
+        {
+            add_in_hand(TowerType.Mage);
+        }
+        else if (addCannonAction.WasPerformedThisFrame())
+        {
+            add_in_hand(TowerType.Cannon);
+        }
+        else if (addGeneratorAction.WasPerformedThisFrame())
         {
             add_in_hand(TowerType.Generator);
         }
 
         if (constructible && placeTowerAction.WasPerformedThisFrame())
         {
-            Assert.IsTrue(towerInHand != TowerType.empty);
-            switch (towerInHand)
-            {
-                case TowerType.Offensif:
-                    Instantiate(
-                        towerPrefab,
-                        towerNB.transform.position,
-                        towerNB.transform.rotation
-                    );
-                    Map.Instance.SetMapArray(
-                        Map.Instance.PositionToCoords(towerNB.transform.position),
-                        Map.TileType.construct
-                    );
-                    break;
-
-                case TowerType.Generator:
-                    Instantiate(
-                        generatorPrefab,
-                        towerNB.transform.position,
-                        towerNB.transform.rotation
-                    );
-                    Map.Instance.SetMapArray(
-                        Map.Instance.PositionToCoords(towerNB.transform.position),
-                        Map.TileType.generator
-                    );
-                    break;
-            }
+            add_to_map(towerInHand);
             Destroy(towerNB);
             constructible = false;
-            towerInHand = TowerType.empty;
+            towerInHand = TowerType.Empty;
         }
     }
 
     private void FixedUpdate()
     {
-        if (towerInHand != TowerType.empty)
+        if (towerInHand != TowerType.Empty)
         {
             Vector2 mousePosition = Mouse.current.position.ReadValue();
             Ray ray = cameraComponent.ScreenPointToRay(mousePosition);
@@ -188,7 +244,10 @@ public class Player : MonoBehaviour
             else
             {
                 constructible = false;
-                tower_MeshRenderer.materials[0].color = Color.red;
+                if (tower_MeshRenderer != null)
+                {
+                    tower_MeshRenderer.materials[0].color = Color.red;
+                }
             }
         }
     }
