@@ -51,7 +51,7 @@ public class OffensifTower : Tower
                 connected();
                 break;
         }
-        //path.Sort(graph.CompareDistanceFromEnd);
+        path.Sort(Map.Compare);
     }
 
     public bool is_connected()

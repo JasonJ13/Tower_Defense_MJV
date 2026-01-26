@@ -10,7 +10,7 @@
 }
 
 .TitleScroll {
-    font-size: 64px;
+    font-size: 32px;
     -unity-font-style: bold;
     -unity-text-align: upper-center;
 }

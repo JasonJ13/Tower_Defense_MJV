@@ -16,7 +16,7 @@ public class UIManager : MonoBehaviour
 
         offensifTowerButton = uiDocument.rootVisualElement.Q("Offensif") as Button;
         GeneratorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
-        DropOutButton = uiDocument.rootVisualElement.Q("DopOut") as Button;
+        DropOutButton = uiDocument.rootVisualElement.Q("DropOut") as Button;
 
         offensifTowerButton.RegisterCallback<ClickEvent>(OffensifSelected);
         GeneratorButton.RegisterCallback<ClickEvent>(GeneratorSelected);

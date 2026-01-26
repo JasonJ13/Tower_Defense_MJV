@@ -112,7 +112,7 @@ public class CameraMouvement : MonoBehaviour
             Destroy(towerNB);
         }
 
-        if (newTower != towerInHand)
+        if (newTower != towerInHand && newTower != TowerType.empty)
         {
             towerNB = Instantiate(typeToTower[newTower]);
             towerInHand = newTower;
@@ -215,6 +215,11 @@ public class CameraMouvement : MonoBehaviour
                     constructible = false;
                     tower_MeshRenderer.materials[0].color = Color.red;
                 }
+            }
+            else
+            {
+                constructible = false;
+                tower_MeshRenderer.materials[0].color = Color.red;
             }
         }
     }
