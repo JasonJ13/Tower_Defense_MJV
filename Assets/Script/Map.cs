@@ -58,6 +58,21 @@ public class Map : MonoBehaviour
          return "(" + this.row.ToString() + "," + this.column.ToString() + ")";
       }
    }
+   public static int CompareCoords(coords c1, coords c2)
+   {
+      if (Map.Instance.GetDistanceFromEnd(c1) < Map.Instance.GetDistanceFromEnd(c2))
+      {
+         return -1;
+      }
+      else if (Map.Instance.GetDistanceFromEnd(c1) == Map.Instance.GetDistanceFromEnd(c2))
+      {
+         return 0;
+      }
+      else
+      {
+         return 1;
+      }
+   }
 
 
    private Color32 colorEmpty = new Color32(229, 229, 229, 255);
