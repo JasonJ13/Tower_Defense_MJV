@@ -552,12 +552,12 @@ public class Map : MonoBehaviour
    /// <summary>
    /// nodeInfos is a STRUCT that contains ??? (TBA)
    /// </summary>
-   /// <param name="pos"></param>
+   /// <param name="node"></param>
    /// <returns></returns>
-      public nodeInfos GetNodeInfos(coords pos)
+      public nodeInfos GetNodeInfos(coords node)
       {
-         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
-         return this.dictNodes[pos];
+         Assert.IsTrue(this.dictNodes.ContainsKey(node));
+         return this.dictNodes[node];
       }
 
    /// <summary>
@@ -621,16 +621,47 @@ procedure Path(u, v) is
          return path;
       }
 
-      public int GetDistanceFromEnd(coords pos)
+      public int GetDistanceFromEnd(coords node)
       {
-         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
-         return this.dictNodes[pos].distanceFromEnd;
+         Assert.IsTrue(this.dictNodes.ContainsKey(node));
+         return this.dictNodes[node].distanceFromEnd;
       }
 
-      public coords GetNearestEnd(coords pos)
+      public coords GetNearestEnd(coords node)
       {
-         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
-         return this.dictNodes[pos].nearestEnd;
+         Assert.IsTrue(this.dictNodes.ContainsKey(node));
+         return this.dictNodes[node].nearestEnd;
+      }
+
+      public List<coords> GetAllStart()
+      {
+         List<coords> starts = new();
+         foreach (coords node in this.dictNodes.Keys)
+         {
+            if (this.dictNodes[node].type == TileType.start)
+            {
+               starts.Add(node);
+            }
+         }
+         return starts; 
+      }
+
+      public List<coords> GetNeighboors(coords node)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(node));
+         List<coords> neighboors = new();
+         foreach (edge edgy in this.edges)
+         {
+            if (edgy.node1.Equals(node))
+            {
+               neighboors.Add(edgy.node2);
+            }
+            if (edgy.node2.Equals(node))
+            {
+               neighboors.Add(edgy.node1);
+            }
+         }
+         return neighboors; 
       }
 
 
