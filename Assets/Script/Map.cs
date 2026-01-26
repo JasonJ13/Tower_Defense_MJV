@@ -170,16 +170,6 @@ public class Map : MonoBehaviour
 
 //      foreach (edge edgy in mapGraphAdj){Debug.Log(edgy.node1 + "," + edgy.node2 + "," + edgy.weight);}
 
-      TileType[,] mapArrayTest =
-      { //map Test
-         { TileType.empty, TileType.empty, TileType.end, TileType.empty, TileType.empty },
-         { TileType.empty, TileType.empty, TileType.road, TileType.empty, TileType.empty },
-         { TileType.start, TileType.road, TileType.cross, TileType.end, TileType.empty },
-         { TileType.empty, TileType.constructible, TileType.empty, TileType.empty, TileType.empty },
-         { TileType.empty, TileType.empty, TileType.empty, TileType.empty, TileType.empty },
-      };
-
-//        mapArray = mapArrayTest;
    }
 
    /// <summary>
@@ -253,6 +243,8 @@ public class Map : MonoBehaviour
                }
          }
       }
+
+      return;
    }
 
 
@@ -451,12 +443,12 @@ public class Map : MonoBehaviour
 
       public struct nodeInfos 
       {
-         internal static int idSetter=0;
-         internal int id;
+         public static int idSetter=0;
+         public int id;
          public TileType type;
-         internal int distanceFromEnd;
-         internal coords nearestEnd;
-         internal nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
+         public int distanceFromEnd;
+         public coords nearestEnd;
+         public nodeInfos(TileType type, int distanceFromStart=int.MaxValue, int distanceFromEnd=int.MaxValue)
          {
             this.id = idSetter;
             idSetter++;
@@ -519,6 +511,16 @@ public class Map : MonoBehaviour
          return this.edges;
       }
 
+   /// <remarks>RECALCULATES THE ENTIRE GRAPH, so it is costly</remarks>
+   /// <param name="newEdges"></param>
+      public void SetEdges(List<edge> newEdges)
+      { 
+         this.edges = newEdges;
+         this.CreateMatAdj();
+         this.CreateDistanceFromEnd();
+      }
+
+
       public int GetPathWeight(coords pos1, coords pos2)
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(pos1));
@@ -574,7 +576,7 @@ procedure Path(u, v) is
       }
 
 
-      public static int CompareDistanceFromEnd(nodeInfos n1, nodeInfos n2)
+      public int CompareDistanceFromEnd(nodeInfos n1, nodeInfos n2)
       {
             if (n1.distanceFromEnd < n2.distanceFromEnd)
             {
@@ -653,7 +655,7 @@ procedure Path(u, v) is
                else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
                {
                   this.edges.Add(new edge(lastCrossPosition, pos, weight));                  
-                  this.edges.Add(new edge(pos, lastCrossPosition, weight));
+//                  this.edges.Add(new edge(pos, lastCrossPosition, weight));
                   weight = 0;
                }
                else{
@@ -684,7 +686,7 @@ procedure Path(u, v) is
                else if (OnAPath && (mapArray[row, column] == TileType.start || mapArray[row, column] == TileType.end || mapArray[row, column] == TileType.cross)) //Si on est 
                {
                   edges.Add(new edge(lastCrossPosition, pos, weight));
-                  edges.Add(new edge(pos, lastCrossPosition, weight));
+//                  edges.Add(new edge(pos, lastCrossPosition, weight));
                   weight = 0;
                }
                else{
@@ -740,9 +742,10 @@ procedure FloydWarshallWithPathReconstruction() is
          }
          foreach (edge edgy in this.edges)
          {
-            
             this.matAdj[this.dictNodes[edgy.node1].id, this.dictNodes[edgy.node2].id] = edgy.weight;
+            this.matAdj[this.dictNodes[edgy.node2].id, this.dictNodes[edgy.node1].id] = edgy.weight;
             this.prev[this.dictNodes[edgy.node1].id, this.dictNodes[edgy.node2].id] = this.dictNodes[edgy.node1].id;
+            this.prev[this.dictNodes[edgy.node2].id, this.dictNodes[edgy.node1].id] = this.dictNodes[edgy.node2].id;
          }
 
          for (int k=0; k < length; k++)
