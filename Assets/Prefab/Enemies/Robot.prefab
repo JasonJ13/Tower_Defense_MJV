@@ -1356,8 +1356,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RobotEnemy
   maxHP: 50
   speed: 1
-  damage: 0
-  randomPath: 0
+  damage: 10
+  randomPath: 5
 --- !u!143 &7146115249765198620
 CharacterController:
   m_ObjectHideFlags: 0
