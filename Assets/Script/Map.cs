@@ -111,6 +111,11 @@ public class Map : MonoBehaviour
       return new coords((int)Math.Floor(position.z), (int)Math.Floor(position.x));
    }
 
+   public TileType[,] GetMapArray()
+   {
+      return this.mapArray;
+   }
+
    /// <summary>
    /// mapArray is the 2DArray representation of a map, access by coordss
    /// </summary>
@@ -550,6 +555,19 @@ procedure Path(u, v) is
          path.Reverse();
          return path;
       }
+
+      public int GetDistanceFromStart(coords pos)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
+         return this.dictNodes[pos].distanceFromStart;
+      }
+
+      public int GetDistanceFromEnd(coords pos)
+      {
+         Assert.IsTrue(this.dictNodes.ContainsKey(pos));
+         return this.dictNodes[pos].distanceFromEnd;
+      }
+
 
       public static int CompareDistanceFromStart(nodeInfos n1, nodeInfos n2)
       {
