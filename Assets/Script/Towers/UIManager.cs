@@ -7,29 +7,34 @@ public class UIManager : MonoBehaviour
     private Button GeneratorButton;
     private Button DropOutButton;
 
+    private CameraMouvement cameraScript;
+
     void OnEnable()
     {
         var uiDocument = this.GetComponent<UIDocument>();
-        var cameraScript = GameObject.Find("Main Camera").GetComponent<CameraMouvement>();
+        cameraScript = GameObject.Find("Main Camera").GetComponent<CameraMouvement>();
 
         offensifTowerButton = uiDocument.rootVisualElement.Q("Offensif") as Button;
         GeneratorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
         DropOutButton = uiDocument.rootVisualElement.Q("DopOut") as Button;
 
-        /*offensifTowerButton.onClick.AddListener(() =>
-        {
-            cameraScript.add_in_hand(CameraMouvement.TowerType.Offensif);
-        });
+        offensifTowerButton.RegisterCallback<ClickEvent>(OffensifSelected);
+        GeneratorButton.RegisterCallback<ClickEvent>(GeneratorSelected);
+        DropOutButton.RegisterCallback<ClickEvent>(DropOutSelected);
+    }
 
-        GeneratorButton.RegisterCallback<ClickEvent>(
-            cameraScript.add_in_hand,
-            CameraMouvement.TowerType.Generator,
-            TrickleDown.TrickleDown
-        );
-        DropOutButton.RegisterCallback<ClickEvent>(
-            cameraScript.add_in_hand,
-            CameraMouvement.TowerType.empty,
-            TrickleDown.TrickleDown
-        );*/
+    void OffensifSelected(ClickEvent evt)
+    {
+        cameraScript.add_in_hand(CameraMouvement.TowerType.Offensif);
+    }
+
+    void GeneratorSelected(ClickEvent evt)
+    {
+        cameraScript.add_in_hand(CameraMouvement.TowerType.Generator);
+    }
+
+    void DropOutSelected(ClickEvent evt)
+    {
+        cameraScript.add_in_hand(CameraMouvement.TowerType.empty);
     }
 }
