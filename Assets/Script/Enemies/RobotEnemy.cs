@@ -23,7 +23,6 @@ public class RobotEnemy : MonoBehaviour
 
     private Vector3 destination;
     private int currentHP;
-    private Map.coords coord;
 
     private Animator anim;
 
@@ -43,8 +42,7 @@ public class RobotEnemy : MonoBehaviour
         characterController = gameObject.GetComponent<CharacterController>();
 
         this.destinations = new List<Map.coords>() { new Map.coords(1, 5), new Map.coords(4, 5) }; //valeurs temporaires
-        this.coord = new Map.coords(1, 1);
-        transform.position = Map.Instance.CoordsToPosition(this.coord); //valeur temporaire
+       
 
         if (destinations.Count > 0)
             ChangeDestination();
@@ -84,7 +82,7 @@ public class RobotEnemy : MonoBehaviour
             }
             else
             {
-                //characterController.Move(direction * speed * Time.deltaTime);
+                characterController.Move(direction * speed * Time.deltaTime);
             }
         }
     }
@@ -97,7 +95,6 @@ public class RobotEnemy : MonoBehaviour
         this.destination = Map.Instance.CoordsToPosition(new_coords);
 
         angle = 90;
-        Debug.Log(angle);
     }
 
     public void TakeDamage(int damage)
