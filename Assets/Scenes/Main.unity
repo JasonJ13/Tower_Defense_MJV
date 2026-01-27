@@ -3929,7 +3929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 178492263}
-  - component: {fileID: 178492262}
+  - component: {fileID: 178492264}
   m_Layer: 0
   m_Name: RobotFactory
   m_TagString: Untagged
@@ -3937,24 +3937,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &178492262
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 178492261}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 436533bfe1811e34b80a74bf4b570ec8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::RobotFactory
-  standardRobot: {fileID: 230910005746097172, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
-  quickRobot: {fileID: 8366493169363178492, guid: b29c07d1c65893942b12620d1f590725, type: 3}
-  bigRobot: {fileID: 1440602166178317342, guid: cd5b882039ce0b04184e6be04fde50d6, type: 3}
-  jesterRobot: {fileID: 1324678228782901740, guid: 10f950b38d04d4242b9c1e8438091c58, type: 3}
-  level: 0
-  waveIndex: 0
 --- !u!4 &178492263
 Transform:
   m_ObjectHideFlags: 0
@@ -3970,6 +3952,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &178492264
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 178492261}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 436533bfe1811e34b80a74bf4b570ec8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RobotFactory
+  standardRobot: {fileID: 230910005746097172, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
+  quickRobot: {fileID: 8366493169363178492, guid: b29c07d1c65893942b12620d1f590725, type: 3}
+  bigRobot: {fileID: 1440602166178317342, guid: cd5b882039ce0b04184e6be04fde50d6, type: 3}
+  jesterRobot: {fileID: 1324678228782901740, guid: 10f950b38d04d4242b9c1e8438091c58, type: 3}
+  quickToBigRatio: 0.5
 --- !u!1 &179859163
 GameObject:
   m_ObjectHideFlags: 0
@@ -38975,5 +38974,5 @@ SceneRoots:
   - {fileID: 330585546}
   - {fileID: 410087041}
   - {fileID: 832575519}
-  - {fileID: 178492263}
   - {fileID: 440849323}
+  - {fileID: 178492263}
