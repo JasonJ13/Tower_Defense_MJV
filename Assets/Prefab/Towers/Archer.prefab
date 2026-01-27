@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4550773813143690578}
   - component: {fileID: -8193505063735148181}
   m_Layer: 0
-  m_Name: Tower
+  m_Name: Archer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,9 +45,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eef399e0271928048a76f19144e599ed, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OffensifTower
-  range: 2
-  dmg: 0
-  shootRate: 60
+  range: 3
+  dmg: 5
+  shootRate: 30
 --- !u!1001 &23085797133647397
 PrefabInstance:
   m_ObjectHideFlags: 0

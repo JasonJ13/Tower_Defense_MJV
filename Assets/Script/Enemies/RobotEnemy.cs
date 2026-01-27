@@ -1,7 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 public class RobotEnemy : MonoBehaviour
 {
@@ -10,29 +10,82 @@ public class RobotEnemy : MonoBehaviour
     [SerializeField] private int damage;
     [SerializeField] private float randomPath;
 
-    private Vector2 destination;
+    private Vector3 destination;
     private int currentHP;
 
     private Animator anim;
 
-    private EnemyGraph graph;
+    private List<Map.coords> destinations;
 
+    private CharacterController characterController;
+
+    private Vector3 direction;
+    private float angle;
+
+    private bool marching = false;
 
     private void Start()
     {
         anim = gameObject.GetComponent<Animator>();
         currentHP = maxHP;
+        characterController = gameObject.GetComponent<CharacterController>();
 
+        this.destinations = new List<Map.coords>() { new Map.coords(1, 5), new Map.coords(4, 5) }; //valeurs temporaires
+       
+
+        if (destinations.Count > 0)
+            ChangeDestination();
     }
 
-    
-
-    private void SetDestination(Vector2 destination)
+    private void Update()
     {
-        this.destination = destination;
+        if (destination != null && marching)
+        {
+            Vector3 rot = new Vector3(0, angle, 0);
+            transform.eulerAngles = Vector3.Lerp(
+                transform.rotation.eulerAngles,
+                rot,
+                Time.deltaTime
+            );
+
+            direction = destination - transform.position;
+
+            direction.y = 0;
+            var distance = direction.magnitude;
+            direction = direction / distance;
+
+            if (distance < 0.05)
+            {
+
+                if (destinations.Count > 0)
+                {
+                    Debug.Log("change destination");
+                    ChangeDestination();
+                }
+                else
+                {
+                    marching = false;
+                    anim.SetTrigger("Attack");
+                    Debug.Log("Fin du parcours");
+
+                }
+            }
+            else
+            {
+                characterController.Move(direction * speed * Time.deltaTime);
+            }
+        }
     }
 
+    private void ChangeDestination()
+    {
+        var new_coords = destinations.FirstOrDefault();
+        destinations.Remove(new_coords);
 
+        this.destination = Map.Instance.CoordsToPosition(new_coords);
+
+        angle = 90;
+    }
 
     public void TakeDamage(int damage)
     {
@@ -42,19 +95,21 @@ public class RobotEnemy : MonoBehaviour
             Die();
         }
     }
-    
-    
+
     public void Die()
     {
-        anim.SetBool("Open_Anim", false);
-
+        anim.SetTrigger("Die");
     }
-    protected void DeathAnimFinished()
+
+    protected void DeathAnimFinished() //event de fin de l'anim de mort
     {
-        
         Debug.Log("mort");
-        Destroy(gameObject,0.5f);
+        RobotFactory.Instance.DestroyRobot(this.transform.parent.gameObject);
+
     }
 
-
+    protected void FinishedOpening() //event de fin de l'animation opening
+    {
+        marching = true;
+    }
 }

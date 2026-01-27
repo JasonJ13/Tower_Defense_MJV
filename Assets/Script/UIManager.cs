@@ -3,9 +3,12 @@ using UnityEngine.UIElements;
 
 public class UIManager : MonoBehaviour
 {
-    private Button offensifTowerButton;
-    private Button GeneratorButton;
-    private Button DropOutButton;
+    private Button archerTowerButton;
+    private Button turretTowerButton;
+    private Button mageTowerButton;
+    private Button cannonTowerButton;
+    private Button generatorButton;
+    private Button dropOutButton;
 
     private Player playerScript;
 
@@ -14,18 +17,39 @@ public class UIManager : MonoBehaviour
         var uiDocument = this.GetComponent<UIDocument>();
         playerScript = GameObject.Find("Player").GetComponent<Player>();
 
-        offensifTowerButton = uiDocument.rootVisualElement.Q("Offensif") as Button;
-        GeneratorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
-        DropOutButton = uiDocument.rootVisualElement.Q("DropOut") as Button;
+        archerTowerButton = uiDocument.rootVisualElement.Q("Archer") as Button;
+        turretTowerButton = uiDocument.rootVisualElement.Q("Turret") as Button;
+        mageTowerButton = uiDocument.rootVisualElement.Q("Mage") as Button;
+        cannonTowerButton = uiDocument.rootVisualElement.Q("Cannon") as Button;
+        generatorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
+        dropOutButton = uiDocument.rootVisualElement.Q("DropOut") as Button;
 
-        offensifTowerButton.RegisterCallback<ClickEvent>(OffensifSelected);
-        GeneratorButton.RegisterCallback<ClickEvent>(GeneratorSelected);
-        DropOutButton.RegisterCallback<ClickEvent>(DropOutSelected);
+        archerTowerButton.RegisterCallback<ClickEvent>(ArcherSelected);
+        turretTowerButton.RegisterCallback<ClickEvent>(TurretSelected);
+        mageTowerButton.RegisterCallback<ClickEvent>(MageSelected);
+        cannonTowerButton.RegisterCallback<ClickEvent>(CannonSelected);
+        generatorButton.RegisterCallback<ClickEvent>(GeneratorSelected);
+        dropOutButton.RegisterCallback<ClickEvent>(DropOutSelected);
     }
 
-    void OffensifSelected(ClickEvent evt)
+    void ArcherSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Offensif);
+        playerScript.add_in_hand(Player.TowerType.Archer);
+    }
+
+    void TurretSelected(ClickEvent evt)
+    {
+        playerScript.add_in_hand(Player.TowerType.Turret);
+    }
+
+    void MageSelected(ClickEvent evt)
+    {
+        playerScript.add_in_hand(Player.TowerType.Mage);
+    }
+
+    void CannonSelected(ClickEvent evt)
+    {
+        playerScript.add_in_hand(Player.TowerType.Cannon);
     }
 
     void GeneratorSelected(ClickEvent evt)
@@ -35,6 +59,6 @@ public class UIManager : MonoBehaviour
 
     void DropOutSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.empty);
+        playerScript.add_in_hand(Player.TowerType.Empty);
     }
 }

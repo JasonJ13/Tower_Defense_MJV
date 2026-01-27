@@ -9,9 +9,7 @@ public class OffensifTower : Tower
     protected int dmg;
 
     [SerializeField]
-    protected float shootRate = 60f;
-
-    private Map.Graph graph;
+    protected float shootRate;
 
     private List<Map.coords> path = new List<Map.coords>();
     private float timer;
@@ -26,7 +24,6 @@ public class OffensifTower : Tower
 
     private void constructPath()
     {
-        graph = Map.Instance.GetGraph();
         getNeighbours().ForEach(addPath);
     }
 
@@ -68,15 +65,29 @@ public class OffensifTower : Tower
     {
         if (timer > shootRate)
         {
-            /*foreach (Map.coords chemin in TileRoad)
-            {
-                //Check si un ennemi est présent
-                break;
-            }*/
+            Shoot();
         }
         else
         {
             timer += 1f;
+        }
+    }
+
+    protected virtual void Shoot()
+    {
+        foreach (Map.coords tile in path)
+        {
+            if (RobotFactory.Instance != null)
+            {
+                RobotEnemy robotTarget = RobotFactory.Instance.FindRobotOnTile(tile);
+                if (robotTarget != null)
+                {
+                    Debug.Log("shoot");
+                    robotTarget.TakeDamage(this.dmg);
+                    timer = 0;
+                    return;
+                }
+            }
         }
     }
 }

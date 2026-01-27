@@ -10,15 +10,13 @@ public class Tower : MonoBehaviour
     [SerializeField]
     protected int range;
 
-    protected Map.coords coord;
+    protected Map.coords coords;
 
     protected Transform transform;
 
     protected virtual void OnEnable()
     {
         transform = GetComponent<Transform>();
-
-        coord = Map.Instance.PositionToCoords(transform.position);
     }
 
     protected List<Map.coords> getNeighbours()
@@ -27,9 +25,9 @@ public class Tower : MonoBehaviour
 
         for (int i = -range; i < 1 + range; i++)
         {
-            for (int j = -range + Mathf.Abs(i); j < range - Mathf.Abs(i) + 1; j++)
+            for (int j = -range; j < range + 1; j++)
             {
-                Map.coords tile = new Map.coords(coord.row + i, coord.column + j);
+                Map.coords tile = new Map.coords(coords.row + i, coords.column + j);
 
                 if ((j != 0 || i != 0) && Map.Instance.IsInMap(tile))
                 {
