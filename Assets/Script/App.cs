@@ -74,7 +74,8 @@ public class App : MonoBehaviour
                     yield break;
                 }
                 yield return null; // yield and return one frame later
-            }            
+            }
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(nameScene2));            
         }
 
 
@@ -99,6 +100,14 @@ public class App : MonoBehaviour
         string[] toUnload = {"MapSelectionScreen"};
         string[] toLoad = {"Main"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+    }
+
+    public void QuitMapSelection()
+    {
+        string[] toUnload = {"MapSelection"};
+        string[] toLoad = {"Main Menu"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));
+
     }
 
     public void QuitGame()
