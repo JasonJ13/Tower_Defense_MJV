@@ -77,13 +77,16 @@ public class OffensifTower : Tower
     {
         foreach (Map.coords tile in path)
         {
-            RobotEnemy robotTarget = RobotFactory.Instance.FindRobotOnTile(tile);
-            if (robotTarget != null)
+            if (RobotFactory.Instance != null)
             {
-                Debug.Log("shoot");
-                robotTarget.TakeDamage(this.dmg);
-                timer = 0;
-                return;
+                RobotEnemy robotTarget = RobotFactory.Instance.FindRobotOnTile(tile);
+                if (robotTarget != null)
+                {
+                    Debug.Log("shoot");
+                    robotTarget.TakeDamage(this.dmg);
+                    timer = 0;
+                    return;
+                }
             }
         }
     }

@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 
-
-
 public class RobotFactory : MonoBehaviour
 {
     public static RobotFactory Instance { get; private set; }
@@ -17,10 +15,17 @@ public class RobotFactory : MonoBehaviour
         RobotFactory.Instance = this;
     }
 
-    [SerializeField] private GameObject standardRobot;
-    [SerializeField] private GameObject quickRobot;
-    [SerializeField] private GameObject bigRobot;
-    [SerializeField] private GameObject jesterRobot;
+    [SerializeField]
+    private GameObject standardRobot;
+
+    [SerializeField]
+    private GameObject quickRobot;
+
+    [SerializeField]
+    private GameObject bigRobot;
+
+    [SerializeField]
+    private GameObject jesterRobot;
 
     public int level;
 
@@ -29,7 +34,6 @@ public class RobotFactory : MonoBehaviour
     private Map.Graph graph;
     private List<Map.coords> starts;
     private List<RobotEnemy> robots = new List<RobotEnemy>();
-
 
     private void Start()
     {
@@ -55,9 +59,11 @@ public class RobotFactory : MonoBehaviour
         int rIndex = Random.Range(0, starts.Count);
         var start = this.starts[rIndex];
 
-        GameObject enemy = Instantiate(robot, Map.Instance.CoordsToPosition(start), Quaternion.identity);
+        GameObject enemy = Instantiate(
+            robot,
+            Map.Instance.CoordsToPosition(start),
+            Quaternion.identity
+        );
         robots.Add(enemy.GetComponent<RobotEnemy>());
     }
-
-    
 }

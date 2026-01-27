@@ -74,6 +74,9 @@ public class Player : MonoBehaviour
     private InputAction addGeneratorAction;
     private InputAction placeTowerAction;
 
+    private Color red = new Color(1f, 0, 0, 0.3f);
+    private Color green = new Color(0, 1f, 0, 0.3f);
+
     public enum TowerType
     {
         Empty,
@@ -113,6 +116,7 @@ public class Player : MonoBehaviour
     private TowerType towerInHand = TowerType.Empty;
     private GameObject towerNB = null;
     private MeshRenderer tower_MeshRenderer = null;
+    private TowerNotBuilt towerNBScript = null;
 
     private void OnEnable()
     {
@@ -141,13 +145,19 @@ public class Player : MonoBehaviour
 
         if (newTower != towerInHand)
         {
-            towerNB = Instantiate(typeToTowerNB[newTower]);
+            towerNB = Instantiate(
+                typeToTowerNB[newTower],
+                Map.Instance.CoordsToPosition(new Map.coords(0, 0)),
+                transform.rotation
+            );
             towerInHand = newTower;
             constructible = false;
             tower_MeshRenderer = towerNB
                 .GetComponent<Transform>()
                 .GetChild(0)
                 .GetComponent<MeshRenderer>();
+            towerNBScript = towerNB.GetComponent<TowerNotBuilt>();
+            towerNBScript.positionGhostTile();
         }
         else
         {
@@ -220,6 +230,7 @@ public class Player : MonoBehaviour
             if (Physics.Raycast(ray, out RaycastHit hitInfo))
             {
                 towerNB.transform.position = hitInfo.transform.position;
+                towerNBScript.positionGhostTile();
 
                 if (
                     !constructible
@@ -229,7 +240,7 @@ public class Player : MonoBehaviour
                 )
                 {
                     constructible = true;
-                    tower_MeshRenderer.materials[0].color = Color.green;
+                    tower_MeshRenderer.materials[0].color = green;
                 }
                 else if (
                     constructible
@@ -241,7 +252,7 @@ public class Player : MonoBehaviour
                 )
                 {
                     constructible = false;
-                    tower_MeshRenderer.materials[0].color = Color.red;
+                    tower_MeshRenderer.materials[0].color = red;
                 }
             }
             else
@@ -249,7 +260,7 @@ public class Player : MonoBehaviour
                 constructible = false;
                 if (tower_MeshRenderer != null)
                 {
-                    tower_MeshRenderer.materials[0].color = Color.red;
+                    tower_MeshRenderer.materials[0].color = red;
                 }
             }
         }

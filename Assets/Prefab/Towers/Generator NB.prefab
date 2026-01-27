@@ -63,5 +63,27 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 6801466210788762790, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -3427154560451998903}
   m_SourcePrefab: {fileID: 100100000, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+--- !u!1 &6405362064283743044 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6801466210788762790, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+  m_PrefabInstance: {fileID: 470559811978123234}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &-3427154560451998903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6405362064283743044}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 85c5b1f0699d22748831b98e895645d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TowerNotBuilt
+  range: 3
+  ghostTile: {fileID: 4041020359719632398, guid: e55912e903ac4c447b77fc4f4c9858a2, type: 3}
