@@ -10,21 +10,17 @@ public class TowerNotBuilt : Tower
 
     private List<GameObject> ghostTiles = new List<GameObject>();
 
-    private Transform transform;
-
     public void positionGhostTile()
     {
-        transform = GetComponent<Transform>();
-
         ghostTiles.ForEach(gtile => Destroy(gtile));
 
-        coords = Map.Instance.PositionToCoords(transform.position);
+        coords = Map.Instance.PositionToCoords(transformTower.position);
 
         foreach (Map.coords tile in getNeighbours())
         {
             Vector3 positionGT = Map.Instance.CoordsToPosition(tile);
             positionGT.y += 0;
-            ghostTiles.Add(Instantiate(ghostTile, positionGT, transform.rotation));
+            ghostTiles.Add(Instantiate(ghostTile, positionGT, transformTower.rotation));
         }
     }
 

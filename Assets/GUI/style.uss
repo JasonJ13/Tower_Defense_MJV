@@ -24,3 +24,17 @@
     width: 80%;
     -unity-font-style: normal;
 }
+
+.ButtonMain {
+    font-size: 32px;
+    width: 100%;
+    -unity-font-style: normal;
+    background-color: rgb(0, 25, 255);
+}
+
+.Title {
+    font-size: 48px;
+    -unity-font-style: bold;
+    -unity-text-align: upper-center;
+    color: rgb(0, 25, 255);
+}
