@@ -81,6 +81,10 @@ PrefabInstance:
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2146842436471667094, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
+      propertyPath: safeRoute
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2146842436471667094, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
       propertyPath: randomPath
       value: 1
       objectReference: {fileID: 0}
