@@ -67,7 +67,6 @@ public class RobotEnemy : MonoBehaviour
 
             if (distance < 0.05)
             {
-                transform.position = destination; //petit tp pour �viter que le robot parte dans tous les sens
 
                 if (destinations.Count > 0)
                 {
@@ -76,8 +75,10 @@ public class RobotEnemy : MonoBehaviour
                 }
                 else
                 {
+                    marching = false;
                     anim.SetTrigger("Attack");
                     Debug.Log("Fin du parcours");
+
                 }
             }
             else
@@ -114,6 +115,8 @@ public class RobotEnemy : MonoBehaviour
     protected void DeathAnimFinished() //event de fin de l'anim de mort
     {
         Debug.Log("mort");
+        RobotFactory.Instance.DestroyRobot(this.transform.parent.gameObject);
+
     }
 
     protected void FinishedOpening() //event de fin de l'animation opening
