@@ -17,63 +17,21 @@ public class CameraMouvement : MonoBehaviour
     [SerializeField]
     Vector2 zoomLimit = new Vector2(2, 24);
 
-    [SerializeField]
-    GameObject towerPrefab;
-
-    [SerializeField]
-    GameObject generatorPrefab;
-
-    [SerializeField]
-    GameObject towerNotBuiltlePrefab;
-
-    [SerializeField]
-    GameObject generatorNotBuiltPrefab;
-
-    private Camera cameraComponent;
     private Transform cameraTransform;
 
     private InputAction moveAction;
     private InputAction zoomAction;
-    private InputAction addTowerAction1;
-    private InputAction addTowerAction2;
-    private InputAction placeTowerAction;
 
     private Vector2 mouvement;
     private float zoom;
 
-    public enum TowerType
-    {
-        empty,
-        Offensif,
-        Generator,
-    }
-
-    private Dictionary<TowerType, GameObject> typeToTower = new Dictionary<TowerType, GameObject>();
-
-    void defineTypeToTower()
-    {
-        typeToTower.Add(TowerType.Offensif, towerNotBuiltlePrefab);
-        typeToTower.Add(TowerType.Generator, generatorPrefab);
-    }
-
-    private bool constructible;
-    private TowerType towerInHand = TowerType.empty;
-    private GameObject towerNB = null;
-    private MeshRenderer tower_MeshRenderer = null;
-
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        defineTypeToTower();
-
         cameraTransform = GetComponent<Transform>();
-        cameraComponent = GetComponent<Camera>();
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
-        addTowerAction1 = InputSystem.actions.FindAction("Player/AddTower1");
-        addTowerAction2 = InputSystem.actions.FindAction("Player/AddTower2");
-        placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
     }
 
     private Vector3 define_translate(Vector2 mouvement, float zoom)
@@ -105,29 +63,6 @@ public class CameraMouvement : MonoBehaviour
         return new Vector3(mouvement.x, mouvement.y, zoom);
     }
 
-    public void add_in_hand(TowerType newTower)
-    {
-        if (towerNB != null)
-        {
-            Destroy(towerNB);
-        }
-
-        if (newTower != towerInHand && newTower != TowerType.empty)
-        {
-            towerNB = Instantiate(typeToTower[newTower]);
-            towerInHand = newTower;
-            constructible = false;
-            tower_MeshRenderer = towerNB
-                .GetComponent<Transform>()
-                .GetChild(0)
-                .GetComponent<MeshRenderer>();
-        }
-        else
-        {
-            towerInHand = TowerType.empty;
-        }
-    }
-
     // Update is called once per frame
     private void Update()
     {
@@ -136,91 +71,5 @@ public class CameraMouvement : MonoBehaviour
         zoom = zoomAction.ReadValue<float>() * SPEED * Time.deltaTime / 2;
         Vector3 translate = define_translate(mouvement, zoom);
         cameraTransform.Translate(translate);
-
-        //Gestion d'une nouvelle tour
-        if (addTowerAction1.WasPerformedThisFrame())
-        {
-            add_in_hand(TowerType.Offensif);
-        }
-        else if (addTowerAction2.WasPerformedThisFrame())
-        {
-            add_in_hand(TowerType.Generator);
-        }
-
-        if (constructible && placeTowerAction.WasPerformedThisFrame())
-        {
-            Assert.IsTrue(towerInHand != TowerType.empty);
-            switch (towerInHand)
-            {
-                case TowerType.Offensif:
-                    Instantiate(
-                        towerPrefab,
-                        towerNB.transform.position,
-                        towerNB.transform.rotation
-                    );
-                    Map.Instance.SetMapArray(
-                        Map.Instance.PositionToCoords(towerNB.transform.position),
-                        Map.TileType.construct
-                    );
-                    break;
-
-                case TowerType.Generator:
-                    Instantiate(
-                        generatorPrefab,
-                        towerNB.transform.position,
-                        towerNB.transform.rotation
-                    );
-                    Map.Instance.SetMapArray(
-                        Map.Instance.PositionToCoords(towerNB.transform.position),
-                        Map.TileType.generator
-                    );
-                    break;
-            }
-            Destroy(towerNB);
-            constructible = false;
-            towerInHand = TowerType.empty;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        if (towerInHand != TowerType.empty)
-        {
-            Vector2 mousePosition = Mouse.current.position.ReadValue();
-            Ray ray = cameraComponent.ScreenPointToRay(mousePosition);
-
-            if (Physics.Raycast(ray, out RaycastHit hitInfo))
-            {
-                towerNB.transform.position = hitInfo.transform.position;
-
-                if (
-                    !constructible
-                    && Map.Instance.GetMapArrayCoords(
-                        Map.Instance.PositionToCoords(hitInfo.transform.position)
-                    ) == Map.TileType.constructible
-                )
-                {
-                    constructible = true;
-                    tower_MeshRenderer.materials[0].color = Color.green;
-                }
-                else if (
-                    constructible
-                    && !(
-                        Map.Instance.GetMapArrayCoords(
-                            Map.Instance.PositionToCoords(hitInfo.transform.position)
-                        ) == Map.TileType.constructible
-                    )
-                )
-                {
-                    constructible = false;
-                    tower_MeshRenderer.materials[0].color = Color.red;
-                }
-            }
-            else
-            {
-                constructible = false;
-                tower_MeshRenderer.materials[0].color = Color.red;
-            }
-        }
     }
 }
