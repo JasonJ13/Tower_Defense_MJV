@@ -84,6 +84,8 @@ public class Player : MonoBehaviour
         Generator,
     }
 
+    public List<Map.coords> listCoordsTower = new List<Map.coords>();
+
     private Dictionary<TowerType, GameObject> typeToTowerNB =
         new Dictionary<TowerType, GameObject>();
 
@@ -172,6 +174,7 @@ public class Player : MonoBehaviour
                 Map.Instance.PositionToCoords(towerNB.transform.position),
                 Map.TileType.construct
             );
+            listCoordsTower.Add(Map.Instance.PositionToCoords(towerNB.transform.position));
         }
     }
 
