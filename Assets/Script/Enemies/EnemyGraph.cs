@@ -23,13 +23,14 @@ public class EnemyGraph : MonoBehaviour
         return graph;
     }
 
-    public Map.coords GetRandomNeighboor(Map.coords start)
+    public Map.coords GetRandomNeighboor(Map.coords start, Map.coords previousCoord)
     {
-        Debug.Log("in get random neighboor");
         var neighboors = graph.GetNeighboors(start);
-        Debug.Log(neighboors.Count);
+        if (!previousCoord.Equals(new Map.coords(0,0)))
+        {
+            neighboors.Remove(previousCoord);
+        }
         int i = Random.Range(0, neighboors.Count);
-        Debug.Log(neighboors[i].ToString());
 
         return neighboors[i];
     }

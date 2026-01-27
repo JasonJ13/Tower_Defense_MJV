@@ -67,7 +67,7 @@ public class RobotFactory : MonoBehaviour
             {
                 StartCoroutine(SpawnRobot(standardRobot));
             }
-            else if (monsterProb < 0.1f)
+            else if (monsterProb < 0.15f)
             {
                 StartCoroutine(SpawnRobot(jesterRobot));
 

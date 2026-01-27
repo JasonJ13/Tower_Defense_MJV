@@ -14,6 +14,7 @@ public class RobotEnemy : MonoBehaviour
 
 
     private Map.coords coord;
+    private Map.coords previousCoord;
 
     private Vector3 destination;
     private int currentHP;
@@ -39,11 +40,12 @@ public class RobotEnemy : MonoBehaviour
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
 
         float randChance = Random.Range(0f, 1f);
-        //if (randChance < randomPath)
-        //{
-        //    isRandom=true;
-            
-        //}
+        if (randChance < randomPath)
+        {
+            isRandom = true;
+            Debug.Log("RANDOM");
+
+        }
         while (enemyGraph.GetGraph()==null)
         {
             yield return null;
@@ -60,7 +62,6 @@ public class RobotEnemy : MonoBehaviour
     public void SetStart(Map.coords start)
     {
         this.coord= start;
-        Debug.Log(coord);
     }
 
     private void Update()
@@ -85,6 +86,7 @@ public class RobotEnemy : MonoBehaviour
             {
                 if (isRandom)
                 {
+                    coord = Map.Instance.PositionToCoords(transform.position);
                     if (enemyGraph.IsExit(coord))
                     {
                         Attack();
@@ -125,12 +127,10 @@ public class RobotEnemy : MonoBehaviour
         Debug.Log("inchangedestination");
         if (this.isRandom)
         {
-            Debug.Log("in if");
-            //coord = Map.Instance.PositionToCoords(transform.position);
-            var new_coords = enemyGraph.GetRandomNeighboor(coord);
-            Debug.Log(new_coords);
+            previousCoord = coord;
+            coord = Map.Instance.PositionToCoords(transform.position);
+            var new_coords = enemyGraph.GetRandomNeighboor(coord,previousCoord);
             this.destination = Map.Instance.CoordsToPosition(new_coords);
-            Debug.Log(destination);
 
         }
         else
@@ -140,7 +140,6 @@ public class RobotEnemy : MonoBehaviour
 
             this.destination = Map.Instance.CoordsToPosition(new_coords);
         }
-        Debug.Log(destination);
         angle = 90;
     }
 
