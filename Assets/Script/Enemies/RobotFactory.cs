@@ -2,8 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class RobotFactory : MonoBehaviour
 {
     public static RobotFactory Instance { get; private set; }
@@ -17,10 +15,17 @@ public class RobotFactory : MonoBehaviour
         RobotFactory.Instance = this;
     }
 
-    [SerializeField] private GameObject standardRobot;
-    [SerializeField] private GameObject quickRobot;
-    [SerializeField] private GameObject bigRobot;
-    [SerializeField] private GameObject jesterRobot;
+    [SerializeField]
+    private GameObject standardRobot;
+
+    [SerializeField]
+    private GameObject quickRobot;
+
+    [SerializeField]
+    private GameObject bigRobot;
+
+    [SerializeField]
+    private GameObject jesterRobot;
 
     private int level = 0;
     private int numbOfWaves;
@@ -141,6 +146,4 @@ public class RobotFactory : MonoBehaviour
 
 
     }
-
-    
 }
