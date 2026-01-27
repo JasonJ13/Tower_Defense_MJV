@@ -299,8 +299,9 @@ public class Map : MonoBehaviour
          foreach (coords node2 in this.graph.GetNodes())
          {
 //            Debug.Log(this.graph.GetPathWeight(node1, node2));
-//            Debug.Log(this.graph.GetPath(node1, node2).Count);
+            Debug.Log(this.graph.GetPath(node1, node2).Count);
          }
+         Debug.Log("voisins :" + this.graph.GetNeighboors(node1)[0]);
 //         Debug.Log(this.graph.GetNodeInfos(node1).distanceFromEnd);
       }
       
@@ -734,27 +735,6 @@ procedure Path(u, v) is
          return starts; 
       }
 
-      public void CreateNeighboors()
-      {
-         foreach (coords node in this.GetNodes())
-         {
-            nodeInfos value = this.dictNodes[node];            
-            value.neighboors = new();
-            foreach (edge edgy in this.edges)
-            {
-               if (edgy.node1.Equals(node))
-               {
-                  value.neighboors.Add(edgy.node2);
-               }
-               if (edgy.node2.Equals(node))
-               {
-                  value.neighboors.Add(edgy.node1);
-               }
-            }
-         }
-         return;
-      }
-
       public List<coords> GetNeighboors(coords node)
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(node));
@@ -902,6 +882,28 @@ procedure Path(u, v) is
             OnAPath = false;
          }
       
+         return;
+      }
+
+      private void CreateNeighboors()
+      {
+         foreach (coords node in this.GetNodes())
+         {
+            nodeInfos value = this.dictNodes[node];            
+            value.neighboors = new();
+            foreach (edge edgy in this.edges)
+            {
+               if (edgy.node1.Equals(node))
+               {
+                  value.neighboors.Add(edgy.node2);
+               }
+               if (edgy.node2.Equals(node))
+               {
+                  value.neighboors.Add(edgy.node1);
+               }
+            }
+            this.dictNodes[node] = value;
+         }
          return;
       }
 

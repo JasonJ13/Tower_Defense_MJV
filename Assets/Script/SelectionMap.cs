@@ -32,7 +32,6 @@ public class SelectionMap : MonoBehaviour
 
         List<string> filesPNG = new();
         filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png", SearchOption.AllDirectories).ToList();
-        Debug.Log("Tes");
         for (int i = 0; i < filesPNG.Count; i++)
         {
             AddButton(filesPNG[i]);
