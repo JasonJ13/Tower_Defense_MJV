@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1949943964288741242, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6801466210788762790, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
       propertyPath: m_Name
       value: Generator NB
