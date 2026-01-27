@@ -40,6 +40,8 @@ public class RobotFactory : MonoBehaviour
     private List<Map.coords> starts;
     private List<RobotEnemy> robots = new List<RobotEnemy>();
 
+    private bool ready = false;
+
 
     private IEnumerator Start()
     {
@@ -53,18 +55,19 @@ public class RobotFactory : MonoBehaviour
 
         SetUpLevel();
         SetUpWave();
+        ready = true;
     }
 
     private void Update()
     {
-        if (monstersSpawned < monstersToSpawn)
+        if (monstersSpawned < monstersToSpawn && ready)
         {
             float monsterProb = Random.Range(0f, 2f);
             if (monsterProb > 1f)
             {
                 StartCoroutine(SpawnRobot(standardRobot));
             }
-            else if (monsterProb < 0.1f)
+            else if (monsterProb < 0.15f)
             {
                 StartCoroutine(SpawnRobot(jesterRobot));
 
@@ -79,7 +82,7 @@ public class RobotFactory : MonoBehaviour
             }
         }
 
-        if (monstersSpawned==monstersToSpawn && robots.Count==0)
+        if (monstersSpawned==monstersToSpawn && robots.Count==0 && ready)
         {
             Debug.Log("wave finished");
             if (waveIndex==numbOfWaves)
@@ -142,7 +145,10 @@ public class RobotFactory : MonoBehaviour
         }
 
         GameObject enemy = Instantiate(robot, Map.Instance.CoordsToPosition(start), Quaternion.identity);
-        robots.Add(enemy.GetComponentInChildren<RobotEnemy>());
+        RobotEnemy enemyScript = enemy.GetComponentInChildren<RobotEnemy>();
+        enemyScript.SetStart(start);
+        robots.Add(enemyScript);
+
 
 
     }

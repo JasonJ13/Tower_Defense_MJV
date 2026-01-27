@@ -3968,7 +3968,7 @@ MonoBehaviour:
   quickRobot: {fileID: 8366493169363178492, guid: b29c07d1c65893942b12620d1f590725, type: 3}
   bigRobot: {fileID: 1440602166178317342, guid: cd5b882039ce0b04184e6be04fde50d6, type: 3}
   jesterRobot: {fileID: 1324678228782901740, guid: 10f950b38d04d4242b9c1e8438091c58, type: 3}
-  quickToBigRatio: 0.5
+  quickToBigRatio: 0.7
 --- !u!1 &179859163
 GameObject:
   m_ObjectHideFlags: 0

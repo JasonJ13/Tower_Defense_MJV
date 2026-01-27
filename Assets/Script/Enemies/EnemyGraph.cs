@@ -1,14 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
 public class EnemyGraph : MonoBehaviour
 {
-    [SerializeField] private bool safeRoute;
-
-    private List<Map.coords> destinations;
 
     private Map.Graph graph;
 
@@ -18,14 +16,42 @@ public class EnemyGraph : MonoBehaviour
         {
             yield return null;
         }
-
         graph = Map.Instance.GetGraph();
     }
-
-
-    private void PathFindingDjikstra()
+    public Map.Graph GetGraph()
     {
+        return graph;
+    }
+
+    public Map.coords GetRandomNeighboor(Map.coords start, Map.coords previousCoord)
+    {
+        var neighboors = graph.GetNeighboors(start);
+        if (!previousCoord.Equals(new Map.coords(0,0)))
+        {
+            neighboors.Remove(previousCoord);
+        }
+        int i = Random.Range(0, neighboors.Count);
+
+        return neighboors[i];
+    }
+
+    public bool IsExit(Map.coords coord)
+    {
+        return (graph.GetNodeInfos(coord).type == Map.TileType.end);
+    }
+
+
+    public List<Map.coords> GetPathFinding(Map.coords start)
+    {
+        return graph.GetPath(start, graph.GetNearestEnd(start));
 
     }
+
+    
+
+
+    
+
+    
     
 }
