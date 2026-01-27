@@ -1,29 +1,17 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 using Debug = UnityEngine.Debug;
 
 public class RobotEnemy : MonoBehaviour
 {
-    [SerializeField]
-    private int maxHP;
-
-    [SerializeField]
-    private float speed;
-
-    [SerializeField]
-    private int damage;
-
-    [SerializeField]
-    private float randomPath;
+    [SerializeField] private int maxHP;
+    [SerializeField] private float speed;
+    [SerializeField] private int damage;
+    [SerializeField] private float randomPath;
 
     private Vector3 destination;
     private int currentHP;
-    private Map.coords coord;
 
     private Animator anim;
 
@@ -43,8 +31,7 @@ public class RobotEnemy : MonoBehaviour
         characterController = gameObject.GetComponent<CharacterController>();
 
         this.destinations = new List<Map.coords>() { new Map.coords(1, 5), new Map.coords(4, 5) }; //valeurs temporaires
-        this.coord = new Map.coords(1, 1);
-        transform.position = Map.Instance.CoordsToPosition(this.coord); //valeur temporaire
+       
 
         if (destinations.Count > 0)
             ChangeDestination();
@@ -69,7 +56,6 @@ public class RobotEnemy : MonoBehaviour
 
             if (distance < 0.05)
             {
-                transform.position = destination; //petit tp pour �viter que le robot parte dans tous les sens
 
                 if (destinations.Count > 0)
                 {
@@ -78,13 +64,15 @@ public class RobotEnemy : MonoBehaviour
                 }
                 else
                 {
+                    marching = false;
                     anim.SetTrigger("Attack");
                     Debug.Log("Fin du parcours");
+
                 }
             }
             else
             {
-                //characterController.Move(direction * speed * Time.deltaTime);
+                characterController.Move(direction * speed * Time.deltaTime);
             }
         }
     }
@@ -97,7 +85,6 @@ public class RobotEnemy : MonoBehaviour
         this.destination = Map.Instance.CoordsToPosition(new_coords);
 
         angle = 90;
-        Debug.Log(angle);
     }
 
     public void TakeDamage(int damage)
@@ -117,6 +104,8 @@ public class RobotEnemy : MonoBehaviour
     protected void DeathAnimFinished() //event de fin de l'anim de mort
     {
         Debug.Log("mort");
+        RobotFactory.Instance.DestroyRobot(this.transform.parent.gameObject);
+
     }
 
     protected void FinishedOpening() //event de fin de l'animation opening
