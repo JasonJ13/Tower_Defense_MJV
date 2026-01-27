@@ -25,6 +25,7 @@ public class App : MonoBehaviour
     void Start()
     {
         SceneManager.LoadScene(this.firstscene, LoadSceneMode.Additive);
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName(this.firstscene));
 //        this.exitAction = InputSystem.actions.FindAction("Exit");
         // Give controls back to the player
 //        this.exitAction.Enable();
