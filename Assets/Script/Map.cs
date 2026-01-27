@@ -757,6 +757,7 @@ procedure Path(u, v) is
 
       public List<coords> GetNeighboors(coords node)
       {
+         Assert.IsTrue(this.dictNodes.ContainsKey(node));
          return this.dictNodes[node].neighboors; 
       }
 
@@ -799,6 +800,7 @@ procedure Path(u, v) is
          this.MAXLENGTHPATH = mapArray.GetLength(0)*mapArray.GetLength(1);
          this.CreateDictNodes(mapArray);
          this.CreateEdges(mapArray);
+         this.CreateNeighboors();
          this.CreateMatAdj();
          this.CreateDistanceFromEnd();
          return;
@@ -900,7 +902,6 @@ procedure Path(u, v) is
             OnAPath = false;
          }
       
-
          return;
       }
 

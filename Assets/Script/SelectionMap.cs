@@ -43,11 +43,11 @@ public class SelectionMap : MonoBehaviour
     {
         Map.mapDiskPath = mapName;
         Debug.Log(Map.mapDiskPath);
-        Quit();
+        App.Instance.MapSelected();
     }
 
     private void Quit()
     {
-        App.Instance.MapSelected();
+        App.Instance.QuitMapSelection();
     }
 }
