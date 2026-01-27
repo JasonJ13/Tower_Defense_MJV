@@ -158,9 +158,73 @@ public class Map : MonoBehaviour
       return this.graph;
    }
 
+
 /// <summary>
-/// Must be a start, end, cross or road tile
 /// </summary>
+/// <remarks>pos must a road tile, since cross/start/end tiles might have multiple edges</remarks>
+/// <param name="pos"></param>
+/// <returns></returns>
+   public Graph.edge FindEdge(coords pos)
+   {
+      
+      Debug.Assert(GetMapArrayCoords(pos)==TileType.road);
+      coords node1 = new(-1,-1);
+      coords node2 = new(-1,-1);
+      node1 = pos;
+      node2 = pos;
+      node1.row--;
+      if (IsInMap(node1) && GetMapArrayCoords(node1)==TileType.road || GetMapArrayCoords(node1)==TileType.cross || GetMapArrayCoords(node1)==TileType.start || GetMapArrayCoords(node1)==TileType.end)
+      //if horizontal road
+      {
+         node1=pos;
+         while (!(GetMapArrayCoords(node1)==TileType.cross || GetMapArrayCoords(node1)==TileType.start || GetMapArrayCoords(node1) == TileType.end))
+         {
+            node1.row--;
+         }
+         node2 = pos;
+         while (!(GetMapArrayCoords(node2)==TileType.cross || GetMapArrayCoords(node2)==TileType.start || GetMapArrayCoords(node2) == TileType.end))
+         {
+            node2.row++;
+         }
+      }
+      else
+      //if vertical road
+      {
+         node1=pos;
+         while (!(GetMapArrayCoords(node1)==TileType.cross || GetMapArrayCoords(node1)==TileType.start || GetMapArrayCoords(node1) == TileType.end))
+         {
+            node1.column--;
+         }
+         node2 = pos;
+         while (!(GetMapArrayCoords(node2)==TileType.cross || GetMapArrayCoords(node2)==TileType.start || GetMapArrayCoords(node2) == TileType.end))
+         {
+            node2.column++;
+         }
+      }
+      List<Graph.edge> edges = graph.GetEdges();
+      foreach (Graph.edge edgy in edges)
+      {
+         if (edgy.node1.Equals(node1) && edgy.node2.Equals(node2))
+         {
+            return edgy;
+         }
+         if (edgy.node1.Equals(node1) && edgy.node2.Equals(node2))
+         {
+            return edgy;            
+         }
+      }
+      
+      Debug.LogError("edge not found for pos : " + pos.ToString() + "\n Here what nodes where found :" + node1.ToString() + node2.ToString());
+      return new Graph.edge();
+
+
+   }
+
+
+/// <summary>
+/// 
+/// </summary>
+/// <remarks>pos must be a start, end, cross or road tile</remarks>
 /// <param name="pos"></param>
 /// <returns></returns>
    public int GetDistanceFromEnd(coords pos)
@@ -598,11 +662,17 @@ public class Map : MonoBehaviour
          return this.edges;
       }
 
+
+      public void AddWeight(edge edgy, int value)
+      {
+         edgy.weight += value;
+         this.edges[this.edges.FindIndex(x => x.node1.Equals(edgy.node1) && x.node1.Equals(edgy.node1))] = edgy;
+         return;
+      }
+
    /// <remarks>RECALCULATES THE ENTIRE GRAPH, so it is costly</remarks>
-   /// <param name="newEdges"></param>
-      public void SetEdges(List<edge> newEdges)
-      { 
-         this.edges = newEdges;
+      public void UpdateGraph()
+      {
          this.CreateMatAdj();
          this.CreateDistanceFromEnd();
       }
