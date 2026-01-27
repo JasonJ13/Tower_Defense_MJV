@@ -10,6 +10,7 @@ using UnityEngine.Assertions;
 public class Map : MonoBehaviour
 {
    public static Map Instance { get; private set; }
+   public static string mapDiskPath;
    private void Awake()
    {
       if (Map.Instance != null)
@@ -284,27 +285,14 @@ public class Map : MonoBehaviour
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
-      string mapDiskPath = Application.dataPath + "/Maps/map_01.png";
-      try 
-      {
-         mapDiskPath = EditorUtility.OpenFilePanel("Map Loader", Application.dataPath + "/Maps/", "png");
-      }
-      catch
-      {
-         mapDiskPath = Application.dataPath + "/Maps/map_01.png";
-      }
-      List<string> filesPNG = new();
-      filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png*", SearchOption.AllDirectories).ToList();
-      Debug.Log("ta mere" + filesPNG[0]);
-      //A faire : Agresser l'utilisateur à choisir une map
-      //faire d'autre trucs
+      if (mapDiskPath == null){mapDiskPath = EditorUtility.OpenFilePanel("Map Loader", Application.dataPath + "/Maps/", "png");}
 
-      this.mapArray = LoadMapArray(mapDiskPath);
+      this.mapArray = LoadMapArray(Map.mapDiskPath);
       this.height = mapArray.GetLength(0);
       this.width = mapArray.GetLength(1);
+      CheckMap();
       this.graph = new();
       this.graph.CreateGraph(mapArray);
-      CheckMap();
       LoadTiles();
       foreach (coords node1 in this.graph.GetNodes())
       {
@@ -371,24 +359,25 @@ public class Map : MonoBehaviour
    }
 
    /// <summary>
-   /// Verifies the validity of a map
+   /// Verifies the validity of a map, Abandonned
    /// </summary>
    /// <param name="mapArray"></param>
    private void CheckMap()
    {
-      bool endExist = false;
-      bool startExist = false;
+
+//      bool endExist = false;
+//      bool startExist = false;
       for (int row = 0; row < mapArray.GetLength(0); row++)
       {
          for (int column = 0; column < mapArray.GetLength(1); column++)
          {
                if (mapArray[row, column] == TileType.start)
                {
-                  startExist = true;
+//                  startExist = true;
                }
                if (mapArray[row, column] == TileType.end)
                {
-                  endExist = true;
+//                  endExist = true;
                }
          }
       }
@@ -587,7 +576,7 @@ public class Map : MonoBehaviour
       private int[,] matAdj; // 
       private int[,] prev; // 
 
-      private int MAXLENGTHPATH;
+      public int MAXLENGTHPATH;
 
 
       public struct nodeInfos 
@@ -662,7 +651,7 @@ public class Map : MonoBehaviour
          return this.edges;
       }
 
-
+   /// <remarks> MUST BE FOLLOWED BY UpdateGraph() at some point, else it won't work</remarks>
       public void AddWeight(edge edgy, int value)
       {
          edgy.weight += value;
