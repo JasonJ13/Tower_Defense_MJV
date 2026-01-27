@@ -291,7 +291,7 @@ public class Map : MonoBehaviour
       this.height = mapArray.GetLength(0);
       this.width = mapArray.GetLength(1);
       CheckMap();
-      this.graph = new();
+      this.graph = new(mapArray);
       this.graph.CreateGraph(mapArray);
       LoadTiles();
       foreach (coords node1 in this.graph.GetNodes())
@@ -579,6 +579,10 @@ public class Map : MonoBehaviour
 
       public int MAXLENGTHPATH;
 
+      public Graph(TileType[,] mapArray)
+      {
+         this.CreateGraph(mapArray);
+      }
 
       public struct nodeInfos 
       {
