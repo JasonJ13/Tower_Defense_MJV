@@ -26,12 +26,9 @@ public class EnemyGraph : MonoBehaviour
     public Map.coords GetRandomNeighboor(Map.coords start)
     {
         Debug.Log("in get random neighboor");
-        Debug.Log(start.ToString());
         var neighboors = graph.GetNeighboors(start);
         Debug.Log(neighboors.Count);
-        Debug.Log(neighboors.FirstOrDefault().ToString());
         int i = Random.Range(0, neighboors.Count);
-        Debug.Log(i);
         Debug.Log(neighboors[i].ToString());
 
         return neighboors[i];
