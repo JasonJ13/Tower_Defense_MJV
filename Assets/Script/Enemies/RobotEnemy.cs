@@ -1,25 +1,14 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.PlayerSettings;
 using Debug = UnityEngine.Debug;
 
 public class RobotEnemy : MonoBehaviour
 {
-    [SerializeField]
-    private int maxHP;
-
-    [SerializeField]
-    private float speed;
-
-    [SerializeField]
-    private int damage;
-
-    [SerializeField]
-    private float randomPath;
+    [SerializeField] private int maxHP;
+    [SerializeField] private float speed;
+    [SerializeField] private int damage;
+    [SerializeField] private float randomPath;
 
     private Vector3 destination;
     private int currentHP;
