@@ -1,64 +1,34 @@
 using UnityEngine;
 using UnityEngine.UIElements;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
-
 
 public class Options : MonoBehaviour
 {
+    private Slider mainAudio;
+    private Slider music;
+    private Slider sfx;
+    private Button backButton;
 
-    private VisualElement scroller;
-
-    private void AddButton(string mapName)
-    {
-        string lastWord = mapName.Split('/').Last(); 
-        Button button = new Button(() =>
-        {
-            SelectMap(mapName);
-        })
-        {
-            text = lastWord,
-        };
-        scroller.Add(button);
-    }
-
-    private void AddBackButton()
-    {
-        Button button = new Button(() =>
-        {
-            Quit();
-        })
-        {
-            text = "Back",
-        };
-        scroller.Add(button);
-    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        UIDocument uiDocument = this.GetComponent<UIDocument>();
-        scroller = uiDocument.rootVisualElement.Q("Map");
+        var uiDocument = this.GetComponent<UIDocument>();
 
-        List<string> filesPNG = new();
-        filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png", SearchOption.AllDirectories).ToList();
-        for (int i = 0; i < filesPNG.Count; i++)
-        {
-            AddButton(filesPNG[i]);
-        }
-        AddBackButton();
+        mainAudio = uiDocument.rootVisualElement.Q("MainAudio") as Slider;
+        music = uiDocument.rootVisualElement.Q("Music") as Slider;
+        sfx = uiDocument.rootVisualElement.Q("SFX") as Slider;
+        backButton = uiDocument.rootVisualElement.Q("Quit") as Button;
+
+        backButton.RegisterCallback<ClickEvent>(Quit);
+
+
+        mainAudio.RegisterValueChangedCallback(evt => {mainAudio.value = evt.newValue;});
+        music.RegisterValueChangedCallback(evt => {music.value = evt.newValue;});
+        sfx.RegisterValueChangedCallback(evt => {sfx.value = evt.newValue;});
+
     }
 
-    private void SelectMap(string mapName)
+    private void Quit(ClickEvent evt)
     {
-        Map.mapDiskPath = mapName;
-        Debug.Log(Map.mapDiskPath);
-        App.Instance.MapSelected();
-    }
-
-    private void Quit()
-    {
-        App.Instance.QuitMapSelection();
+        App.Instance.QuitOption();
     }
 }

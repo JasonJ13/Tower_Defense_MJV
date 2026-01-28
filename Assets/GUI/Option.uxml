@@ -5,9 +5,9 @@
             <ui:VisualElement style="flex-grow: 1; position: absolute; background-color: rgba(0, 0, 0, 0);">
                 <ui:Label text="Option" name="Option" class="TitleScroll" />
                 <ui:VisualElement style="flex-grow: 1; background-color: rgba(91, 91, 91, 0.25);">
-                    <ui:MinMaxSlider label="SFX&#10;" value="10,12" low-limit="-10" high-limit="40" name="SFX" />
-                    <ui:MinMaxSlider label="Music&#10;" value="10,12" low-limit="-10" high-limit="40" name="Music" />
-                    <ui:MinMaxSlider label="MainAudio" value="10,12" low-limit="-10" high-limit="40" name="MainAudio" />
+                    <ui:Slider label="Slider" value="42" high-value="100" name="MainAudio" />
+                    <ui:Slider label="Slider" value="42" high-value="100" name="Music" />
+                    <ui:Slider label="Slider" value="42" high-value="100" name="SFX" />
                 </ui:VisualElement>
             </ui:VisualElement>
         </ui:VisualElement>
