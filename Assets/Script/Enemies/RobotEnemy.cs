@@ -34,10 +34,14 @@ public class RobotEnemy : MonoBehaviour
 
     private IEnumerator Start()
     {
+       
         anim = gameObject.GetComponent<Animator>();
-        currentHP = maxHP;
         characterController = gameObject.GetComponent<CharacterController>();
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
+
+
+        currentHP = maxHP * (int)RobotFactory.Instance.GetHPMultiplier();
+
 
         float randChance = Random.Range(0f, 1f);
         if (randChance < randomPath)
@@ -51,6 +55,7 @@ public class RobotEnemy : MonoBehaviour
             yield return null;
         }
 
+        
         if (!isRandom)
         {
             this.destinations = enemyGraph.GetPathFinding(coord);

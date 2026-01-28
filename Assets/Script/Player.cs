@@ -5,9 +5,21 @@ using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
+using Debug = UnityEngine.Debug;
 
 public class Player : MonoBehaviour
 {
+    public static Player Instance { get; private set; }
+
+    private void Awake()
+    {
+        if (Player.Instance != null)
+        {
+            Debug.LogError("Error : Instance of Player already exists");
+        }
+        Player.Instance = this;
+    }
+
     private int hp;
 
     private int money;

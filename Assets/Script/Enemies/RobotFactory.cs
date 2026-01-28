@@ -95,6 +95,19 @@ public class RobotFactory : MonoBehaviour
 
     }
 
+    public float GetHPMultiplier()
+    {
+        if (level > 1)
+        {
+            float levelMultiplier = level + level / 10;
+            return levelMultiplier;
+        }
+
+        else
+            return 1f;
+        
+    }
+
     private void SetUpLevel()
     {
         level++;
