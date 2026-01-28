@@ -35,7 +35,7 @@ public class RobotEnemy : MonoBehaviour
     private Vector3 direction;
     private float angle;
 
-    private bool hasTurned;
+   
 
     private bool marching = false;
     private bool isRandom = false;
@@ -77,6 +77,7 @@ public class RobotEnemy : MonoBehaviour
     public void SetStart(Map.coords start)
     {
         this.coord= start;
+        previousCoord = start;
     }
 
     private void Update()
@@ -87,7 +88,6 @@ public class RobotEnemy : MonoBehaviour
 
             Vector3 rot = new Vector3(0, angle, 0);
             transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, rot, Time.deltaTime*rotationSpeed);
-
             //maj direction
 
             direction = destination - transform.position;
@@ -101,6 +101,7 @@ public class RobotEnemy : MonoBehaviour
             {
                 if (isRandom)
                 {
+                    previousCoord = coord;
                     coord = Map.Instance.PositionToCoords(transform.position);
                     if (enemyGraph.IsExit(coord))
                     {
@@ -149,22 +150,22 @@ public class RobotEnemy : MonoBehaviour
         var newCoord = Map.Instance.PositionToCoords(destination);
         var diff_row = newCoord.row - coord.row;
         var diff_column = newCoord.column - coord.column;
-        
-        ////test si on va tout droit
-        //if (diff_row==0)
-        //{
-        //    if (previousCoord.row == coord.row)
-        //    {
-        //        return;
-        //    }
-        //}
-        //if (diff_column==0)
-        //{
-        //    if (previousCoord.column==coord.column)
-        //    {
-        //        return;
-        //    }
-        //}
+
+        //test si on va tout droit
+        if (diff_row == 0)
+        {
+            if (previousCoord.row == coord.row)
+            {
+                return;
+            }
+        }
+        if (diff_column == 0)
+        {
+            if (previousCoord.column == coord.column)
+            {
+                return;
+            }
+        }
 
         //ajuste l'angle si on tourne
         if (diff_row>0)
@@ -180,9 +181,15 @@ public class RobotEnemy : MonoBehaviour
         {
             angle += 90;
         }
+
+        if (angle<0)
+        {
+            angle += 180;
+        }
+
     }
 
-   
+
 
     private void Attack()
     {
@@ -197,7 +204,6 @@ public class RobotEnemy : MonoBehaviour
         {
             var new_coords = enemyGraph.GetRandomNeighboor(coord,previousCoord);
             this.destination = Map.Instance.CoordsToPosition(new_coords);
-            previousCoord = coord;
 
 
         }
@@ -226,7 +232,7 @@ public class RobotEnemy : MonoBehaviour
     public void Die()
     {
         Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
-        Player.Instance.GainMoney(scoreValue*2);
+        Player.Instance.GainMoney(scoreValue);
         anim.SetTrigger("Die");
     }
 
