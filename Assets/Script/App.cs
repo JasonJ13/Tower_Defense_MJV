@@ -123,6 +123,13 @@ public class App : MonoBehaviour
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
 
+    public void QuitGameOver()
+    {
+        string[] toUnload = {"Main", "GameOver"};
+        string[] toLoad = {"MainMenu"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+    }
+
     public void StartOption()
     {
         string[] toUnload = {"MainMenu"};
@@ -137,5 +144,20 @@ public class App : MonoBehaviour
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
 
+    public void GameOverScreen()
+    {
+        string[] toUnload = {};
+        string[] toLoad = {"GameOver"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+    }
+
+
+    public void Restart()
+    {
+        string[] toUnload = { "GameOver", "Main"};
+        string[] toLoad = {"Main"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+        
+    }
 
 }
