@@ -158,6 +158,8 @@ public class Player : MonoBehaviour
         addCannonAction = InputSystem.actions.FindAction("Player/AddTower4");
         addGeneratorAction = InputSystem.actions.FindAction("Player/AddTower5");
         placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
+
+        InputSystem.actions.FindActionMap("Player").Enable();
     }
 
     public void add_in_hand(TowerType newTower)

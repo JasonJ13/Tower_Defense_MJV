@@ -78,13 +78,18 @@ public class EnemyGraph : MonoBehaviour
                 {
                     for (int j = 0; j<range; j++)
                     {
+
                         Map.coords possible_path = new Map.coords(row+i, column+j);
-                        if (graph.GetNodeInfos(possible_path).type == Map.TileType.road)
+                        if (graph.Contains(possible_path))
                         {
-                            var edge = Map.Instance.FindEdge(possible_path);
-                            graph.AddWeight(edge, weight);
+                            if (graph.GetNodeInfos(possible_path).type == Map.TileType.road)
+                            {
+                                var edge = Map.Instance.FindEdge(possible_path);
+                                graph.AddWeight(edge, weight);
+                            }
                         }
-                        
+
+
 
                     }
                 }
@@ -92,6 +97,7 @@ public class EnemyGraph : MonoBehaviour
             graph.UpdateGraph();
             var list = graph.GetPath(start, graph.GetNearestEnd(start));
             list.Remove(start);
+            
             return list;
         }
        

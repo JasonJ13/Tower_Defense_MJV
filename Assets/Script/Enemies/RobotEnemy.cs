@@ -142,7 +142,11 @@ public class RobotEnemy : MonoBehaviour
         var newCoord = Map.Instance.PositionToCoords(destination);
         var diff_row = newCoord.row - coord.row;
         var diff_column = newCoord.column - coord.column;
-        
+
+        if (diff_row==0 && diff_column==0)
+        {
+            return;
+        }
         if (diff_row>0)
         {
             angle -= 90;
