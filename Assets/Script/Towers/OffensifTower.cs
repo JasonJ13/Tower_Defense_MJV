@@ -11,6 +11,8 @@ public class OffensifTower : Tower
     [SerializeField]
     protected float shootRate;
 
+    protected Animator animationShoot;
+
     private List<Map.coords> path = new List<Map.coords>();
     private float timer;
 
@@ -20,6 +22,8 @@ public class OffensifTower : Tower
     {
         base.OnEnable();
         constructPath();
+
+        animationShoot = GetComponent<Animator>();
     }
 
     private void constructPath()
@@ -37,6 +41,7 @@ public class OffensifTower : Tower
             case Map.TileType.cross:
             case Map.TileType.start:
                 path.Add(tile);
+                Debug.Log(tile);
                 break;
 
             case Map.TileType.generator:
@@ -82,7 +87,19 @@ public class OffensifTower : Tower
                 RobotEnemy robotTarget = RobotFactory.Instance.FindRobotOnTile(tile);
                 if (robotTarget != null)
                 {
-                    Debug.Log("shoot");
+                    if (animationShoot != null)
+                    {
+                        transformTower.Rotate(
+                            0f,
+                            Vector3.Angle(
+                                transformTower.position,
+                                Map.Instance.CoordsToPosition(tile)
+                            ),
+                            0f
+                        );
+                        animationShoot.SetTrigger("Shoot");
+                    }
+
                     robotTarget.TakeDamage(this.dmg);
                     timer = 0;
                     return;
