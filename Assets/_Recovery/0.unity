@@ -11162,7 +11162,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Player
   hp: 100
   money: 100
-  towerUI: {fileID: 1640413654}
+  Interface: {fileID: 1640413654}
   cameraComponent: {fileID: 330585545}
   archerPrefab: {fileID: 5900671482960123876, guid: e17eb83a34c00f5468f3fcbf72820bea, type: 3}
   turretPrefab: {fileID: 6032957686190862967, guid: d37ca5e20e893884288791cea43ae74a, type: 3}
@@ -39107,5 +39107,5 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 440849323}
   - {fileID: 178492263}
-  - {fileID: 1640413656}
   - {fileID: 564611482}
+  - {fileID: 1640413656}

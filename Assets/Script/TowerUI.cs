@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 using UnityEngine.UIElements;
 
-public class UIManager : MonoBehaviour
+[RequireComponent(typeof(UIDocument))]
+public class TowerUI : MonoBehaviour
 {
     private Button archerTowerButton;
     private Button turretTowerButton;
@@ -16,7 +18,7 @@ public class UIManager : MonoBehaviour
 
     private Player playerScript;
 
-    private void OnEnable()
+    private void Start()
     {
         var uiDocument = this.GetComponent<UIDocument>();
         this.playerScript = GameObject.Find("Player").GetComponent<Player>();
@@ -38,6 +40,8 @@ public class UIManager : MonoBehaviour
         this.lifeText = uiDocument.rootVisualElement.Q("Life") as Label;
         this.moneyText = uiDocument.rootVisualElement.Q("Money") as Label;
         this.scoreText = uiDocument.rootVisualElement.Q("Score") as Label;
+
+        Debug.Log(this.lifeText != null);
     }
 
     private void ArcherSelected(ClickEvent evt)
@@ -72,16 +76,25 @@ public class UIManager : MonoBehaviour
 
     public void ChangeLifeText(int newLife)
     {
-        this.lifeText.text = "life : " + newLife;
+        if (this.lifeText != null)
+        {
+            this.lifeText.text = "life : " + newLife;
+        }
     }
 
     public void ChangeMoneyText(int newMoney)
     {
-        this.moneyText.text = "Money : " + newMoney;
+        if (this.moneyText != null)
+        {
+            this.moneyText.text = "Money : " + newMoney;
+        }
     }
 
     public void ChangeScoreText(int newScore)
     {
-        this.scoreText.text = "Score : " + newScore;
+        if (this.scoreText != null)
+        {
+            this.scoreText.text = "Score : " + newScore;
+        }
     }
 }

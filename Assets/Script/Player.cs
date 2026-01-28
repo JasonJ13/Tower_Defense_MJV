@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
     }
 
     [SerializeField]
-    private int hp = 10;
+    private int hp = 100;
 
     private int score = 0;
 
@@ -29,7 +29,7 @@ public class Player : MonoBehaviour
     private int money = 100;
 
     [SerializeField]
-    private UIManager Interface;
+    private TowerUI towerUI;
 
     public int GetScore()
     {
@@ -38,8 +38,8 @@ public class Player : MonoBehaviour
 
     public void AddScore(int value)
     {
+        towerUI.ChangeScoreText(this.score);
         this.score += value;
-        Interface.ChangeScoreText(this.score);
     }
 
     public int GetHp()
@@ -50,7 +50,7 @@ public class Player : MonoBehaviour
     public int Damage(int damage)
     {
         this.hp = this.hp - damage;
-        Interface.ChangeLifeText(this.hp);
+        towerUI.ChangeLifeText(this.hp);
         return this.hp;
     }
 
@@ -62,7 +62,7 @@ public class Player : MonoBehaviour
     public int GainMoney(int moneyToAdd)
     {
         this.money = this.money + moneyToAdd;
-        Interface.ChangeMoneyText(this.money);
+        towerUI.ChangeMoneyText(this.money);
         return this.money;
     }
 
@@ -74,7 +74,7 @@ public class Player : MonoBehaviour
     public void SpendMoney(int moneySpended)
     {
         this.money = this.money - moneySpended;
-        Interface.ChangeMoneyText(this.money);
+        towerUI.ChangeMoneyText(this.money);
     }
 
     [SerializeField]
@@ -217,9 +217,9 @@ public class Player : MonoBehaviour
 
         InputSystem.actions.FindActionMap("Player").Enable();
 
-        Interface.ChangeLifeText(this.hp);
-        Interface.ChangeMoneyText(this.money);
-        Interface.ChangeScoreText(this.score);
+        towerUI.ChangeLifeText(this.hp);
+        towerUI.ChangeMoneyText(this.money);
+        towerUI.ChangeScoreText(this.score);
     }
 
     public void add_in_hand(TowerType newTower)
