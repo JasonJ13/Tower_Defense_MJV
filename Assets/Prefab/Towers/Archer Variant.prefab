@@ -86,5 +86,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85c5b1f0699d22748831b98e895645d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TowerNotBuilt
-  range: 0
-  ghostTile: {fileID: 0}
+  range: 3
+  ghostTile: {fileID: 4041020359719632398, guid: e55912e903ac4c447b77fc4f4c9858a2, type: 3}
