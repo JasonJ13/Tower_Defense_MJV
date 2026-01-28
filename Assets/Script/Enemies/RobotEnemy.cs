@@ -17,6 +17,9 @@ public class RobotEnemy : MonoBehaviour
 
     [SerializeField] private int rotationSpeed;
 
+    [SerializeField] private AudioSource dieSound;
+    [SerializeField] private AudioSource damageSound;
+
     //components
     private CharacterController characterController;
     private EnemyGraph enemyGraph;
@@ -194,6 +197,7 @@ public class RobotEnemy : MonoBehaviour
     private void Attack()
     {
         marching = false;
+        damageSound.Play();
         Player.Instance.Damage(damage);
         anim.SetTrigger("Attack");
 
@@ -233,6 +237,7 @@ public class RobotEnemy : MonoBehaviour
     {
         Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
         Player.Instance.GainMoney(scoreValue);
+        dieSound.Play();
         anim.SetTrigger("Die");
     }
 

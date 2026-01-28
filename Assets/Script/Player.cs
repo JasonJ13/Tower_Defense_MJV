@@ -33,6 +33,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private TowerUI towerUI;
 
+    [SerializeField] private AudioSource placeTower;
+
     public int GetScore()
     {
         return this.score;
@@ -329,6 +331,7 @@ public class Player : MonoBehaviour
         if (constructible && placeTowerAction.WasPerformedThisFrame())
         {
             add_to_map(towerInHand);
+            placeTower.Play();
             Destroy(towerNB);
             constructible = false;
             towerInHand = TowerType.Empty;

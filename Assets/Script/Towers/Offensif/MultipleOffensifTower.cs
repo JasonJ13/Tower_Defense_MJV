@@ -5,6 +5,8 @@ public class MultipleOffensifTower : OffensifTower
     [SerializeField]
     private GameObject cloud;
 
+    [SerializeField] private AudioSource shoot;
+
     protected override void Shoot()
     {
         bool didntAttack = true;
@@ -37,6 +39,7 @@ public class MultipleOffensifTower : OffensifTower
     {
         if (CanShoot() && is_connected())
         {
+            shoot.Play();
             Shoot();
         }
         else
