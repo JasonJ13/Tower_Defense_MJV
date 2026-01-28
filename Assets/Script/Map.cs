@@ -741,7 +741,7 @@ procedure Path(u, v) is
          return this.dictNodes[node].neighboors; 
       }
 
-      public bool IsEdge(coords node1, coords node2)
+      public Graph.edge GetEdge(coords node1, coords node2)
       {
          Assert.IsTrue(this.dictNodes.ContainsKey(node1));
          Assert.IsTrue(this.dictNodes.ContainsKey(node2));
@@ -749,10 +749,12 @@ procedure Path(u, v) is
          {
             if ((edgy.node1.Equals(node1) && edgy.node2.Equals(node2)) || (edgy.node2.Equals(node1) && edgy.node1.Equals(node2)))
             {
-               return true;
+               return edgy;
             }
          }
-         return false;
+         Debug.LogError("No edge for those nodes :" + node1.ToString() + node2.ToString());
+         return new();
+
       }
 
       public int CompareDistanceFromEnd(nodeInfos n1, nodeInfos n2)
