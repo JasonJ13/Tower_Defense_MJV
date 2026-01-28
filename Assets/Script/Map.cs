@@ -636,6 +636,11 @@ public class Map : MonoBehaviour
          return this.dictNodes.Keys.ToList();
       }
 
+      public bool Contains(coords node)
+      {
+         return this.dictNodes.ContainsKey(node);
+      }
+
    /// <summary>
    /// nodeInfos is a STRUCT that contains ??? (TBA)
    /// </summary>

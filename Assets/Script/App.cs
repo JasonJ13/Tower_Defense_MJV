@@ -83,7 +83,7 @@ public class App : MonoBehaviour
         Debug.Log("Désaffiche Loading Screen");
 
         // Give controls back to the player
-        this.exitAction.Enable();
+//        this.exitAction.Enable();
         InputSystem.actions.FindActionMap("Player").Enable();
 //        InputSystem.actions.FindActionMap("Player").Enable();
     }

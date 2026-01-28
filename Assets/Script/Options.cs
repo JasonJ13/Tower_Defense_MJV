@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 
 
-public class SelectionMap : MonoBehaviour
+public class Options : MonoBehaviour
 {
 
     private VisualElement scroller;
