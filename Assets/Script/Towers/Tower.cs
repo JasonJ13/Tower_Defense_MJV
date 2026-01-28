@@ -12,11 +12,11 @@ public class Tower : MonoBehaviour
 
     protected Map.coords coords;
 
-    protected Transform transform;
+    protected Transform transformTower;
 
     protected virtual void OnEnable()
     {
-        transform = GetComponent<Transform>();
+        transformTower = GetComponent<Transform>();
     }
 
     protected List<Map.coords> getNeighbours()

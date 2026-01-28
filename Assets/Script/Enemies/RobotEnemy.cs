@@ -14,6 +14,7 @@ public class RobotEnemy : MonoBehaviour
 
 
     private Map.coords coord;
+    private Map.coords previousCoord;
 
     private Vector3 destination;
     private int currentHP;
@@ -33,22 +34,28 @@ public class RobotEnemy : MonoBehaviour
 
     private IEnumerator Start()
     {
+       
         anim = gameObject.GetComponent<Animator>();
-        currentHP = maxHP;
         characterController = gameObject.GetComponent<CharacterController>();
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
 
+
+        currentHP = maxHP * (int)RobotFactory.Instance.GetHPMultiplier();
+
+
         float randChance = Random.Range(0f, 1f);
-        //if (randChance < randomPath)
-        //{
-        //    isRandom=true;
-            
-        //}
+        if (randChance < randomPath)
+        {
+            isRandom = true;
+            Debug.Log("RANDOM");
+
+        }
         while (enemyGraph.GetGraph()==null)
         {
             yield return null;
         }
 
+        
         if (!isRandom)
         {
             this.destinations = enemyGraph.GetPathFinding(coord);
@@ -60,7 +67,6 @@ public class RobotEnemy : MonoBehaviour
     public void SetStart(Map.coords start)
     {
         this.coord= start;
-        Debug.Log(coord);
     }
 
     private void Update()
@@ -85,6 +91,7 @@ public class RobotEnemy : MonoBehaviour
             {
                 if (isRandom)
                 {
+                    coord = Map.Instance.PositionToCoords(transform.position);
                     if (enemyGraph.IsExit(coord))
                     {
                         Attack();
@@ -117,20 +124,19 @@ public class RobotEnemy : MonoBehaviour
     private void Attack()
     {
         marching = false;
+        Player.Instance.Damage(damage);
         anim.SetTrigger("Attack");
-        Debug.Log("Fin du parcours");
+
     }
     private void ChangeDestination()
     {
         Debug.Log("inchangedestination");
         if (this.isRandom)
         {
-            Debug.Log("in if");
-            //coord = Map.Instance.PositionToCoords(transform.position);
-            var new_coords = enemyGraph.GetRandomNeighboor(coord);
-            Debug.Log(new_coords);
+            previousCoord = coord;
+            coord = Map.Instance.PositionToCoords(transform.position);
+            var new_coords = enemyGraph.GetRandomNeighboor(coord,previousCoord);
             this.destination = Map.Instance.CoordsToPosition(new_coords);
-            Debug.Log(destination);
 
         }
         else
@@ -140,8 +146,6 @@ public class RobotEnemy : MonoBehaviour
 
             this.destination = Map.Instance.CoordsToPosition(new_coords);
         }
-        Debug.Log(destination);
-        angle = 90;
     }
 
     public void TakeDamage(int damage)
@@ -160,7 +164,7 @@ public class RobotEnemy : MonoBehaviour
 
     protected void DeathAnimFinished() //event de fin de l'anim de mort
     {
-        Debug.Log("mort");
+
         RobotFactory.Instance.DestroyRobot(this.transform.parent.gameObject);
 
     }

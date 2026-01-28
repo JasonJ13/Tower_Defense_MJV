@@ -27,9 +27,6 @@ public class RobotFactory : MonoBehaviour
     [SerializeField]
     private GameObject jesterRobot;
 
-    private int level = 0;
-    private int numbOfWaves;
-
     private int waveIndex = 0;
     private int monstersToSpawn = 2;
     private int monstersSpawned;
@@ -53,7 +50,6 @@ public class RobotFactory : MonoBehaviour
         graph = Map.Instance.GetGraph();
         starts = graph.GetAllStart();
 
-        SetUpLevel();
         SetUpWave();
         ready = true;
     }
@@ -67,7 +63,7 @@ public class RobotFactory : MonoBehaviour
             {
                 StartCoroutine(SpawnRobot(standardRobot));
             }
-            else if (monsterProb < 0.1f)
+            else if (monsterProb < 0.15f)
             {
                 StartCoroutine(SpawnRobot(jesterRobot));
 
@@ -85,28 +81,30 @@ public class RobotFactory : MonoBehaviour
         if (monstersSpawned==monstersToSpawn && robots.Count==0 && ready)
         {
             Debug.Log("wave finished");
-            if (waveIndex==numbOfWaves)
-            {
-                Debug.Log("next level");
-                SetUpLevel();
-            }
             SetUpWave();
         } 
 
     }
 
-    private void SetUpLevel()
+    public float GetHPMultiplier()
     {
-        level++;
-        numbOfWaves = level + Random.Range(0, 3);
-        waveIndex = 0;
+        if (waveIndex > 1)
+        {
+            float levelMultiplier = waveIndex + waveIndex / 100;
+            return levelMultiplier;
+        }
+
+        else
+            return 1f;
+        
     }
 
+  
     private void SetUpWave()
     {
         waveIndex++;
         monstersSpawned = 0;
-        int difficultyLevel = level * waveIndex;
+        int difficultyLevel = waveIndex * Random.Range(1,3);
         monstersToSpawn += Random.Range(0, difficultyLevel);
 
     }
