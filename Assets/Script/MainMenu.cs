@@ -21,9 +21,19 @@ public class MainMenu : MonoBehaviour
         quitButton.RegisterCallback<ClickEvent>(quit);
     }
 
-    private void start(ClickEvent evt) { }
+    private void start(ClickEvent evt)
+    {
+        App.Instance.StartGame();
+    }
 
-    private void option(ClickEvent evt) { }
+    private void option(ClickEvent evt)
+    {
+        App.Instance.StartOption();
+    }
 
-    private void quit(ClickEvent evt) { }
+    private void quit(ClickEvent evt)
+    {
+        UnityEditor.EditorApplication.isPlaying = false;
+        Application.Quit();
+    }
 }
