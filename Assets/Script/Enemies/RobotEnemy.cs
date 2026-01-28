@@ -34,7 +34,8 @@ public class RobotEnemy : MonoBehaviour
 
     private Vector3 direction;
     private float angle;
-    
+
+    private bool hasTurned;
 
     private bool marching = false;
     private bool isRandom = false;
@@ -148,11 +149,24 @@ public class RobotEnemy : MonoBehaviour
         var newCoord = Map.Instance.PositionToCoords(destination);
         var diff_row = newCoord.row - coord.row;
         var diff_column = newCoord.column - coord.column;
+        
+        ////test si on va tout droit
+        //if (diff_row==0)
+        //{
+        //    if (previousCoord.row == coord.row)
+        //    {
+        //        return;
+        //    }
+        //}
+        //if (diff_column==0)
+        //{
+        //    if (previousCoord.column==coord.column)
+        //    {
+        //        return;
+        //    }
+        //}
 
-        if (diff_row==0 && diff_column==0)
-        {
-            return;
-        }
+        //ajuste l'angle si on tourne
         if (diff_row>0)
         {
             angle -= 90;
@@ -212,6 +226,7 @@ public class RobotEnemy : MonoBehaviour
     public void Die()
     {
         Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
+        Player.Instance.GainMoney(scoreValue*2);
         anim.SetTrigger("Die");
     }
 
