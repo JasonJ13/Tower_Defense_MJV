@@ -1358,7 +1358,7 @@ MonoBehaviour:
   maxHP: 50
   speed: 1.5
   damage: 10
-  randomPath: 0.2
+  randomPath: 0.1
   safeRoute: 1
   rotationSpeed: 2
 --- !u!143 &7146115249765198620

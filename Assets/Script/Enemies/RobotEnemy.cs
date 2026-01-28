@@ -77,10 +77,12 @@ public class RobotEnemy : MonoBehaviour
         if (destination != Vector3.zero && marching)
         {
             //maj rotation
+
             Vector3 rot = new Vector3(0, angle, 0);
             transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, rot, Time.deltaTime*rotationSpeed);
 
             //maj direction
+
             direction = destination - transform.position;
             direction.y = 0;
             var distance = direction.magnitude;
@@ -107,7 +109,6 @@ public class RobotEnemy : MonoBehaviour
                 {
                     if (destinations.Count > 0)
                     {
-                        Debug.Log("change destination");
                         ChangeDestination();
                         ChangeRotation();
                     }
@@ -141,8 +142,7 @@ public class RobotEnemy : MonoBehaviour
         var newCoord = Map.Instance.PositionToCoords(destination);
         var diff_row = newCoord.row - coord.row;
         var diff_column = newCoord.column - coord.column;
-        Debug.Log(diff_row);
-        Debug.Log(diff_column);
+        
         if (diff_row>0)
         {
             angle -= 90;
@@ -156,7 +156,6 @@ public class RobotEnemy : MonoBehaviour
         {
             angle += 90;
         }
-        Debug.Log(angle);
     }
 
    

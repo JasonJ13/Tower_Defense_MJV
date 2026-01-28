@@ -47,7 +47,30 @@ public class EnemyGraph : MonoBehaviour
         }
         else
         {
+            var list_tower = Player.Instance.GetListCoordsTower();
+            foreach(Map.coords coord in list_tower)
+            {
+                int row = coord.row;
+                int column = coord.column;
+                for (int i = 0; i<3; i++)
+                {
+                    for (int j = 0; j<3; j++)
+                    {
+                        Map.coords possible_path = new Map.coords(row+i, column+j);
+                        if (graph.GetNodeInfos(possible_path).type == Map.TileType.road)
+                        {
+                            var edge = Map.Instance.FindEdge(possible_path);
+                            graph.AddWeight(edge, 1);
+                        }
+                        
 
+                    }
+                }
+            }
+            graph.UpdateGraph();
+            var list = graph.GetPath(start, graph.GetNearestEnd(start));
+            list.Remove(start);
+            return list;
         }
        
 
