@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2188051615981212237}
-  - component: {fileID: -1752677260375393870}
   - component: {fileID: 2625116945745829265}
+  - component: {fileID: 2338084048569676685}
   m_Layer: 0
   m_Name: Cannon
   m_TagString: Untagged
@@ -35,21 +35,6 @@ Transform:
   - {fileID: 1717557508172713843}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 88.951, z: 0}
---- !u!114 &-1752677260375393870
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1519496441523325175}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef399e0271928048a76f19144e599ed, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OffensifTower
-  range: 2
-  dmg: 20
-  shootRate: 60
 --- !u!95 &2625116945745829265
 Animator:
   serializedVersion: 7
@@ -72,6 +57,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &2338084048569676685
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1519496441523325175}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc2105bd335df254c86e59701005be9b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SoloOffensialTower
+  range: 2
+  dmg: 20
+  shootRate: 1
+  projectile: {fileID: 4356676701223193001, guid: e09d452c3b4777640b9776d390e7cfb3, type: 3}
+  height: 0.5
 --- !u!1 &8116681019347174702
 GameObject:
   m_ObjectHideFlags: 0
