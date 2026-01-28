@@ -31,14 +31,14 @@ public class RobotFactory : MonoBehaviour
     private int monstersToSpawn = 2;
     private int monstersSpawned;
 
-    [SerializeField] private float quickToBigRatio;
+    [SerializeField]
+    private float quickToBigRatio;
 
     private Map.Graph graph;
     private List<Map.coords> starts;
     private List<RobotEnemy> robots = new List<RobotEnemy>();
 
     private bool ready = false;
-
 
     private IEnumerator Start()
     {
@@ -66,7 +66,6 @@ public class RobotFactory : MonoBehaviour
             else if (monsterProb < 0.15f)
             {
                 StartCoroutine(SpawnRobot(jesterRobot));
-
             }
             else if (monsterProb < quickToBigRatio)
             {
@@ -78,12 +77,11 @@ public class RobotFactory : MonoBehaviour
             }
         }
 
-        if (monstersSpawned==monstersToSpawn && robots.Count==0 && ready)
+        if (monstersSpawned == monstersToSpawn && robots.Count == 0 && ready)
         {
             Debug.Log("wave finished");
             SetUpWave();
-        } 
-
+        }
     }
 
     public float GetHPMultiplier()
@@ -93,27 +91,22 @@ public class RobotFactory : MonoBehaviour
             float levelMultiplier = 1 +  waveIndex / 4;
             return levelMultiplier;
         }
-
         else
             return 1f;
-        
     }
 
-  
     private void SetUpWave()
     {
         waveIndex++;
         monstersSpawned = 0;
-        int difficultyLevel = waveIndex * Random.Range(1,3);
+        int difficultyLevel = waveIndex * Random.Range(1, 3);
         monstersToSpawn += Random.Range(0, difficultyLevel);
-
     }
 
     public void DestroyRobot(GameObject robot)
     {
         robots.Remove(robot.GetComponentInChildren<RobotEnemy>());
         Destroy(robot);
-
     }
 
     public int GetWave()
@@ -142,17 +135,18 @@ public class RobotFactory : MonoBehaviour
         int rIndex = Random.Range(0, starts.Count);
         var start = this.starts[rIndex];
 
-        while (FindRobotOnTile(start) != null)          //si il y a un robot sur la tile, on attend que le robot parte
-        {            
+        while (FindRobotOnTile(start) != null) //si il y a un robot sur la tile, on attend que le robot parte
+        {
             yield return null;
         }
 
-        GameObject enemy = Instantiate(robot, Map.Instance.CoordsToPosition(start), Quaternion.identity);
+        GameObject enemy = Instantiate(
+            robot,
+            Map.Instance.CoordsToPosition(start),
+            Quaternion.identity
+        );
         RobotEnemy enemyScript = enemy.GetComponentInChildren<RobotEnemy>();
         enemyScript.SetStart(start);
         robots.Add(enemyScript);
-
-
-
     }
 }

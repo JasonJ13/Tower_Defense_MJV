@@ -7,7 +7,10 @@ public class Generator : Tower
         base.OnEnable();
         foreach (Map.coords tile in this.getNeighbours())
         {
-            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct) { }
+            if (Map.Instance.GetMapArrayCoords(tile) == Map.TileType.construct)
+            {
+                Player.Instance.supplieTower(tile);
+            }
         }
     }
 

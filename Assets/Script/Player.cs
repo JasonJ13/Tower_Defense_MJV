@@ -130,6 +130,14 @@ public class Player : MonoBehaviour
         return dictCoordsTower;
     }
 
+    private Dictionary<Map.coords, OffensifTower> dictCoordsOffensifTower =
+        new Dictionary<Map.coords, OffensifTower>();
+
+    public Dictionary<Map.coords, OffensifTower> GetDictCoordsOffensifTower()
+    {
+        return dictCoordsOffensifTower;
+    }
+
     private Dictionary<TowerType, GameObject> typeToTowerNB =
         new Dictionary<TowerType, GameObject>();
 
@@ -212,7 +220,12 @@ public class Player : MonoBehaviour
     {
         Assert.IsTrue(newTower != TowerType.Empty);
 
-        Instantiate(typeToTower[newTower], towerNB.transform.position, towerNB.transform.rotation);
+        OffensifTower t = Instantiate(
+                typeToTower[newTower],
+                towerNB.transform.position,
+                towerNB.transform.rotation
+            )
+            .GetComponent<OffensifTower>();
 
         if (newTower == TowerType.Generator)
         {
@@ -230,6 +243,10 @@ public class Player : MonoBehaviour
             dictCoordsTower.Add(
                 Map.Instance.PositionToCoords(towerNB.transform.position),
                 newTower
+            );
+            dictCoordsOffensifTower.Add(
+                Map.Instance.PositionToCoords(towerNB.transform.position),
+                t
             );
         }
     }
@@ -310,5 +327,10 @@ public class Player : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void supplieTower(Map.coords tile)
+    {
+        dictCoordsOffensifTower[tile].connected();
     }
 }
