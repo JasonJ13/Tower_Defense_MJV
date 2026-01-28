@@ -24,6 +24,17 @@ public class SelectionMap : MonoBehaviour
         scroller.Add(button);
     }
 
+    private void AddBackButton()
+    {
+        Button button = new Button(() =>
+        {
+            Quit();
+        })
+        {
+            text = "Back",
+        };
+        scroller.Add(button);
+    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
@@ -36,6 +47,7 @@ public class SelectionMap : MonoBehaviour
         {
             AddButton(filesPNG[i]);
         }
+        AddBackButton();
     }
 
     private void SelectMap(string mapName)
