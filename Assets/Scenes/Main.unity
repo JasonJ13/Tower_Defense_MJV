@@ -11161,6 +11161,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Player
   hp: 100
+  money: 100
+  Interface: {fileID: 1640413654}
   cameraComponent: {fileID: 330585545}
   archerPrefab: {fileID: 5900671482960123876, guid: e17eb83a34c00f5468f3fcbf72820bea, type: 3}
   turretPrefab: {fileID: 6032957686190862967, guid: d37ca5e20e893884288791cea43ae74a, type: 3}
@@ -11172,6 +11174,11 @@ MonoBehaviour:
   mageNotBuiltPrefab: {fileID: 8819230636322115839, guid: bd03c724c7b00764d8fb8bf764897350, type: 3}
   cannonNotBuiltPrefab: {fileID: 5745914843517949027, guid: 61cafe120fde85844835ac0809ee82c2, type: 3}
   generatorNotBuiltPrefab: {fileID: 6405362064283743044, guid: 71e6b3c5a4aee9e49abb29e3c5ec631d, type: 3}
+  archerCost: 10
+  turretCost: 10
+  mageCost: 20
+  cannonCost: 10
+  generatorCost: 5
 --- !u!4 &564611482
 Transform:
   m_ObjectHideFlags: 0
