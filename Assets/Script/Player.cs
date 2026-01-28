@@ -102,9 +102,9 @@ public class Player : MonoBehaviour
 
     private List<Map.coords> listCoordsTower = new List<Map.coords>();
 
-    public List<Map.coords> get_listCoordsTower()
+    public List<Map.coords> GetListCoordsTower()
     {
-        return listCoordsTower
+        return listCoordsTower;
     }
 
     private Dictionary<TowerType, GameObject> typeToTowerNB =
