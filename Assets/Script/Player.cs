@@ -21,19 +21,24 @@ public class Player : MonoBehaviour
     }
 
     [SerializeField]
-    private int hp;
+    private int hp = 100;
 
-    private int money;
+    private int score = 0;
 
-    private int score=0;
+    [SerializeField]
+    private int money = 100;
 
-    public int GetScore() 
+    [SerializeField]
+    private TowerUI towerUI;
+
+    public int GetScore()
     {
         return this.score;
     }
 
     public void AddScore(int value)
     {
+        towerUI.ChangeScoreText(this.score);
         this.score += value;
     }
 
@@ -45,6 +50,7 @@ public class Player : MonoBehaviour
     public int Damage(int damage)
     {
         this.hp = this.hp - damage;
+        towerUI.ChangeLifeText(this.hp);
         return this.hp;
     }
 
@@ -56,6 +62,7 @@ public class Player : MonoBehaviour
     public int GainMoney(int moneyToAdd)
     {
         this.money = this.money + moneyToAdd;
+        towerUI.ChangeMoneyText(this.money);
         return this.money;
     }
 
@@ -67,40 +74,56 @@ public class Player : MonoBehaviour
     public void SpendMoney(int moneySpended)
     {
         this.money = this.money - moneySpended;
+        towerUI.ChangeMoneyText(this.money);
     }
 
     [SerializeField]
-    Camera cameraComponent;
+    private Camera cameraComponent;
 
     [SerializeField]
-    GameObject archerPrefab;
+    private GameObject archerPrefab;
 
     [SerializeField]
-    GameObject turretPrefab;
+    private GameObject turretPrefab;
 
     [SerializeField]
-    GameObject magePrefab;
+    private GameObject magePrefab;
 
     [SerializeField]
-    GameObject cannonPrefab;
+    private GameObject cannonPrefab;
 
     [SerializeField]
-    GameObject generatorPrefab;
+    private GameObject generatorPrefab;
 
     [SerializeField]
-    GameObject archerNotBuiltPrefab;
+    private GameObject archerNotBuiltPrefab;
 
     [SerializeField]
-    GameObject turretNotBuiltPrefab;
+    private GameObject turretNotBuiltPrefab;
 
     [SerializeField]
-    GameObject mageNotBuiltPrefab;
+    private GameObject mageNotBuiltPrefab;
 
     [SerializeField]
-    GameObject cannonNotBuiltPrefab;
+    private GameObject cannonNotBuiltPrefab;
 
     [SerializeField]
-    GameObject generatorNotBuiltPrefab;
+    private GameObject generatorNotBuiltPrefab;
+
+    [SerializeField]
+    private int archerCost = 10;
+
+    [SerializeField]
+    private int turretCost = 10;
+
+    [SerializeField]
+    private int mageCost = 20;
+
+    [SerializeField]
+    private int cannonCost = 10;
+
+    [SerializeField]
+    private int generatorCost = 5;
 
     private InputAction addArcherAction;
     private InputAction addTouretAction;
@@ -161,6 +184,18 @@ public class Player : MonoBehaviour
         typeToTower.Add(TowerType.Generator, generatorPrefab);
     }
 
+    private Dictionary<TowerType, int> typeToMoney = new Dictionary<TowerType, int>();
+
+    void defineTypeToMoney()
+    {
+        typeToMoney.Add(TowerType.Archer, archerCost);
+        typeToMoney.Add(TowerType.Turret, turretCost);
+        typeToMoney.Add(TowerType.Mage, mageCost);
+        typeToMoney.Add(TowerType.Cannon, cannonCost);
+        typeToMoney.Add(TowerType.Generator, generatorCost);
+        typeToMoney.Add(TowerType.Empty, 0);
+    }
+
     private bool constructible;
     private TowerType towerInHand = TowerType.Empty;
     private GameObject towerNB = null;
@@ -171,6 +206,7 @@ public class Player : MonoBehaviour
     {
         defineTypeToTowerNB();
         defineTypeToTower();
+        defineTypeToMoney();
 
         addArcherAction = InputSystem.actions.FindAction("Player/AddTower1");
         addTouretAction = InputSystem.actions.FindAction("Player/AddTower2");
@@ -180,6 +216,10 @@ public class Player : MonoBehaviour
         placeTowerAction = InputSystem.actions.FindAction("Player/PlaceTower");
 
         InputSystem.actions.FindActionMap("Player").Enable();
+
+        towerUI.ChangeLifeText(this.hp);
+        towerUI.ChangeMoneyText(this.money);
+        towerUI.ChangeScoreText(this.score);
     }
 
     public void add_in_hand(TowerType newTower)
@@ -191,11 +231,13 @@ public class Player : MonoBehaviour
 
         if (newTower == TowerType.Empty)
         {
+            towerInHand = TowerType.Empty;
             return;
         }
 
-        if (newTower != towerInHand)
+        if (newTower != towerInHand && AsMoney(typeToMoney[newTower] - typeToMoney[towerInHand]))
         {
+            GainMoney(typeToMoney[towerInHand]);
             towerNB = Instantiate(
                 typeToTowerNB[newTower],
                 Map.Instance.CoordsToPosition(new Map.coords(0, 0)),
@@ -209,10 +251,13 @@ public class Player : MonoBehaviour
                 .GetComponent<MeshRenderer>();
             towerNBScript = towerNB.GetComponent<TowerNotBuilt>();
             towerNBScript.positionGhostTile();
+
+            SpendMoney(typeToMoney[newTower]);
         }
-        else
+        else if (newTower == towerInHand)
         {
             towerInHand = TowerType.Empty;
+            GainMoney(typeToMoney[newTower]);
         }
     }
 
