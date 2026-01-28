@@ -6,7 +6,7 @@ using System.Collections;
 public class App : MonoBehaviour
 {
     private InputAction exitAction;
-    private string firstscene = "MapSelectionScreen"; 
+    private string firstscene = "MainMenu"; 
     public static App Instance
     {
         get;
@@ -91,7 +91,7 @@ public class App : MonoBehaviour
     public void StartGame()
     {
         string[] toUnload = {"MainMenu"};
-        string[] toLoad = {"MapSelection"};
+        string[] toLoad = {"MapSelectionScreen"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));
 
     }
@@ -105,7 +105,7 @@ public class App : MonoBehaviour
 
     public void QuitMapSelection()
     {
-        string[] toUnload = {"MapSelection"};
+        string[] toUnload = {"MapSelectionScreen"};
         string[] toLoad = {"MainMenu"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));
 
