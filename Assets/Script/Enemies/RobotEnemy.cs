@@ -1,3 +1,4 @@
+using Ilumisoft.HealthSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ public class RobotEnemy : MonoBehaviour
     private CharacterController characterController;
     private EnemyGraph enemyGraph;
     private Animator anim;
+    private Health health;
 
     private int currentHP;
 
@@ -43,8 +45,10 @@ public class RobotEnemy : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         characterController = gameObject.GetComponent<CharacterController>();
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
+        health = gameObject.GetComponent<Health>();
 
         currentHP = maxHP * (int)RobotFactory.Instance.GetHPMultiplier();
+        health.MaxHealth= currentHP;
 
 
         float randChance = Random.Range(0f, 1f);
@@ -197,6 +201,8 @@ public class RobotEnemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
+        health.ApplyDamage(damage);
+
         if (currentHP <= 0)
         {
             Die();
