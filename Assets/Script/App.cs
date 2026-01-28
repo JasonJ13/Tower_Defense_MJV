@@ -90,7 +90,7 @@ public class App : MonoBehaviour
 
     public void StartGame()
     {
-        string[] toUnload = {"Main Menu"};
+        string[] toUnload = {"MainMenu"};
         string[] toLoad = {"MapSelection"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));
 
@@ -106,7 +106,7 @@ public class App : MonoBehaviour
     public void QuitMapSelection()
     {
         string[] toUnload = {"MapSelection"};
-        string[] toLoad = {"Main Menu"};
+        string[] toLoad = {"MainMenu"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));
 
     }
@@ -114,13 +114,13 @@ public class App : MonoBehaviour
     public void QuitGame()
     {
         string[] toUnload = {"Game"};
-        string[] toLoad = {"Main Menu"};
+        string[] toLoad = {"MainMenu"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
 
     public void StartOption()
     {
-        string[] toUnload = {"Main Menu"};
+        string[] toUnload = {"MainMenu"};
         string[] toLoad = {"Options"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
@@ -128,7 +128,7 @@ public class App : MonoBehaviour
     public void QuitOption()
     {
         string[] toUnload = {"Options"};
-        string[] toLoad = {"Main Menu"};
+        string[] toLoad = {"MainMenu"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
 
