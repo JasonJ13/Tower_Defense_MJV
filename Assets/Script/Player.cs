@@ -47,6 +47,16 @@ public class Player : MonoBehaviour
         return this.money;
     }
 
+    public bool AsMoney(int needed)
+    {
+        return this.money >= needed;
+    }
+
+    public void SpendMoney(int moneySpended)
+    {
+        this.money = this.money - moneySpended;
+    }
+
     [SerializeField]
     Camera cameraComponent;
 
@@ -100,11 +110,12 @@ public class Player : MonoBehaviour
         Generator,
     }
 
-    private List<Map.coords> listCoordsTower = new List<Map.coords>();
+    private Dictionary<Map.coords, TowerType> dictCoordsTower =
+        new Dictionary<Map.coords, TowerType>();
 
-    public List<Map.coords> GetListCoordsTower()
+    public Dictionary<Map.coords, TowerType> GetDictCoordsTower()
     {
-        return listCoordsTower;
+        return dictCoordsTower;
     }
 
     private Dictionary<TowerType, GameObject> typeToTowerNB =
@@ -202,7 +213,10 @@ public class Player : MonoBehaviour
                 Map.Instance.PositionToCoords(towerNB.transform.position),
                 Map.TileType.construct
             );
-            listCoordsTower.Add(Map.Instance.PositionToCoords(towerNB.transform.position));
+            dictCoordsTower.Add(
+                Map.Instance.PositionToCoords(towerNB.transform.position),
+                newTower
+            );
         }
     }
 

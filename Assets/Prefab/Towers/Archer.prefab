@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::OffensifTower
   range: 3
-  dmg: 5
+  dmg: 10
   shootRate: 30
 --- !u!1001 &23085797133647397
 PrefabInstance:
