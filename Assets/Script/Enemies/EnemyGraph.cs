@@ -47,20 +47,42 @@ public class EnemyGraph : MonoBehaviour
         }
         else
         {
-            var list_tower = Player.Instance.GetListCoordsTower();
-            foreach(Map.coords coord in list_tower)
+            var dictTowers = Player.Instance.GetDictCoordsTower();
+            foreach(Map.coords coord in dictTowers.Keys)
             {
+                Player.TowerType tower = dictTowers[coord];
+                int range=0;
+                int weight=0;
+                switch(tower)
+                {
+                    case Player.TowerType.Cannon:
+                        range = 2;
+                        weight = 2;
+                        break;
+                    case Player.TowerType.Archer:
+                        range = 3;
+                        weight = 1;
+                        break;
+                    case Player.TowerType.Turret:
+                        range = 2;
+                        weight = 1;
+                        break;
+                    case Player.TowerType.Mage:
+                        range = 1;
+                        weight = 2;
+                        break;
+                }
                 int row = coord.row;
                 int column = coord.column;
-                for (int i = 0; i<3; i++)
+                for (int i = 0; i<range; i++)
                 {
-                    for (int j = 0; j<3; j++)
+                    for (int j = 0; j<range; j++)
                     {
                         Map.coords possible_path = new Map.coords(row+i, column+j);
                         if (graph.GetNodeInfos(possible_path).type == Map.TileType.road)
                         {
                             var edge = Map.Instance.FindEdge(possible_path);
-                            graph.AddWeight(edge, 1);
+                            graph.AddWeight(edge, weight);
                         }
                         
 
