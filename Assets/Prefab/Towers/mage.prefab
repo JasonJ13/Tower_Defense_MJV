@@ -48,6 +48,7 @@ MonoBehaviour:
   range: 1
   dmg: 10
   shootRate: 1
+  cloud: {fileID: 639386177243193320, guid: 25a500c89b65a6c468734ef666a25eff, type: 3}
 --- !u!1 &1699896421750099182
 GameObject:
   m_ObjectHideFlags: 0
