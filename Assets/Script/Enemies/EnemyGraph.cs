@@ -26,12 +26,8 @@ public class EnemyGraph : MonoBehaviour
     public Map.coords GetRandomNeighboor(Map.coords start, Map.coords previousCoord)
     {
         var neighboors = graph.GetNeighboors(start);
-        if (!previousCoord.Equals(new Map.coords(0,0)))
-        {
-            neighboors.Remove(previousCoord);
-        }
+        neighboors.Remove(previousCoord);
         int i = Random.Range(0, neighboors.Count);
-
         return neighboors[i];
     }
 
@@ -41,9 +37,70 @@ public class EnemyGraph : MonoBehaviour
     }
 
 
-    public List<Map.coords> GetPathFinding(Map.coords start)
+    public List<Map.coords> GetPathFinding(Map.coords start, bool towerWeight)
     {
-        return graph.GetPath(start, graph.GetNearestEnd(start));
+        if (!towerWeight)
+        {
+            var list = graph.GetPath(start, graph.GetNearestEnd(start));
+            list.Remove(start);
+            return list;
+        }
+        else
+        {
+            var dictTowers = Player.Instance.GetDictCoordsTower();
+            foreach(Map.coords coord in dictTowers.Keys)
+            {
+                Player.TowerType tower = dictTowers[coord];
+                int range=0;
+                int weight=0;
+                switch(tower)
+                {
+                    case Player.TowerType.Cannon:
+                        range = 2;
+                        weight = 2;
+                        break;
+                    case Player.TowerType.Archer:
+                        range = 3;
+                        weight = 1;
+                        break;
+                    case Player.TowerType.Turret:
+                        range = 2;
+                        weight = 1;
+                        break;
+                    case Player.TowerType.Mage:
+                        range = 1;
+                        weight = 2;
+                        break;
+                }
+                int row = coord.row;
+                int column = coord.column;
+                for (int i = 0; i<range; i++)
+                {
+                    for (int j = 0; j<range; j++)
+                    {
+
+                        Map.coords possible_path = new Map.coords(row+i, column+j);
+                        if (graph.Contains(possible_path))
+                        {
+                            if (graph.GetNodeInfos(possible_path).type == Map.TileType.road)
+                            {
+                                var edge = Map.Instance.FindEdge(possible_path);
+                                graph.AddWeight(edge, weight);
+                            }
+                        }
+
+
+
+                    }
+                }
+            }
+            graph.UpdateGraph();
+            var list = graph.GetPath(start, graph.GetNearestEnd(start));
+            list.Remove(start);
+            
+            return list;
+        }
+       
 
     }
 

@@ -1,3 +1,4 @@
+using Ilumisoft.HealthSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,25 +13,31 @@ public class RobotEnemy : MonoBehaviour
     [SerializeField] private float randomPath;
     [SerializeField] private bool safeRoute;
 
+    [SerializeField] private int scoreValue;
 
+    [SerializeField] private int rotationSpeed;
+
+    //components
+    private CharacterController characterController;
+    private EnemyGraph enemyGraph;
+    private Animator anim;
+    private Health health;
+
+    private int currentHP;
+
+    //path
+    private List<Map.coords> destinations;
+    private Vector3 destination;
     private Map.coords coord;
     private Map.coords previousCoord;
 
-    private Vector3 destination;
-    private int currentHP;
-
-    private Animator anim;
-
-    private List<Map.coords> destinations;
-
-    private CharacterController characterController;
-    private EnemyGraph enemyGraph;
 
     private Vector3 direction;
     private float angle;
-    private bool isRandom=false;
+    
 
     private bool marching = false;
+    private bool isRandom = false;
 
     private IEnumerator Start()
     {
@@ -38,9 +45,10 @@ public class RobotEnemy : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         characterController = gameObject.GetComponent<CharacterController>();
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
-
+        health = gameObject.GetComponent<Health>();
 
         currentHP = maxHP * (int)RobotFactory.Instance.GetHPMultiplier();
+        health.MaxHealth= currentHP;
 
 
         float randChance = Random.Range(0f, 1f);
@@ -58,11 +66,12 @@ public class RobotEnemy : MonoBehaviour
         
         if (!isRandom)
         {
-            this.destinations = enemyGraph.GetPathFinding(coord);
+            this.destinations = enemyGraph.GetPathFinding(coord,safeRoute);
             
         }
         ChangeDestination();
-        
+        SetInitialAngle();
+
     }
     public void SetStart(Map.coords start)
     {
@@ -73,20 +82,20 @@ public class RobotEnemy : MonoBehaviour
     {
         if (destination != Vector3.zero && marching)
         {
-            //Debug.Log(destination);
+            //maj rotation
+
             Vector3 rot = new Vector3(0, angle, 0);
-            transform.eulerAngles = Vector3.Lerp(
-                transform.rotation.eulerAngles,
-                rot,
-                Time.deltaTime
-            );
+            transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, rot, Time.deltaTime*rotationSpeed);
+
+            //maj direction
 
             direction = destination - transform.position;
-
             direction.y = 0;
             var distance = direction.magnitude;
             direction = direction / distance;
 
+
+            
             if (distance < 0.05)
             {
                 if (isRandom)
@@ -99,14 +108,15 @@ public class RobotEnemy : MonoBehaviour
                     else
                     {
                         ChangeDestination();
+                        ChangeRotation();
                     }
                 }
                 else
                 {
                     if (destinations.Count > 0)
                     {
-                        Debug.Log("change destination");
                         ChangeDestination();
+                        ChangeRotation();
                     }
                     else
                     {
@@ -121,6 +131,45 @@ public class RobotEnemy : MonoBehaviour
             }
         }
     }
+
+    private void SetInitialAngle()
+    {
+        
+        var vectDirection = destination - transform.position;
+        var angleToDest = Vector3.Angle(Vector3.forward, vectDirection);
+
+        angle = angleToDest;
+        transform.eulerAngles=new Vector3(0,angle,0);
+
+    }
+
+    private void ChangeRotation()
+    {
+        var newCoord = Map.Instance.PositionToCoords(destination);
+        var diff_row = newCoord.row - coord.row;
+        var diff_column = newCoord.column - coord.column;
+
+        if (diff_row==0 && diff_column==0)
+        {
+            return;
+        }
+        if (diff_row>0)
+        {
+            angle -= 90;
+        } else if (diff_row<0)
+        {
+            angle += 90;
+        } else if (diff_column>0)
+        {
+            angle -= 90;
+        } else if (diff_column<0)
+        {
+            angle += 90;
+        }
+    }
+
+   
+
     private void Attack()
     {
         marching = false;
@@ -130,17 +179,18 @@ public class RobotEnemy : MonoBehaviour
     }
     private void ChangeDestination()
     {
-        Debug.Log("inchangedestination");
         if (this.isRandom)
         {
-            previousCoord = coord;
-            coord = Map.Instance.PositionToCoords(transform.position);
             var new_coords = enemyGraph.GetRandomNeighboor(coord,previousCoord);
             this.destination = Map.Instance.CoordsToPosition(new_coords);
+            previousCoord = coord;
+
 
         }
         else
         {
+            previousCoord = coord;
+            coord = Map.Instance.PositionToCoords(transform.position);
             var new_coords = destinations.FirstOrDefault();
             destinations.Remove(new_coords);
 
@@ -151,6 +201,8 @@ public class RobotEnemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
+        health.ApplyDamage(damage);
+
         if (currentHP <= 0)
         {
             Die();
@@ -159,6 +211,7 @@ public class RobotEnemy : MonoBehaviour
 
     public void Die()
     {
+        Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
         anim.SetTrigger("Die");
     }
 

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 410112772759946342}
-  - component: {fileID: 1808888418681986509}
+  - component: {fileID: 1043797448315154740}
   m_Layer: 0
   m_Name: mage
   m_TagString: Untagged
@@ -33,7 +33,7 @@ Transform:
   - {fileID: 1545794732076939758}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1808888418681986509
+--- !u!114 &1043797448315154740
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,12 +42,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 1079407917738057436}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eef399e0271928048a76f19144e599ed, type: 3}
+  m_Script: {fileID: 11500000, guid: 7faf603c7f45e8049807a1377c3517f2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::OffensifTower
+  m_EditorClassIdentifier: Assembly-CSharp::MultipleOffensifTower
   range: 1
   dmg: 10
-  shootRate: 30
+  shootRate: 1
 --- !u!1 &1699896421750099182
 GameObject:
   m_ObjectHideFlags: 0
