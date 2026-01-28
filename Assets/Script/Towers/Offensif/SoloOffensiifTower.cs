@@ -8,6 +8,8 @@ public class SoloOffensialTower : OffensifTower
     [SerializeField]
     private float height;
 
+    [SerializeField] private AudioSource shoot;
+
     private Vector3 positionHead;
 
     protected Animator animationShoot;
@@ -51,6 +53,7 @@ public class SoloOffensialTower : OffensifTower
     {
         if (CanShoot() && is_connected())
         {
+            shoot.Play();
             Shoot();
         }
         else
