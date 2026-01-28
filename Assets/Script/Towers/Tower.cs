@@ -17,6 +17,7 @@ public class Tower : MonoBehaviour
     protected virtual void OnEnable()
     {
         transformTower = GetComponent<Transform>();
+        coords = Map.Instance.PositionToCoords(transformTower.position);
     }
 
     protected List<Map.coords> getNeighbours()
