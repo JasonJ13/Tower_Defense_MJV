@@ -1,3 +1,4 @@
+using Ilumisoft.HealthSystem;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,6 +21,7 @@ public class RobotEnemy : MonoBehaviour
     private CharacterController characterController;
     private EnemyGraph enemyGraph;
     private Animator anim;
+    private Health health;
 
     private int currentHP;
 
@@ -32,7 +34,8 @@ public class RobotEnemy : MonoBehaviour
 
     private Vector3 direction;
     private float angle;
-    
+
+    private bool hasTurned;
 
     private bool marching = false;
     private bool isRandom = false;
@@ -43,8 +46,10 @@ public class RobotEnemy : MonoBehaviour
         anim = gameObject.GetComponent<Animator>();
         characterController = gameObject.GetComponent<CharacterController>();
         enemyGraph = gameObject.GetComponent<EnemyGraph>();
+        health = gameObject.GetComponent<Health>();
 
         currentHP = maxHP * (int)RobotFactory.Instance.GetHPMultiplier();
+        health.MaxHealth= currentHP;
 
 
         float randChance = Random.Range(0f, 1f);
@@ -144,11 +149,24 @@ public class RobotEnemy : MonoBehaviour
         var newCoord = Map.Instance.PositionToCoords(destination);
         var diff_row = newCoord.row - coord.row;
         var diff_column = newCoord.column - coord.column;
+        
+        ////test si on va tout droit
+        //if (diff_row==0)
+        //{
+        //    if (previousCoord.row == coord.row)
+        //    {
+        //        return;
+        //    }
+        //}
+        //if (diff_column==0)
+        //{
+        //    if (previousCoord.column==coord.column)
+        //    {
+        //        return;
+        //    }
+        //}
 
-        if (diff_row==0 && diff_column==0)
-        {
-            return;
-        }
+        //ajuste l'angle si on tourne
         if (diff_row>0)
         {
             angle -= 90;
@@ -197,6 +215,8 @@ public class RobotEnemy : MonoBehaviour
     public void TakeDamage(int damage)
     {
         currentHP -= damage;
+        health.ApplyDamage(damage);
+
         if (currentHP <= 0)
         {
             Die();
@@ -206,6 +226,7 @@ public class RobotEnemy : MonoBehaviour
     public void Die()
     {
         Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
+        Player.Instance.GainMoney(scoreValue*2);
         anim.SetTrigger("Die");
     }
 
