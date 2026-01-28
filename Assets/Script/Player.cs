@@ -20,7 +20,8 @@ public class Player : MonoBehaviour
         Player.Instance = this;
     }
 
-    [SerializeField] private int hp;
+    [SerializeField]
+    private int hp;
 
     private int money;
 
@@ -99,7 +100,12 @@ public class Player : MonoBehaviour
         Generator,
     }
 
-    public List<Map.coords> listCoordsTower = new List<Map.coords>();
+    private List<Map.coords> listCoordsTower = new List<Map.coords>();
+
+    public List<Map.coords> get_listCoordsTower()
+    {
+        return listCoordsTower
+    }
 
     private Dictionary<TowerType, GameObject> typeToTowerNB =
         new Dictionary<TowerType, GameObject>();
