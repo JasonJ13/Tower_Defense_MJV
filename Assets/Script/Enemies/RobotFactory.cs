@@ -90,7 +90,7 @@ public class RobotFactory : MonoBehaviour
     {
         if (waveIndex > 1)
         {
-            float levelMultiplier = waveIndex + waveIndex / 100;
+            float levelMultiplier = 1 +  waveIndex / 4;
             return levelMultiplier;
         }
 

@@ -177,10 +177,10 @@ public class RobotEnemy : MonoBehaviour
     {
         if (this.isRandom)
         {
-            previousCoord = coord;
-            coord = Map.Instance.PositionToCoords(transform.position);
             var new_coords = enemyGraph.GetRandomNeighboor(coord,previousCoord);
             this.destination = Map.Instance.CoordsToPosition(new_coords);
+            previousCoord = coord;
+
 
         }
         else
