@@ -1360,6 +1360,7 @@ MonoBehaviour:
   damage: 10
   randomPath: 0.1
   safeRoute: 1
+  scoreValue: 5
   rotationSpeed: 2
 --- !u!143 &7146115249765198620
 CharacterController:

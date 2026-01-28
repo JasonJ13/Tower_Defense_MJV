@@ -25,6 +25,18 @@ public class Player : MonoBehaviour
 
     private int money;
 
+    private int score=0;
+
+    public int GetScore() 
+    {
+        return this.score;
+    }
+
+    public void AddScore(int value)
+    {
+        this.score += value;
+    }
+
     public int GetHp()
     {
         return this.hp;

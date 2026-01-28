@@ -88,6 +88,10 @@ PrefabInstance:
       propertyPath: randomPath
       value: 0.25
       objectReference: {fileID: 0}
+    - target: {fileID: 2146842436471667094, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
+      propertyPath: scoreValue
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 2612238766406369233, guid: 7091ab5f9d31bcd45b348082829e6d38, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 

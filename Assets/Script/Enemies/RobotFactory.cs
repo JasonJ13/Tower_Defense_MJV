@@ -116,6 +116,11 @@ public class RobotFactory : MonoBehaviour
 
     }
 
+    public int GetWave()
+    {
+        return waveIndex;
+    }
+
 
     public RobotEnemy FindRobotOnTile(Map.coords coord)
     {

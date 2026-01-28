@@ -12,6 +12,8 @@ public class RobotEnemy : MonoBehaviour
     [SerializeField] private float randomPath;
     [SerializeField] private bool safeRoute;
 
+    [SerializeField] private int scoreValue;
+
     [SerializeField] private int rotationSpeed;
 
     //components
@@ -203,6 +205,7 @@ public class RobotEnemy : MonoBehaviour
 
     public void Die()
     {
+        Player.Instance.AddScore(scoreValue*RobotFactory.Instance.GetWave());
         anim.SetTrigger("Die");
     }
 
