@@ -38,3 +38,7 @@
     -unity-text-align: upper-center;
     color: rgb(0, 25, 255);
 }
+
+.PlayerVariable {
+    font-size: 28px;
+}

@@ -10,55 +10,78 @@ public class UIManager : MonoBehaviour
     private Button generatorButton;
     private Button dropOutButton;
 
+    private Label lifeText;
+    private Label moneyText;
+    private Label scoreText;
+
     private Player playerScript;
 
-    void OnEnable()
+    private void OnEnable()
     {
         var uiDocument = this.GetComponent<UIDocument>();
-        playerScript = GameObject.Find("Player").GetComponent<Player>();
+        this.playerScript = GameObject.Find("Player").GetComponent<Player>();
 
-        archerTowerButton = uiDocument.rootVisualElement.Q("Archer") as Button;
-        turretTowerButton = uiDocument.rootVisualElement.Q("Turret") as Button;
-        mageTowerButton = uiDocument.rootVisualElement.Q("Mage") as Button;
-        cannonTowerButton = uiDocument.rootVisualElement.Q("Cannon") as Button;
-        generatorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
-        dropOutButton = uiDocument.rootVisualElement.Q("DropOut") as Button;
+        this.archerTowerButton = uiDocument.rootVisualElement.Q("Archer") as Button;
+        this.turretTowerButton = uiDocument.rootVisualElement.Q("Turret") as Button;
+        this.mageTowerButton = uiDocument.rootVisualElement.Q("Mage") as Button;
+        this.cannonTowerButton = uiDocument.rootVisualElement.Q("Cannon") as Button;
+        this.generatorButton = uiDocument.rootVisualElement.Q("Generator") as Button;
+        this.dropOutButton = uiDocument.rootVisualElement.Q("DropOut") as Button;
 
-        archerTowerButton.RegisterCallback<ClickEvent>(ArcherSelected);
-        turretTowerButton.RegisterCallback<ClickEvent>(TurretSelected);
-        mageTowerButton.RegisterCallback<ClickEvent>(MageSelected);
-        cannonTowerButton.RegisterCallback<ClickEvent>(CannonSelected);
-        generatorButton.RegisterCallback<ClickEvent>(GeneratorSelected);
-        dropOutButton.RegisterCallback<ClickEvent>(DropOutSelected);
+        this.archerTowerButton.RegisterCallback<ClickEvent>(ArcherSelected);
+        this.turretTowerButton.RegisterCallback<ClickEvent>(TurretSelected);
+        this.mageTowerButton.RegisterCallback<ClickEvent>(MageSelected);
+        this.cannonTowerButton.RegisterCallback<ClickEvent>(CannonSelected);
+        this.generatorButton.RegisterCallback<ClickEvent>(GeneratorSelected);
+        this.dropOutButton.RegisterCallback<ClickEvent>(DropOutSelected);
+
+        this.lifeText = uiDocument.rootVisualElement.Q("Life") as Label;
+        this.moneyText = uiDocument.rootVisualElement.Q("Money") as Label;
+        this.scoreText = uiDocument.rootVisualElement.Q("Score") as Label;
     }
 
-    void ArcherSelected(ClickEvent evt)
+    private void ArcherSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Archer);
+        this.playerScript.add_in_hand(Player.TowerType.Archer);
     }
 
-    void TurretSelected(ClickEvent evt)
+    private void TurretSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Turret);
+        this.playerScript.add_in_hand(Player.TowerType.Turret);
     }
 
-    void MageSelected(ClickEvent evt)
+    private void MageSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Mage);
+        this.playerScript.add_in_hand(Player.TowerType.Mage);
     }
 
-    void CannonSelected(ClickEvent evt)
+    private void CannonSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Cannon);
+        this.playerScript.add_in_hand(Player.TowerType.Cannon);
     }
 
-    void GeneratorSelected(ClickEvent evt)
+    private void GeneratorSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Generator);
+        this.playerScript.add_in_hand(Player.TowerType.Generator);
     }
 
-    void DropOutSelected(ClickEvent evt)
+    private void DropOutSelected(ClickEvent evt)
     {
-        playerScript.add_in_hand(Player.TowerType.Empty);
+        this.playerScript.add_in_hand(Player.TowerType.Empty);
+    }
+
+    public void ChangeLifeText(int newLife)
+    {
+        this.lifeText.text = "life : " + newLife;
+    }
+
+    public void ChangeMoneyText(int newMoney)
+    {
+        this.moneyText.text = "Money : " + newMoney;
+    }
+
+    public void ChangeScoreText(int newScore)
+    {
+        this.scoreText.text = "Score : " + newScore;
     }
 }
