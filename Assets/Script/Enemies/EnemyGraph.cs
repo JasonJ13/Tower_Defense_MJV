@@ -26,12 +26,8 @@ public class EnemyGraph : MonoBehaviour
     public Map.coords GetRandomNeighboor(Map.coords start, Map.coords previousCoord)
     {
         var neighboors = graph.GetNeighboors(start);
-        if (!previousCoord.Equals(new Map.coords(0,0)))
-        {
-            neighboors.Remove(previousCoord);
-        }
+        neighboors.Remove(previousCoord);
         int i = Random.Range(0, neighboors.Count);
-
         return neighboors[i];
     }
 
@@ -41,9 +37,19 @@ public class EnemyGraph : MonoBehaviour
     }
 
 
-    public List<Map.coords> GetPathFinding(Map.coords start)
+    public List<Map.coords> GetPathFinding(Map.coords start, bool towerWeight)
     {
-        return graph.GetPath(start, graph.GetNearestEnd(start));
+        if (!towerWeight)
+        {
+            var list = graph.GetPath(start, graph.GetNearestEnd(start));
+            list.Remove(start);
+            return list;
+        }
+        else
+        {
+
+        }
+       
 
     }
 
