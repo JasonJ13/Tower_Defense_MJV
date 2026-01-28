@@ -9,28 +9,34 @@ public class JustPull : MonoBehaviour
     [SerializeField] VideoPlayer video3star;
     [SerializeField] VideoPlayer video5star;
 
+    [SerializeField] UIDocument uiDocument;
+
     private Button pullButton;
     private Label gems;
+    private int nbGems;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        var uiDocument = this.GetComponent<UIDocument>();
 
         pullButton = uiDocument.rootVisualElement.Q("Pull") as Button;
-        gems = uiDocument.rootVisualElement.Q("Gems") as Label;
+        this.gems =  uiDocument.rootVisualElement.Q<Label>("Gems");
+        this.nbGems = Int32.Parse(this.gems.text.Split(" ")[2]);
 
         pullButton.RegisterCallback<ClickEvent>(Pull);
     }
 
+    private void Update()
+    {
+        this.gems.text = "Gems : " + (nbGems).ToString();
+    }
 
     private void Pull(ClickEvent evt)
     {
         Debug.Log(this.gems.text.Split(" ")[2]);
-        int nbgems = Int32.Parse(this.gems.text.Split(" ")[2]);
-        if (nbgems > 200)
+        if (nbGems >= 300)
         {
-            this.gems.text = "Gems : " + (nbgems-200).ToString();
+            nbGems-=300;
             StartCoroutine(Pull3());
         }
     }
@@ -40,7 +46,7 @@ public class JustPull : MonoBehaviour
         Debug.Log("Test");
         this.GetComponent<UIDocument>().enabled = false;
         this.video3star.Play();
-        yield return new WaitForSecondsRealtime(8);
+        yield return new WaitForSecondsRealtime(7);
         this.GetComponent<UIDocument>().enabled = true;
 
     }
@@ -50,7 +56,8 @@ public class JustPull : MonoBehaviour
         Debug.Log("Test");
         this.GetComponent<UIDocument>().enabled = false;
         this.video5star.Play();
-        yield return new WaitForSecondsRealtime(8);
+        yield return new WaitForSecondsRealtime(7);
+
         this.GetComponent<UIDocument>().enabled = true;
 
     }

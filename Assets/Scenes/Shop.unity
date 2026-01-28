@@ -189,6 +189,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::JustPull
   video3star: {fileID: 1014039938}
   video5star: {fileID: 317535094}
+  uiDocument: {fileID: 275762361}
 --- !u!1 &298475588
 GameObject:
   m_ObjectHideFlags: 0
