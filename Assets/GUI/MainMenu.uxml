@@ -2,7 +2,7 @@
     <Style src="project://database/Assets/GUI/style.uss?fileID=7433441132597879392&amp;guid=4bf4cd61d2f85064fa2f9bd7e322602a&amp;type=3#style" />
     <ui:VisualElement style="flex-grow: 1;">
         <ui:VisualElement style="flex-grow: 1; align-self: center; justify-content: center;">
-            <ui:Label text="Label" class="Title" />
+            <ui:Label text="Main Menu" class="Title" />
             <ui:Button text="Start" name="Start" class="ButtonMain" />
             <ui:Button text="Option" name="Option" class="ButtonMain" />
             <ui:Button text="Quit" name="Quit" class="ButtonMain" />

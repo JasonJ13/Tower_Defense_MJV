@@ -1,64 +1,43 @@
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.UIElements;
-using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
-
 
 public class Options : MonoBehaviour
 {
+    private Slider mainAudio;
+    private Slider music;
+    private Slider sfx;
+    private Button backButton;
+    
+    [SerializeField] AudioMixer mixer;
 
-    private VisualElement scroller;
-
-    private void AddButton(string mapName)
-    {
-        string lastWord = mapName.Split('/').Last(); 
-        Button button = new Button(() =>
-        {
-            SelectMap(mapName);
-        })
-        {
-            text = lastWord,
-        };
-        scroller.Add(button);
-    }
-
-    private void AddBackButton()
-    {
-        Button button = new Button(() =>
-        {
-            Quit();
-        })
-        {
-            text = "Back",
-        };
-        scroller.Add(button);
-    }
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     private void Start()
     {
-        UIDocument uiDocument = this.GetComponent<UIDocument>();
-        scroller = uiDocument.rootVisualElement.Q("Map");
+        var uiDocument = this.GetComponent<UIDocument>();
 
-        List<string> filesPNG = new();
-        filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png", SearchOption.AllDirectories).ToList();
-        for (int i = 0; i < filesPNG.Count; i++)
-        {
-            AddButton(filesPNG[i]);
-        }
-        AddBackButton();
+        mainAudio = uiDocument.rootVisualElement.Q("MainAudio") as Slider;
+        music = uiDocument.rootVisualElement.Q("Music") as Slider;
+        sfx = uiDocument.rootVisualElement.Q("SFX") as Slider;
+        backButton = uiDocument.rootVisualElement.Q("Back") as Button;
+
+        mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("mainAudio", 0));
+        mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("music", 0));
+        mixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("sfx", 0));
+        mainAudio.SetValueWithoutNotify(PlayerPrefs.GetFloat("mainAudio", 0)+80);
+        music.SetValueWithoutNotify(PlayerPrefs.GetFloat("music", 0)+80);
+        sfx.SetValueWithoutNotify(PlayerPrefs.GetFloat("sfx", 0)+80);
+
+        backButton.RegisterCallback<ClickEvent>(Quit);
+
+        mainAudio.RegisterValueChangedCallback(evt => {mainAudio.value = evt.newValue; mixer.SetFloat("MasterVolume", mainAudio.value-80);PlayerPrefs.SetFloat("mainAudio", mainAudio.value-80);});
+        music.RegisterValueChangedCallback(evt => {music.value = evt.newValue; mixer.SetFloat("MusicVolume", music.value-80);PlayerPrefs.SetFloat("music", music.value-80);});
+        sfx.RegisterValueChangedCallback(evt => {sfx.value = evt.newValue; mixer.SetFloat("SFXVolume", sfx.value-80); PlayerPrefs.SetFloat("sfx", sfx.value-80);});
+
     }
 
-    private void SelectMap(string mapName)
+    private void Quit(ClickEvent evt)
     {
-        Map.mapDiskPath = mapName;
-        Debug.Log(Map.mapDiskPath);
-        App.Instance.MapSelected();
-    }
-
-    private void Quit()
-    {
-        App.Instance.QuitMapSelection();
+        App.Instance.QuitOption();
     }
 }

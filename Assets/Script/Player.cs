@@ -23,6 +23,8 @@ public class Player : MonoBehaviour
     [SerializeField]
     private int hp = 100;
 
+    private bool dead = false;
+
     private int score = 0;
 
     [SerializeField]
@@ -298,6 +300,11 @@ public class Player : MonoBehaviour
 
     private void Update()
     {
+        if (this.hp <= 0 && !this.dead)
+        {
+            this.dead = true;
+            App.Instance.GameOverScreen();
+        }
         if (addArcherAction.WasPerformedThisFrame())
         {
             add_in_hand(TowerType.Archer);

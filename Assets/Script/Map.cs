@@ -108,8 +108,8 @@ public class Map : MonoBehaviour
 
    private TileType[,] mapArray; // 2DArray representation of a map
 
-   private int height;
-   private int width;
+   public int height;
+   public int width;
 
    private Graph graph;
 
@@ -299,9 +299,9 @@ public class Map : MonoBehaviour
          foreach (coords node2 in this.graph.GetNodes())
          {
 //            Debug.Log(this.graph.GetPathWeight(node1, node2));
-            Debug.Log(this.graph.GetPath(node1, node2).Count);
+//            Debug.Log(this.graph.GetPath(node1, node2).Count);
          }
-         Debug.Log("voisins :" + this.graph.GetNeighboors(node1)[0]);
+//         Debug.Log("voisins :" + this.graph.GetNeighboors(node1)[0]);
 //         Debug.Log(this.graph.GetNodeInfos(node1).distanceFromEnd);
       }
       

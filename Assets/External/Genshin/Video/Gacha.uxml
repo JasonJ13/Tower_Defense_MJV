@@ -1,0 +1,10 @@
+<ui:UXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd" editor-extension-mode="False">
+    <ui:VisualElement name="Banner" style="flex-grow: 1; background-image: url(&quot;project://database/Assets/External/Genshin/Video/Gachabanner_final.png?fileID=2800000&amp;guid=fd1a7c29e0edc4f4f939b621e4219196&amp;type=3#Gachabanner_final&quot;);">
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:Label text="Gems : 300" parse-escape-sequences="false" name="Gems" style="-unity-text-align: upper-center;" />
+        </ui:VisualElement>
+        <ui:VisualElement style="flex-grow: 1;">
+            <ui:Button text=" &#10;" emoji-fallback-support="false" name="Pull" style="width: 120px; -unity-text-align: middle-center; white-space: nowrap; height: 60px; position: absolute; bottom: 10%; right: 370px; left: 40%; background-image: url(&quot;project://database/Assets/External/Genshin/Video/pull_button.png?fileID=2800000&amp;guid=6eb60f4470cc31343b4c8f1e596c1ce7&amp;type=3#pull_button&quot;);" />
+        </ui:VisualElement>
+    </ui:VisualElement>
+</ui:UXML>

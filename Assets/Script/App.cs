@@ -2,9 +2,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class App : MonoBehaviour
 {
+    [SerializeField] AudioMixer mixer;
     private InputAction exitAction;
     private string firstscene = "MainMenu"; 
     public static App Instance
@@ -24,9 +26,12 @@ public class App : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        this.exitAction = InputSystem.actions.FindAction("exit");
+        mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("mainAudio", 0));
+        mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("music", 0));
+        mixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("sfx", 0));
         SceneManager.LoadScene(this.firstscene, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(this.firstscene));
-//        this.exitAction = InputSystem.actions.FindAction("Exit");
         // Give controls back to the player
 //        this.exitAction.Enable();
 //        InputSystem.actions.FindActionMap("Player").Enable();
@@ -35,9 +40,9 @@ public class App : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-//        if (this.exitAction.activeValueType != null){
-//            QuitGame();
-//        }
+        if (this.exitAction.activeValueType != null && SceneManager.GetActiveScene().name == "Main"){
+            QuitGame();
+        }
     }
 
     private IEnumerator UnloadAndLoad(string[] toUnload, string[] toLoad)
@@ -113,7 +118,14 @@ public class App : MonoBehaviour
 
     public void QuitGame()
     {
-        string[] toUnload = {"Game"};
+        string[] toUnload = {"Main"};
+        string[] toLoad = {"MainMenu"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+    }
+
+    public void QuitGameOver()
+    {
+        string[] toUnload = {"Main", "GameOver"};
         string[] toLoad = {"MainMenu"};
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
@@ -132,5 +144,20 @@ public class App : MonoBehaviour
         this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
     }
 
+    public void GameOverScreen()
+    {
+        string[] toUnload = {};
+        string[] toLoad = {"GameOver"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+    }
+
+
+    public void Restart()
+    {
+        string[] toUnload = { "GameOver", "Main"};
+        string[] toLoad = {"Main"};
+        this.StartCoroutine(UnloadAndLoad(toUnload, toLoad));        
+        
+    }
 
 }
