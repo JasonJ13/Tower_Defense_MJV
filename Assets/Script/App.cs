@@ -2,9 +2,11 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
 using System.Collections;
+using UnityEngine.Audio;
 
 public class App : MonoBehaviour
 {
+    [SerializeField] AudioMixer mixer;
     private InputAction exitAction;
     private string firstscene = "MainMenu"; 
     public static App Instance
@@ -24,6 +26,9 @@ public class App : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        mixer.SetFloat("MasterVolume", PlayerPrefs.GetFloat("mainAudio", 0));
+        mixer.SetFloat("MusicVolume", PlayerPrefs.GetFloat("music", 0));
+        mixer.SetFloat("SFXVolume", PlayerPrefs.GetFloat("sfx", 0));
         SceneManager.LoadScene(this.firstscene, LoadSceneMode.Additive);
         SceneManager.SetActiveScene(SceneManager.GetSceneByName(this.firstscene));
 //        this.exitAction = InputSystem.actions.FindAction("Exit");
