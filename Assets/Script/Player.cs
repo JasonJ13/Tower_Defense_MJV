@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
         Player.Instance = this;
     }
 
-    private int hp;
+    [SerializeField] private int hp;
 
     private int money;
 

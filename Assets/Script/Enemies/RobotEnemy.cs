@@ -124,8 +124,9 @@ public class RobotEnemy : MonoBehaviour
     private void Attack()
     {
         marching = false;
+        Player.Instance.Damage(damage);
         anim.SetTrigger("Attack");
-        Debug.Log("Fin du parcours");
+
     }
     private void ChangeDestination()
     {
@@ -145,7 +146,6 @@ public class RobotEnemy : MonoBehaviour
 
             this.destination = Map.Instance.CoordsToPosition(new_coords);
         }
-        angle = 90;
     }
 
     public void TakeDamage(int damage)
@@ -164,7 +164,7 @@ public class RobotEnemy : MonoBehaviour
 
     protected void DeathAnimFinished() //event de fin de l'anim de mort
     {
-        Debug.Log("mort");
+
         RobotFactory.Instance.DestroyRobot(this.transform.parent.gameObject);
 
     }

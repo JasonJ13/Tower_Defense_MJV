@@ -11131,6 +11131,62 @@ Transform:
   - {fileID: 506956992}
   m_Father: {fileID: 658454059}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &564611480
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 564611482}
+  - component: {fileID: 564611481}
+  m_Layer: 0
+  m_Name: Player
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &564611481
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564611480}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d21b3e1141a2a2449b7804cb880e3ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Player
+  hp: 100
+  cameraComponent: {fileID: 330585545}
+  archerPrefab: {fileID: 2723801371631890344, guid: 07a61012e3d72bb40b8ed4252cdd0ffc, type: 3}
+  turretPrefab: {fileID: 6032957686190862967, guid: d37ca5e20e893884288791cea43ae74a, type: 3}
+  magePrefab: {fileID: 1079407917738057436, guid: ec2928c59f9a039488b2d8d7c1a9dcf8, type: 3}
+  cannonPrefab: {fileID: 1519496441523325175, guid: 28fa7f43c275f374989945b0a2cf9ce6, type: 3}
+  generatorPrefab: {fileID: 6801466210788762790, guid: 2772797dca6f656438ff742c5fb1ee2d, type: 3}
+  archerNotBuiltPrefab: {fileID: 5707283993927370067, guid: b2d510ca0dafc684e826745d3089c66f, type: 3}
+  turretNotBuiltPrefab: {fileID: 6591600636617967424, guid: f09f06610cdc49d458bb6dcec2d79ca0, type: 3}
+  mageNotBuiltPrefab: {fileID: 8819230636322115839, guid: bd03c724c7b00764d8fb8bf764897350, type: 3}
+  cannonNotBuiltPrefab: {fileID: 5745914843517949027, guid: 61cafe120fde85844835ac0809ee82c2, type: 3}
+  generatorNotBuiltPrefab: {fileID: 6405362064283743044, guid: 71e6b3c5a4aee9e49abb29e3c5ec631d, type: 3}
+--- !u!4 &564611482
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 564611480}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.81445, y: 0, z: 10.61112}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &567571410
 GameObject:
   m_ObjectHideFlags: 0
@@ -38976,3 +39032,4 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 440849323}
   - {fileID: 178492263}
+  - {fileID: 564611482}
