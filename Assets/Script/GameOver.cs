@@ -22,6 +22,8 @@ public class GameOver : MonoBehaviour
 
         restartButton.RegisterCallback<ClickEvent>(restart);
         quitButton.RegisterCallback<ClickEvent>(quit);
+
+        App.Instance.QuitMain();
     }
 
     private void restart(ClickEvent evt)
