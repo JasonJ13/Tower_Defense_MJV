@@ -20,13 +20,18 @@ public class Tower : MonoBehaviour
         coords = Map.Instance.PositionToCoords(transformTower.position);
     }
 
-    protected List<Map.coords> getNeighbours()
+    protected List<Map.coords> getNeighbours(int ran = 0)
     {
         List<Map.coords> neighbours = new List<Map.coords>();
 
-        for (int i = -range; i < 1 + range; i++)
+        if (ran == 0)
         {
-            for (int j = -range; j < range + 1; j++)
+            ran = range;
+        }
+
+        for (int i = -ran; i < 1 + ran; i++)
+        {
+            for (int j = -ran; j < ran + 1; j++)
             {
                 Map.coords tile = new Map.coords(coords.row + i, coords.column + j);
 

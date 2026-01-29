@@ -25,6 +25,7 @@ public class OffensifTower : Tower
     protected void constructPath()
     {
         getNeighbours().ForEach(addPath);
+        getNeighbours(3).ForEach(SearchGenerator);
     }
 
     protected void addPath(Map.coords tile)
@@ -36,15 +37,21 @@ public class OffensifTower : Tower
             case Map.TileType.road:
             case Map.TileType.cross:
             case Map.TileType.start:
-                path.Add(tile);
                 //Debug.Log(tile);
-                break;
-
-            case Map.TileType.generator:
-                connected();
+                path.Add(tile);
                 break;
         }
         path.Sort(Map.CompareCoords);
+    }
+
+    protected void SearchGenerator(Map.coords tile)
+    {
+        Map.TileType type = Map.Instance.GetMapArrayCoords(tile);
+
+        if (type == Map.TileType.generator)
+        {
+            connected();
+        }
     }
 
     protected bool is_connected()

@@ -5,7 +5,13 @@ public class MultipleOffensifTower : OffensifTower
     [SerializeField]
     private GameObject cloud;
 
-    [SerializeField] private AudioSource shoot;
+    [SerializeField]
+    private AudioSource shoot;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+    }
 
     protected override void Shoot()
     {
