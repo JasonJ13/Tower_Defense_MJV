@@ -285,7 +285,8 @@ public class Map : MonoBehaviour
    // Start is called once before the first execution of Update after the MonoBehaviour is created
    private void Start()
    {
-      if (mapDiskPath == null){mapDiskPath = EditorUtility.OpenFilePanel("Map Loader", Application.dataPath + "/Maps/", "png");}
+//      if (mapDiskPath == null){mapDiskPath = EditorUtility.OpenFilePanel("Map Loader", Application.dataPath + "/Maps/", "png");}
+      if (mapDiskPath == null){mapDiskPath = Application.streamingAssetsPath + "/Maps/map_01.png";};
 
       this.mapArray = LoadMapArray(Map.mapDiskPath);
       this.height = mapArray.GetLength(0);

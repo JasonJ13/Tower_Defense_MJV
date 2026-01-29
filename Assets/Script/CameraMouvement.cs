@@ -1,9 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Assertions;
 using UnityEngine.InputSystem;
 
 public class CameraMouvement : MonoBehaviour
@@ -26,12 +22,20 @@ public class CameraMouvement : MonoBehaviour
     private float zoom;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
-    private void Start()
+    private IEnumerator Start()
     {
         cameraTransform = GetComponent<Transform>();
 
         moveAction = InputSystem.actions.FindAction("Player/Move");
         zoomAction = InputSystem.actions.FindAction("Player/Zoom");
+
+        while (Map.Instance.height == 0)
+        {
+            yield return null;
+        }
+        
+        cameraBorder = new Vector2(Map.Instance.height, Map.Instance.width);            
+
     }
 
     private Vector3 define_translate(Vector2 mouvement, float zoom)

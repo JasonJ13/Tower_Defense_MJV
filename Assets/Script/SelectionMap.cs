@@ -42,9 +42,11 @@ public class SelectionMap : MonoBehaviour
         scroller = uiDocument.rootVisualElement.Q("Map");
 
         List<string> filesPNG = new();
-        filesPNG = Directory.GetFiles(Application.dataPath + "/Maps/", "*png", SearchOption.AllDirectories).ToList();
+        filesPNG = Directory.GetFiles(Application.streamingAssetsPath + "/Maps/", "*png", SearchOption.AllDirectories).ToList();
+
         for (int i = 0; i < filesPNG.Count; i++)
         {
+            Resources.Load<Texture2D>(filesPNG[i]);
             AddButton(filesPNG[i]);
         }
         AddBackButton();
